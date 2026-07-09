@@ -17,22 +17,25 @@ export function Header() {
   return (
     <header className="sticky top-0 z-50 w-full bg-white/95 backdrop-blur-md border-b border-purple-100 shadow-sm">
       <div className="container mx-auto flex h-24 items-center justify-between px-4">
-        {/* LOGO + TRIVOR + SLOGAN */}
+        {/* LOGO - SOMENTE TEXTO */}
         <Link href="/" className="flex items-center gap-4 group">
-          <div className="flex items-center gap-4">
-            {/* LOGO - USANDO IMG NORMAL */}
-            <img 
-              src="/logo.png" 
-              alt="TRIVOR"
-              className="w-16 h-16 md:w-20 md:h-20 object-contain"
-            />
+          <div className="flex items-center gap-3">
+            {/* ÍCONE DA LOGO (TEXTUAL) */}
+            <div className="w-14 h-14 md:w-16 md:h-16 bg-gradient-to-br from-purple-600 to-purple-800 rounded-xl flex items-center justify-center shadow-lg shadow-purple-200 group-hover:shadow-purple-300 transition-all duration-300 group-hover:scale-105">
+              <span className="text-2xl md:text-3xl font-extrabold text-white">T</span>
+            </div>
             
-            {/* TEXTO AO LADO DA LOGO */}
+            {/* TEXTO AO LADO */}
             <div className="flex flex-col">
-              <span className="text-3xl md:text-4xl font-extrabold text-purple-600 group-hover:text-purple-700 transition">
-                TRIVOR
-              </span>
-              <span className="text-xs md:text-sm font-light text-gray-500 tracking-wider uppercase">
+              <div className="flex items-center gap-1">
+                <span className="text-2xl md:text-3xl font-extrabold text-purple-600 group-hover:text-purple-700 transition">
+                  TRIVOR
+                </span>
+                <span className="text-[10px] md:text-xs font-light text-purple-400 align-top mt-1">
+                  ™
+                </span>
+              </div>
+              <span className="text-[10px] md:text-xs font-light text-gray-500 tracking-wider uppercase">
                 Gestão & Estratégia Empresarial
               </span>
             </div>
