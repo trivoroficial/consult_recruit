@@ -11,18 +11,27 @@ export function Footer() {
       <div className="container mx-auto px-4 py-16">
         <div className="grid grid-cols-1 gap-8 md:grid-cols-4">
           
-          {/* COLUNA 1 - LOGO */}
+          {/* COLUNA 1 - LOGO BRANCA */}
           <div>
-            <Link href="/" className="flex items-center gap-2">
-              <Image 
-                src="/logo-white.png" 
-                alt="TRIVOR"
-                width={160}
-                height={45}
-                className="h-10 w-auto object-contain brightness-0 invert"
-              />
+            <Link href="/" className="flex items-center gap-3">
+              {/* LOGO BRANCA - MAIOR */}
+              <div className="relative w-14 h-14 flex-shrink-0">
+                <Image 
+                  src="/logo-white.png" 
+                  alt="TRIVOR"
+                  fill
+                  className="object-contain"
+                />
+              </div>
+              <div className="flex flex-col">
+                <span className="text-xl font-extrabold text-white">
+                  TRIVOR
+                </span>
+                <span className="text-[10px] font-light text-gray-400 tracking-wider uppercase">
+                  Gestão & Estratégia Empresarial
+                </span>
+              </div>
             </Link>
-            <p className="mt-3 text-sm text-gray-400">Gestão & Estratégia Empresarial</p>
             <p className="mt-4 text-sm text-gray-500 leading-relaxed">
               Transformando empresas através de pessoas, processos e inteligência.
             </p>
