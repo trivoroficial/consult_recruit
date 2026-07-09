@@ -1,5 +1,6 @@
 import Link from 'next/link'
-import { Linkedin, Instagram, Youtube, Mail, Phone, MapPin, Crown } from 'lucide-react'
+import Image from 'next/image'
+import { Linkedin, Instagram, Youtube, Mail, Phone, MapPin } from 'lucide-react'
 
 export function Footer() {
   return (
@@ -12,10 +13,15 @@ export function Footer() {
           
           {/* COLUNA 1 - LOGO */}
           <div>
-            <div className="flex items-center gap-2">
-              <span className="text-2xl font-extrabold text-purple-400">TRIVOR</span>
-              <Crown className="h-4 w-4 text-yellow-500" />
-            </div>
+            <Link href="/" className="flex items-center gap-2">
+              <Image 
+                src="/logo-white.png" 
+                alt="TRIVOR"
+                width={160}
+                height={45}
+                className="h-10 w-auto object-contain brightness-0 invert"
+              />
+            </Link>
             <p className="mt-3 text-sm text-gray-400">Gestão & Estratégia Empresarial</p>
             <p className="mt-4 text-sm text-gray-500 leading-relaxed">
               Transformando empresas através de pessoas, processos e inteligência.
