@@ -1,5 +1,4 @@
 import Link from 'next/link'
-import Image from 'next/image'
 import { Linkedin, Instagram, Youtube, Mail, Phone, MapPin } from 'lucide-react'
 
 export function Footer() {
@@ -14,15 +13,12 @@ export function Footer() {
           {/* COLUNA 1 - LOGO BRANCA */}
           <div>
             <Link href="/" className="flex items-center gap-3">
-              {/* LOGO BRANCA - MAIOR */}
-              <div className="relative w-14 h-14 flex-shrink-0">
-                <Image 
-                  src="/logo-white.png" 
-                  alt="TRIVOR"
-                  fill
-                  className="object-contain"
-                />
-              </div>
+              {/* LOGO BRANCA - USANDO IMG NORMAL */}
+              <img 
+                src="/logo-white.png" 
+                alt="TRIVOR"
+                className="w-14 h-14 object-contain"
+              />
               <div className="flex flex-col">
                 <span className="text-xl font-extrabold text-white">
                   TRIVOR
