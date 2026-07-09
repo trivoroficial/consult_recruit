@@ -1,6 +1,7 @@
 'use client'
 
 import Link from 'next/link'
+import Image from 'next/image'
 import { useState } from 'react'
 import { Menu, X, LogIn, UserPlus, Crown } from 'lucide-react'
 
@@ -19,11 +20,14 @@ export function Header() {
       <div className="container mx-auto flex h-20 items-center justify-between px-4">
         {/* LOGO */}
         <Link href="/" className="flex items-center gap-3 group">
-          <span className="text-3xl font-extrabold text-purple-600 group-hover:text-purple-700 transition">TRIVOR</span>
-          <span className="hidden md:block text-xs font-light text-gray-400">®</span>
-          <span className="hidden md:block text-xs font-light text-gray-500 tracking-wider uppercase">
-            Gestão & Estratégia
-          </span>
+          <Image 
+            src="/logo.png" 
+            alt="TRIVOR - Gestão & Estratégia Empresarial"
+            width={180}
+            height={50}
+            className="h-12 w-auto object-contain"
+            priority
+          />
         </Link>
 
         {/* MENU DESKTOP */}
