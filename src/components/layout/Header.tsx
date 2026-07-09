@@ -1,6 +1,7 @@
 'use client'
 
 import Link from 'next/link'
+import Image from 'next/image'
 import { useState } from 'react'
 import { Menu, X, LogIn, UserPlus, Crown } from 'lucide-react'
 
@@ -17,15 +18,21 @@ export function Header() {
   return (
     <header className="sticky top-0 z-50 w-full bg-white/95 backdrop-blur-md border-b border-purple-100 shadow-sm">
       <div className="container mx-auto flex h-24 items-center justify-between px-4">
-        {/* LOGO - SOMENTE TEXTO */}
+        {/* LOGO + TRIVOR + SLOGAN */}
         <Link href="/" className="flex items-center gap-4 group">
-          <div className="flex items-center gap-3">
-            {/* ÍCONE DA LOGO (TEXTUAL) */}
-            <div className="w-14 h-14 md:w-16 md:h-16 bg-gradient-to-br from-purple-600 to-purple-800 rounded-xl flex items-center justify-center shadow-lg shadow-purple-200 group-hover:shadow-purple-300 transition-all duration-300 group-hover:scale-105">
-              <span className="text-2xl md:text-3xl font-extrabold text-white">T</span>
+          <div className="flex items-center gap-4">
+            {/* LOGO PNG */}
+            <div className="relative w-16 h-16 md:w-20 md:h-20 flex-shrink-0">
+              <Image 
+                src="/logo.png" 
+                alt="TRIVOR"
+                fill
+                className="object-contain"
+                priority
+              />
             </div>
             
-            {/* TEXTO AO LADO */}
+            {/* TEXTO AO LADO DA LOGO */}
             <div className="flex flex-col">
               <div className="flex items-center gap-1">
                 <span className="text-2xl md:text-3xl font-extrabold text-purple-600 group-hover:text-purple-700 transition">
