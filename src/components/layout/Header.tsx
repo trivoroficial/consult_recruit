@@ -17,17 +17,31 @@ export function Header() {
 
   return (
     <header className="sticky top-0 z-50 w-full bg-white/95 backdrop-blur-md border-b border-purple-100 shadow-sm">
-      <div className="container mx-auto flex h-20 items-center justify-between px-4">
-        {/* LOGO */}
-        <Link href="/" className="flex items-center gap-3 group">
-          <Image 
-            src="/logo.png" 
-            alt="TRIVOR - Gestão & Estratégia Empresarial"
-            width={180}
-            height={50}
-            className="h-12 w-auto object-contain"
-            priority
-          />
+      <div className="container mx-auto flex h-24 items-center justify-between px-4">
+        {/* LOGO + TRIVOR + SLOGAN */}
+        <Link href="/" className="flex items-center gap-4 group">
+          <div className="flex items-center gap-4">
+            {/* LOGO - MAIOR */}
+            <div className="relative w-16 h-16 md:w-20 md:h-20 flex-shrink-0">
+              <Image 
+                src="/logo.png" 
+                alt="TRIVOR"
+                fill
+                className="object-contain"
+                priority
+              />
+            </div>
+            
+            {/* TEXTO AO LADO DA LOGO */}
+            <div className="flex flex-col">
+              <span className="text-3xl md:text-4xl font-extrabold text-purple-600 group-hover:text-purple-700 transition">
+                TRIVOR
+              </span>
+              <span className="text-xs md:text-sm font-light text-gray-500 tracking-wider uppercase">
+                Gestão & Estratégia Empresarial
+              </span>
+            </div>
+          </div>
         </Link>
 
         {/* MENU DESKTOP */}
