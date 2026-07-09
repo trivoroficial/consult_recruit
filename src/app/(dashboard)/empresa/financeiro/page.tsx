@@ -1,14 +1,28 @@
 'use client'
 
-import { DollarSign, FileText, Calendar, TrendingUp } from 'lucide-react'
+import { SidebarEmpresa } from '@/components/layout/SidebarEmpresa'
+import { DollarSign, FileText, Calendar, TrendingUp, CreditCard, Download } from 'lucide-react'
+
+const historico = [
+  { id: 1, descricao: 'Recrutamento - Analista Administrativo', valor: 3500, data: '01/07/2026', status: 'Pago' },
+  { id: 2, descricao: 'Consultoria - Gestão de Pessoas', valor: 2800, data: '01/07/2026', status: 'Pago' },
+  { id: 3, descricao: 'Recrutamento - Auxiliar de RH', valor: 2800, data: '15/07/2026', status: 'Pendente' },
+]
 
 export default function FinanceiroEmpresa() {
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
-      <div className="container mx-auto px-4 max-w-5xl">
-        <h1 className="text-3xl font-bold mb-8">
-          <span className="text-purple-600">Financeiro</span>
-        </h1>
+    <div className="flex min-h-screen bg-gray-50">
+      <SidebarEmpresa />
+      <div className="flex-1 ml-64 p-8">
+        <div className="flex items-center justify-between mb-8">
+          <h1 className="text-3xl font-bold">
+            <span className="text-purple-600">Financeiro</span>
+          </h1>
+          <button className="btn-outline btn-sm flex items-center gap-2">
+            <Download className="h-4 w-4" />
+            Exportar
+          </button>
+        </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
           <div className="bg-white p-6 rounded-xl shadow-sm border">
@@ -49,23 +63,35 @@ export default function FinanceiroEmpresa() {
         </div>
 
         <div className="bg-white rounded-xl shadow-sm border p-6">
-          <h2 className="text-lg font-semibold mb-4">Histórico de Pagamentos</h2>
-          <div className="space-y-3">
-            <div className="flex items-center justify-between p-3 border-b">
-              <div>
-                <p className="font-medium">Recrutamento - Analista RH</p>
-                <p className="text-sm text-gray-500">Pago em 01/07/2026</p>
-              </div>
-              <span className="text-green-600 font-semibold">R$ 3.500</span>
-            </div>
-            <div className="flex items-center justify-between p-3 border-b">
-              <div>
-                <p className="font-medium">Consultoria - Gestão de Pessoas</p>
-                <p className="text-sm text-gray-500">Pago em 01/07/2026</p>
-              </div>
-              <span className="text-green-600 font-semibold">R$ 2.800</span>
-            </div>
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="text-lg font-semibold">Histórico de Pagamentos</h2>
+            <span className="text-sm text-gray-500">Total: {historico.length}</span>
           </div>
+          <div className="space-y-3">
+            {historico.map((item) => (
+              <div key={item.id} className="flex items-center justify-between p-3 border rounded-lg hover:bg-gray-50 transition">
+                <div>
+                  <p className="font-medium">{item.descricao}</p>
+                  <p className="text-sm text-gray-500">{item.data}</p>
+                </div>
+                <div className="flex items-center gap-4">
+                  <span className={`px-2 py-1 rounded-full text-xs font-medium ${
+                    item.status === 'Pago' ? 'bg-green-100 text-green-700' : 'bg-yellow-100 text-yellow-700'
+                  }`}>
+                    {item.status}
+                  </span>
+                  <span className={`font-semibold ${item.status === 'Pago' ? 'text-green-600' : 'text-yellow-600'}`}>
+                    R$ {item.valor.toLocaleString()}
+                  </span>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div className="mt-6 bg-blue-50 border border-blue-200 rounded-lg p-4">
+          <h4 className="font-semibold text-blue-800">💡 Próximos passos</h4>
+          <p className="text-sm text-blue-700">Mantenha seus pagamentos em dia para garantir a continuidade dos serviços TRIVOR.</p>
         </div>
       </div>
     </div>
