@@ -47,37 +47,46 @@
 .btn-primary {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 0.5rem;
-  padding: 0.75rem 1.5rem;
+  padding: 0.60rem 1.25rem;
   background-color: #7C3AED;
   color: #ffffff;
   font-weight: 600;
+  font-size: 0.875rem;
   border-radius: 0.75rem;
   transition: all 0.3s ease;
   box-shadow: 0 4px 14px rgba(124, 58, 237, 0.3);
   cursor: pointer;
   border: none;
-  font-size: 0.875rem;
+  text-decoration: none;
 }
 .btn-primary:hover {
   background-color: #6D28D9;
   box-shadow: 0 6px 20px rgba(124, 58, 237, 0.4);
   transform: translateY(-2px);
 }
+.btn-primary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
 
 .btn-secondary {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 0.5rem;
-  padding: 0.75rem 1.5rem;
+  padding: 0.60rem 1.25rem;
   background-color: transparent;
   color: #7C3AED;
   font-weight: 600;
+  font-size: 0.875rem;
   border-radius: 0.75rem;
   border: 2px solid #7C3AED;
   transition: all 0.3s ease;
   cursor: pointer;
-  font-size: 0.875rem;
+  text-decoration: none;
 }
 .btn-secondary:hover {
   background-color: #EDE9FE;
@@ -87,22 +96,59 @@
 .btn-gold {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 0.5rem;
-  padding: 0.75rem 1.5rem;
+  padding: 0.60rem 1.25rem;
   background-color: #F59E0B;
   color: #ffffff;
   font-weight: 600;
+  font-size: 0.875rem;
   border-radius: 0.75rem;
   transition: all 0.3s ease;
   box-shadow: 0 4px 14px rgba(245, 158, 11, 0.3);
   cursor: pointer;
   border: none;
-  font-size: 0.875rem;
+  text-decoration: none;
 }
 .btn-gold:hover {
   background-color: #D97706;
   box-shadow: 0 6px 20px rgba(245, 158, 11, 0.4);
   transform: translateY(-2px);
+}
+
+.btn-outline {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.60rem 1.25rem;
+  background-color: transparent;
+  color: #6B7280;
+  font-weight: 500;
+  font-size: 0.875rem;
+  border-radius: 0.75rem;
+  border: 1px solid #D1D5DB;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  text-decoration: none;
+}
+.btn-outline:hover {
+  background-color: #F9FAFB;
+  border-color: #9CA3AF;
+}
+
+/* ===== BOTÕES TAMANHOS ===== */
+.btn-sm {
+  padding: 0.40rem 0.80rem;
+  font-size: 0.75rem;
+}
+.btn-lg {
+  padding: 0.80rem 1.75rem;
+  font-size: 1rem;
+}
+.btn-full {
+  width: 100%;
+  justify-content: center;
 }
 
 /* ===== CARDS ===== */
