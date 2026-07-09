@@ -1,21 +1,24 @@
 'use client'
 
+import { SidebarAdmin } from '@/components/layout/SidebarAdmin'
+import { Settings, Globe, Mail, Shield, Palette, Database, Save, User, Lock } from 'lucide-react'
 import { useState } from 'react'
-import { Settings, Globe, Mail, Shield, Palette, Database, Save } from 'lucide-react'
 
 export default function AdminConfiguracoes() {
   const [config, setConfig] = useState({
     nomeSite: 'TRIVOR',
     emailContato: 'contato@trivor.com.br',
-    telefone: '(34) 99999-9999',
+    telefone: '(34) 99117-7058',
     corPrimaria: '#7C3AED',
     manutencao: false,
-    registro: true
+    registro: true,
+    autoAprovacao: false,
   })
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
-      <div className="container mx-auto px-4 max-w-4xl">
+    <div className="flex min-h-screen bg-gray-50">
+      <SidebarAdmin />
+      <div className="flex-1 ml-64 p-8">
         <div className="flex items-center gap-3 mb-8">
           <Settings className="h-8 w-8 text-purple-600" />
           <h1 className="text-3xl font-bold">
@@ -34,7 +37,7 @@ export default function AdminConfiguracoes() {
                 <label className="block text-sm font-medium text-gray-700">Nome do Site</label>
                 <input
                   type="text"
-                  className="mt-1 w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-purple-500 outline-none"
+                  className="input-default"
                   value={config.nomeSite}
                   onChange={(e) => setConfig({...config, nomeSite: e.target.value})}
                 />
@@ -50,7 +53,7 @@ export default function AdminConfiguracoes() {
                   />
                   <input
                     type="text"
-                    className="flex-1 px-4 py-2 border rounded-lg focus:ring-2 focus:ring-purple-500 outline-none"
+                    className="flex-1 input-default"
                     value={config.corPrimaria}
                     onChange={(e) => setConfig({...config, corPrimaria: e.target.value})}
                   />
@@ -69,7 +72,7 @@ export default function AdminConfiguracoes() {
                 <label className="block text-sm font-medium text-gray-700">Email de Contato</label>
                 <input
                   type="email"
-                  className="mt-1 w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-purple-500 outline-none"
+                  className="input-default"
                   value={config.emailContato}
                   onChange={(e) => setConfig({...config, emailContato: e.target.value})}
                 />
@@ -78,7 +81,7 @@ export default function AdminConfiguracoes() {
                 <label className="block text-sm font-medium text-gray-700">Telefone</label>
                 <input
                   type="text"
-                  className="mt-1 w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-purple-500 outline-none"
+                  className="input-default"
                   value={config.telefone}
                   onChange={(e) => setConfig({...config, telefone: e.target.value})}
                 />
@@ -105,6 +108,15 @@ export default function AdminConfiguracoes() {
                 <input
                   type="checkbox"
                   className="w-4 h-4 text-purple-600 focus:ring-purple-500"
+                  checked={config.autoAprovacao}
+                  onChange={(e) => setConfig({...config, autoAprovacao: e.target.checked})}
+                />
+                <span className="text-sm text-gray-700">Aprovação automática de empresas</span>
+              </label>
+              <label className="flex items-center gap-3 cursor-pointer">
+                <input
+                  type="checkbox"
+                  className="w-4 h-4 text-purple-600 focus:ring-purple-500"
                   checked={config.manutencao}
                   onChange={(e) => setConfig({...config, manutencao: e.target.checked})}
                 />
@@ -113,7 +125,7 @@ export default function AdminConfiguracoes() {
             </div>
           </div>
 
-          <button className="w-full py-3 bg-purple-600 text-white rounded-lg font-semibold hover:bg-purple-700 transition flex items-center justify-center gap-2">
+          <button className="w-full btn-primary justify-center py-3 text-base">
             <Save className="h-5 w-5" />
             Salvar Configurações
           </button>
