@@ -1,7 +1,8 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { Users, Building2, Briefcase, TrendingUp, Eye, Settings, UserPlus } from 'lucide-react'
+import { Users, Building2, Briefcase, TrendingUp, Settings, UserPlus, Eye } from 'lucide-react'
+import { SidebarAdmin } from '@/components/layout/SidebarAdmin'
 
 // DADOS DE EXEMPLO DO ADMIN
 const dadosAdmin = {
@@ -34,8 +35,9 @@ export default function DashboardAdmin() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
-      <div className="container mx-auto px-4">
+    <div className="flex min-h-screen bg-gray-50">
+      <SidebarAdmin />
+      <div className="flex-1 ml-64 p-8">
         {/* CABEÇALHO */}
         <div className="flex items-center justify-between mb-8">
           <div>
@@ -56,9 +58,9 @@ export default function DashboardAdmin() {
           </div>
         </div>
 
-        {/* CARDS DE INDICADORES */}
+        {/* CARDS */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-          <div className="bg-white p-6 rounded-xl shadow-sm border hover:shadow-md transition">
+          <div className="bg-white p-6 rounded-xl shadow-sm border">
             <div className="flex items-center gap-3">
               <div className="p-3 bg-purple-100 rounded-lg">
                 <Users className="h-6 w-6 text-purple-600" />
@@ -70,7 +72,7 @@ export default function DashboardAdmin() {
             </div>
           </div>
 
-          <div className="bg-white p-6 rounded-xl shadow-sm border hover:shadow-md transition">
+          <div className="bg-white p-6 rounded-xl shadow-sm border">
             <div className="flex items-center gap-3">
               <div className="p-3 bg-blue-100 rounded-lg">
                 <Building2 className="h-6 w-6 text-blue-600" />
@@ -82,7 +84,7 @@ export default function DashboardAdmin() {
             </div>
           </div>
 
-          <div className="bg-white p-6 rounded-xl shadow-sm border hover:shadow-md transition">
+          <div className="bg-white p-6 rounded-xl shadow-sm border">
             <div className="flex items-center gap-3">
               <div className="p-3 bg-green-100 rounded-lg">
                 <Briefcase className="h-6 w-6 text-green-600" />
@@ -94,7 +96,7 @@ export default function DashboardAdmin() {
             </div>
           </div>
 
-          <div className="bg-white p-6 rounded-xl shadow-sm border hover:shadow-md transition">
+          <div className="bg-white p-6 rounded-xl shadow-sm border">
             <div className="flex items-center gap-3">
               <div className="p-3 bg-yellow-100 rounded-lg">
                 <TrendingUp className="h-6 w-6 text-yellow-600" />
@@ -107,26 +109,22 @@ export default function DashboardAdmin() {
           </div>
         </div>
 
-        {/* CONTEÚDO PRINCIPAL */}
+        {/* CONTEÚDO */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {/* ATIVIDADES RECENTES */}
           <div className="col-span-2 bg-white p-6 rounded-xl shadow-sm border">
             <h2 className="text-lg font-semibold mb-4">Atividades Recentes</h2>
-            {dadosAdmin.atividades.length === 0 ? (
-              <p className="text-gray-500 text-center py-8">Nenhuma atividade recente.</p>
-            ) : (
-              <div className="space-y-3">
-                {dadosAdmin.atividades.map((item) => (
-                  <div key={item.id} className="flex items-center justify-between p-3 border-b last:border-0 hover:bg-gray-50 transition">
-                    <div>
-                      <p className="font-semibold text-sm">{item.usuario}</p>
-                      <p className="text-sm text-gray-500">{item.acao}</p>
-                    </div>
-                    <span className="text-xs text-gray-400">{item.data}</span>
+            <div className="space-y-3">
+              {dadosAdmin.atividades.map((item) => (
+                <div key={item.id} className="flex items-center justify-between p-3 border-b last:border-0 hover:bg-gray-50 transition">
+                  <div>
+                    <p className="font-semibold text-sm">{item.usuario}</p>
+                    <p className="text-sm text-gray-500">{item.acao}</p>
                   </div>
-                ))}
-              </div>
-            )}
+                  <span className="text-xs text-gray-400">{item.data}</span>
+                </div>
+              ))}
+            </div>
           </div>
 
           {/* AÇÕES RÁPIDAS */}
