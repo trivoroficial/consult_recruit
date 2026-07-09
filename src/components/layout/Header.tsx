@@ -1,6 +1,7 @@
 'use client'
 
 import Link from 'next/link'
+import Image from 'next/image'
 import { useState } from 'react'
 import { Menu, X, LogIn, UserPlus, Crown } from 'lucide-react'
 
@@ -21,11 +22,15 @@ export function Header() {
         <Link href="/" className="flex items-center gap-4 group">
           <div className="flex items-center gap-4">
             {/* LOGO PNG */}
-            <img 
-              src="/logo.png" 
-              alt="TRIVOR"
-              className="w-16 h-16 md:w-20 md:h-20 object-contain"
-            />
+            <div className="relative w-16 h-16 md:w-20 md:h-20 flex-shrink-0">
+              <Image 
+                src="/logo.png" 
+                alt="TRIVOR"
+                fill
+                className="object-contain"
+                priority
+              />
+            </div>
             
             {/* TEXTO AO LADO DA LOGO */}
             <div className="flex flex-col">
