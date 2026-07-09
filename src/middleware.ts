@@ -3,9 +3,9 @@ import type { NextRequest } from 'next/server'
 
 // Rotas protegidas por perfil
 const protectedRoutes = {
-  admin: ['/admin', '/admin/'],
-  empresa: ['/empresa', '/empresa/'],
-  candidato: ['/candidato', '/candidato/'],
+  admin: ['/admin'],
+  empresa: ['/empresa'],
+  candidato: ['/candidato'],
 }
 
 // Rotas públicas (não precisa estar logado)
@@ -19,17 +19,17 @@ export function middleware(request: NextRequest) {
     return NextResponse.next()
   }
 
-  // Verifica se o usuário está logado
-  const userData = request.cookies.get('trivor_user')?.value
+  // Verifica se o usuário está logado via cookie
+  const userCookie = request.cookies.get('trivor_user')?.value
 
   // Se não estiver logado e tentar acessar rota protegida, redireciona para login
-  if (!userData) {
+  if (!userCookie) {
     return NextResponse.redirect(new URL('/login', request.url))
   }
 
   // Se estiver logado, verifica permissão
   try {
-    const user = JSON.parse(userData)
+    const user = JSON.parse(decodeURIComponent(userCookie))
     const role = user.role
 
     // Verifica se o usuário tem permissão para acessar a rota
@@ -59,13 +59,6 @@ export function middleware(request: NextRequest) {
 
 export const config = {
   matcher: [
-    /*
-     * Match all request paths except for the ones starting with:
-     * - _next/static (static files)
-     * - _next/image (image optimization files)
-     * - favicon.ico (favicon file)
-     * - public folder
-     */
-    '/((?!_next/static|_next/image|favicon.ico|.*\\.png$|.*\\.svg$).*)',
+    '/((?!_next/static|_next/image|favicon.ico|.*\\.png$|.*\\.svg$|.*\\.jpg$).*)',
   ],
 }
