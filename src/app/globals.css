@@ -27,21 +27,18 @@
   }
 }
 
-/* Scrollbar personalizada */
+/* ===== SCROLLBAR ===== */
 ::-webkit-scrollbar {
   width: 8px;
   height: 8px;
 }
-
 ::-webkit-scrollbar-track {
   background: #f3f4f6;
 }
-
 ::-webkit-scrollbar-thumb {
   background: #7C3AED;
   border-radius: 9999px;
 }
-
 ::-webkit-scrollbar-thumb:hover {
   background: #5B21B6;
 }
@@ -58,6 +55,9 @@
   border-radius: 0.75rem;
   transition: all 0.3s ease;
   box-shadow: 0 4px 14px rgba(124, 58, 237, 0.3);
+  cursor: pointer;
+  border: none;
+  font-size: 0.875rem;
 }
 .btn-primary:hover {
   background-color: #6D28D9;
@@ -76,6 +76,8 @@
   border-radius: 0.75rem;
   border: 2px solid #7C3AED;
   transition: all 0.3s ease;
+  cursor: pointer;
+  font-size: 0.875rem;
 }
 .btn-secondary:hover {
   background-color: #EDE9FE;
@@ -93,6 +95,9 @@
   border-radius: 0.75rem;
   transition: all 0.3s ease;
   box-shadow: 0 4px 14px rgba(245, 158, 11, 0.3);
+  cursor: pointer;
+  border: none;
+  font-size: 0.875rem;
 }
 .btn-gold:hover {
   background-color: #D97706;
@@ -124,7 +129,6 @@
   font-size: 0.75rem;
   font-weight: 500;
 }
-
 .badge-gold {
   display: inline-block;
   padding: 0.25rem 0.75rem;
@@ -157,7 +161,6 @@
   margin-left: auto;
   margin-right: auto;
 }
-
 .divider-gold {
   width: 5rem;
   height: 0.25rem;
@@ -175,6 +178,7 @@
   border-radius: 0.5rem;
   outline: none;
   transition: all 0.3s ease;
+  background: #ffffff;
 }
 .input-default:focus {
   border-color: #7C3AED;
@@ -186,12 +190,22 @@
   color: #7C3AED;
   font-weight: 500;
   transition: color 0.3s ease;
+  text-decoration: none;
 }
 .link-purple:hover {
   color: #5B21B6;
 }
 
-/* ===== SEÇÃO COM FUNDO ROXO CLARO ===== */
+/* ===== SEÇÃO ===== */
 .section-purple-light {
   background: linear-gradient(135deg, #f5f3ff 0%, #ffffff 50%, #f5f3ff 100%);
+}
+
+/* ===== CONTAINER ===== */
+.container-custom {
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 1rem;
+  padding-right: 1rem;
 }
