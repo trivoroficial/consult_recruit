@@ -1,5 +1,4 @@
 import Link from 'next/link'
-import Image from 'next/image'
 import { Linkedin, Instagram, Youtube, Mail, Phone, MapPin } from 'lucide-react'
 
 export function Footer() {
@@ -11,18 +10,15 @@ export function Footer() {
       <div className="container mx-auto px-4 py-16">
         <div className="grid grid-cols-1 gap-8 md:grid-cols-4">
           
-          {/* COLUNA 1 - LOGO BRANCA */}
+          {/* COLUNA 1 - LOGO (MESMA IMAGEM, FILTRO BRANCO) */}
           <div>
             <Link href="/" className="flex items-center gap-3">
-              {/* LOGO BRANCA */}
-              <div className="relative w-14 h-14 flex-shrink-0">
-                <Image 
-                  src="/logo-white.png" 
-                  alt="TRIVOR"
-                  fill
-                  className="object-contain brightness-0 invert"
-                />
-              </div>
+              {/* LOGO - FILTRO BRANCO PARA FUNDO ESCURO */}
+              <img 
+                src="/logo.png" 
+                alt="TRIVOR"
+                className="w-14 h-14 object-contain brightness-0 invert"
+              />
               <div className="flex flex-col">
                 <div className="flex items-center gap-0.5">
                   <span className="text-xl font-extrabold text-white">
