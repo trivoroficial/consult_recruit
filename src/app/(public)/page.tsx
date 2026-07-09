@@ -23,13 +23,13 @@ export default function Home() {
               </p>
               <div className="mt-8 flex flex-wrap gap-4">
                 <Link href="/cadastro">
-                  <button className="btn-primary text-base">
+                  <button className="btn-primary btn-lg">
                     Solicitar Diagnóstico
                     <ArrowRight className="h-5 w-5" />
                   </button>
                 </Link>
                 <Link href="/servicos">
-                  <button className="btn-secondary text-base">
+                  <button className="btn-secondary btn-lg">
                     Conhecer Soluções
                   </button>
                 </Link>
@@ -98,7 +98,7 @@ export default function Home() {
 
           <div className="mt-12 grid gap-6 md:grid-cols-2 lg:grid-cols-4">
             <div className="card-premium hover:border-purple-300">
-              <div className="w-14 h-14 rounded-xl flex items-center justify-center mb-4 bg-purple-100 text-purple-600 group-hover:bg-purple-200 transition">
+              <div className="w-14 h-14 rounded-xl flex items-center justify-center mb-4 bg-purple-100 text-purple-600 transition">
                 <Users className="h-7 w-7" />
               </div>
               <h3 className="text-lg font-bold">Recrutamento & Seleção</h3>
