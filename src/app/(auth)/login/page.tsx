@@ -1,17 +1,52 @@
 'use client'
 
 import { useState } from 'react'
+import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { Eye, EyeOff } from 'lucide-react'
+import { autenticar } from '@/lib/auth'
 
 export default function Login() {
+  const router = useRouter()
   const [showPassword, setShowPassword] = useState(false)
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [loading, setLoading] = useState(false)
+  const [erro, setErro] = useState('')
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    alert('Login realizado com sucesso!')
+    setLoading(true)
+    setErro('')
+
+    const result = autenticar(email, password)
+
+    if (!result.success) {
+      setErro(result.error || 'Erro ao fazer login')
+      setLoading(false)
+      return
+    }
+
+    // Salvar usuário no localStorage (para testes)
+    localStorage.setItem('trivor_user', JSON.stringify(result.user))
+    localStorage.setItem('trivor_role', result.user.role)
+
+    setLoading(false)
+
+    // Redirecionar conforme o perfil
+    switch (result.user.role) {
+      case 'admin':
+        router.push('/admin/dashboard')
+        break
+      case 'empresa':
+        router.push('/empresa/dashboard')
+        break
+      case 'candidato':
+        router.push('/candidato/dashboard')
+        break
+      default:
+        router.push('/')
+    }
   }
 
   return (
@@ -23,6 +58,12 @@ export default function Login() {
             <h2 className="mt-2 text-xl font-semibold">Bem-vindo de volta</h2>
             <p className="text-gray-500 text-sm">Entre com suas credenciais</p>
           </div>
+
+          {erro && (
+            <div className="mt-4 p-3 bg-red-50 border border-red-200 text-red-600 rounded-lg text-sm">
+              {erro}
+            </div>
+          )}
 
           <form onSubmit={handleSubmit} className="mt-8 space-y-4">
             <div>
@@ -67,10 +108,23 @@ export default function Login() {
               </Link>
             </div>
 
-            <button type="submit" className="btn-primary btn-full">
-              Entrar
+            <button
+              type="submit"
+              disabled={loading}
+              className="btn-primary btn-full"
+            >
+              {loading ? 'Entrando...' : 'Entrar'}
             </button>
           </form>
+
+          <div className="mt-6 text-center">
+            <p className="text-sm text-gray-500">Contas para teste:</p>
+            <div className="mt-2 text-xs text-gray-400 space-y-1">
+              <p>👑 Admin: admin@trivor.com / trivor2026</p>
+              <p>🏢 Empresa: empresa@trivor.com / trivor2026</p>
+              <p>👤 Candidato: candidato@trivor.com / trivor2026</p>
+            </div>
+          </div>
 
           <p className="mt-6 text-center text-sm text-gray-600">
             Não tem uma conta?{' '}
