@@ -3,7 +3,6 @@
 import Link from 'next/link'
 import { useState } from 'react'
 import { Menu, X, LogIn, UserPlus, Crown } from 'lucide-react'
-import { Button } from '@/components/ui/Button'
 
 export function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
@@ -20,11 +19,8 @@ export function Header() {
       <div className="container mx-auto flex h-20 items-center justify-between px-4">
         {/* LOGO */}
         <Link href="/" className="flex items-center gap-3 group">
-          <div className="flex items-center gap-1">
-            <span className="text-3xl font-extrabold text-purple-600 group-hover:text-purple-700 transition">TRIVOR</span>
-            <span className="text-xs font-light text-gray-400 hidden md:block">®</span>
-          </div>
-          <div className="hidden md:block h-8 w-px bg-gray-200"></div>
+          <span className="text-3xl font-extrabold text-purple-600 group-hover:text-purple-700 transition">TRIVOR</span>
+          <span className="hidden md:block text-xs font-light text-gray-400">®</span>
           <span className="hidden md:block text-xs font-light text-gray-500 tracking-wider uppercase">
             Gestão & Estratégia
           </span>
@@ -47,22 +43,22 @@ export function Header() {
         {/* BOTÕES DESKTOP */}
         <div className="hidden items-center gap-3 lg:flex">
           <Link href="/login">
-            <Button variant="ghost" size="sm" className="text-gray-600 hover:text-purple-600 hover:bg-purple-50">
-              <LogIn className="h-4 w-4 mr-2" />
+            <button className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-gray-600 hover:text-purple-600 hover:bg-purple-50 rounded-lg transition">
+              <LogIn className="h-4 w-4" />
               Entrar
-            </Button>
+            </button>
           </Link>
           <Link href="/cadastro">
-            <Button size="sm" className="bg-purple-600 hover:bg-purple-700 text-white shadow-md shadow-purple-200 hover:shadow-purple-300 transition-all">
-              <UserPlus className="h-4 w-4 mr-2" />
+            <button className="btn-primary text-sm py-2 px-5">
+              <UserPlus className="h-4 w-4" />
               Cadastrar
-            </Button>
+            </button>
           </Link>
           <Link href="/servicos">
-            <Button size="sm" className="bg-yellow-500 hover:bg-yellow-600 text-white shadow-md shadow-yellow-200 hover:shadow-yellow-300 transition-all">
-              <Crown className="h-4 w-4 mr-2" />
+            <button className="btn-gold text-sm py-2 px-5">
+              <Crown className="h-4 w-4" />
               Premium
-            </Button>
+            </button>
           </Link>
         </div>
 
@@ -91,22 +87,22 @@ export function Header() {
             ))}
             <div className="flex flex-col gap-3 pt-4 border-t border-gray-100">
               <Link href="/login" onClick={() => setIsMenuOpen(false)}>
-                <Button variant="outline" className="w-full border-purple-300 text-purple-600 hover:bg-purple-50">
-                  <LogIn className="h-4 w-4 mr-2" />
+                <button className="w-full flex items-center justify-center gap-2 px-4 py-3 border-2 border-purple-300 text-purple-600 font-medium rounded-lg hover:bg-purple-50 transition">
+                  <LogIn className="h-4 w-4" />
                   Entrar
-                </Button>
+                </button>
               </Link>
               <Link href="/cadastro" onClick={() => setIsMenuOpen(false)}>
-                <Button className="w-full bg-purple-600 hover:bg-purple-700 text-white">
-                  <UserPlus className="h-4 w-4 mr-2" />
+                <button className="w-full btn-primary justify-center">
+                  <UserPlus className="h-4 w-4" />
                   Cadastrar
-                </Button>
+                </button>
               </Link>
               <Link href="/servicos" onClick={() => setIsMenuOpen(false)}>
-                <Button className="w-full bg-yellow-500 hover:bg-yellow-600 text-white">
-                  <Crown className="h-4 w-4 mr-2" />
+                <button className="w-full btn-gold justify-center">
+                  <Crown className="h-4 w-4" />
                   Premium
-                </Button>
+                </button>
               </Link>
             </div>
           </div>
