@@ -27,13 +27,19 @@ export default function Login() {
       return
     }
 
-    // Salvar usuário no localStorage (para testes)
+    // 1. Salvar no localStorage (para os sidebars)
     localStorage.setItem('trivor_user', JSON.stringify(result.user))
     localStorage.setItem('trivor_role', result.user.role)
 
+    // 2. Salvar em cookie (para o middleware proteger as rotas)
+    // O cookie expira em 7 dias
+    const cookieData = JSON.stringify(result.user)
+    document.cookie = `trivor_user=${encodeURIComponent(cookieData)}; path=/; max-age=604800`
+    document.cookie = `trivor_role=${result.user.role}; path=/; max-age=604800`
+
     setLoading(false)
 
-    // Redirecionar conforme o perfil
+    // 3. Redirecionar conforme o perfil
     switch (result.user.role) {
       case 'admin':
         router.push('/admin/dashboard')
@@ -117,6 +123,7 @@ export default function Login() {
             </button>
           </form>
 
+          {/* DADOS PARA TESTE */}
           <div className="mt-6 text-center">
             <p className="text-sm text-gray-500">Contas para teste:</p>
             <div className="mt-2 text-xs text-gray-400 space-y-1">
