@@ -66,19 +66,19 @@ export function Header() {
         {/* BOTÕES DESKTOP */}
         <div className="hidden items-center gap-3 lg:flex">
           <Link href="/login">
-            <button className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-gray-600 hover:text-purple-600 hover:bg-purple-50 rounded-lg transition">
+            <button className="btn-outline btn-sm">
               <LogIn className="h-4 w-4" />
               Entrar
             </button>
           </Link>
           <Link href="/cadastro">
-            <button className="btn-primary text-sm py-2 px-5">
+            <button className="btn-primary btn-sm">
               <UserPlus className="h-4 w-4" />
               Cadastrar
             </button>
           </Link>
           <Link href="/servicos">
-            <button className="btn-gold text-sm py-2 px-5">
+            <button className="btn-gold btn-sm">
               <Crown className="h-4 w-4" />
               Premium
             </button>
@@ -110,7 +110,7 @@ export function Header() {
             ))}
             <div className="flex flex-col gap-3 pt-4 border-t border-gray-100">
               <Link href="/login" onClick={() => setIsMenuOpen(false)}>
-                <button className="w-full flex items-center justify-center gap-2 px-4 py-3 border-2 border-purple-300 text-purple-600 font-medium rounded-lg hover:bg-purple-50 transition">
+                <button className="w-full btn-outline justify-center">
                   <LogIn className="h-4 w-4" />
                   Entrar
                 </button>
