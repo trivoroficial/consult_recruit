@@ -1,43 +1,28 @@
 'use client'
 
+import { SidebarAdmin } from '@/components/layout/SidebarAdmin'
+import { Search, Building2, Mail, Phone, MapPin, MoreVertical, Eye, Edit, Trash2, Plus } from 'lucide-react'
 import { useState } from 'react'
-import { Search, Building2, Mail, Phone, MapPin, MoreVertical, Eye, Edit, Trash2 } from 'lucide-react'
 
 const empresas = [
-  {
-    id: 1,
-    nome: 'Empresa XYZ',
-    cnpj: '12.345.678/0001-99',
-    email: 'contato@xyz.com',
-    telefone: '(34) 99999-9999',
-    cidade: 'Uberlândia',
-    status: 'Ativa',
-    planos: 'Profissional'
-  },
-  {
-    id: 2,
-    nome: 'Indústria ABC',
-    cnpj: '98.765.432/0001-11',
-    email: 'contato@abc.com',
-    telefone: '(34) 88888-8888',
-    cidade: 'Uberlândia',
-    status: 'Ativa',
-    planos: 'Enterprise'
-  }
+  { id: 1, nome: 'Empresa XPTO', cnpj: '12.345.678/0001-99', email: 'contato@empresaxpto.com', telefone: '(34) 99117-7058', cidade: 'Uberlândia', status: 'Ativa', plano: 'Profissional' },
+  { id: 2, nome: 'Indústria ABC', cnpj: '98.765.432/0001-11', email: 'contato@industriaabc.com', telefone: '(34) 88888-8888', cidade: 'Uberlândia', status: 'Ativa', plano: 'Enterprise' },
+  { id: 3, nome: 'Grupo Financeiro', cnpj: '11.222.333/0001-44', email: 'contato@grupofinanceiro.com', telefone: '(34) 77777-7777', cidade: 'Uberlândia', status: 'Pendente', plano: 'Start' },
 ]
 
 export default function AdminEmpresas() {
   const [busca, setBusca] = useState('')
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
-      <div className="container mx-auto px-4 max-w-6xl">
+    <div className="flex min-h-screen bg-gray-50">
+      <SidebarAdmin />
+      <div className="flex-1 ml-64 p-8">
         <div className="flex items-center justify-between mb-8">
           <h1 className="text-3xl font-bold">
             <span className="text-purple-600">Empresas</span>
           </h1>
-          <button className="flex items-center gap-2 py-2 px-4 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition">
-            <Building2 className="h-5 w-5" />
+          <button className="btn-primary btn-sm flex items-center gap-2">
+            <Plus className="h-4 w-4" />
             Nova Empresa
           </button>
         </div>
@@ -73,12 +58,16 @@ export default function AdminEmpresas() {
                 </div>
                 <div className="flex flex-col items-end gap-2">
                   <span className={`px-2 py-1 rounded-full text-xs font-medium ${
-                    empresa.status === 'Ativa' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'
+                    empresa.status === 'Ativa' ? 'bg-green-100 text-green-700' : 'bg-yellow-100 text-yellow-700'
                   }`}>
                     {empresa.status}
                   </span>
-                  <span className="px-2 py-1 bg-purple-100 text-purple-700 rounded-full text-xs font-medium">
-                    {empresa.planos}
+                  <span className={`px-2 py-1 rounded-full text-xs font-medium ${
+                    empresa.plano === 'Enterprise' ? 'bg-purple-100 text-purple-700' :
+                    empresa.plano === 'Profissional' ? 'bg-blue-100 text-blue-700' :
+                    'bg-gray-100 text-gray-700'
+                  }`}>
+                    {empresa.plano}
                   </span>
                 </div>
               </div>
