@@ -14,28 +14,37 @@ module.exports = {
       },
     },
     extend: {
-      // Nova tipografia para visual internacional
       fontFamily: {
         serif: ['Playfair Display', 'serif'],
         sans: ['Inter', 'sans-serif'],
       },
       colors: {
-        // Nova Identidade Internacional TRIVOR
-        navy: {
-          900: '#0F172A',
-          800: '#1E293B',
-          700: '#334155',
+        // Nova Identidade TRIVOR - Verde Oliva + Lilás
+        oliva: {
+          50: '#F4F5F0',
+          100: '#E8EAE0',
+          200: '#D1D5C1',
+          300: '#B9BFA2',
+          400: '#A2AA83',
+          500: '#5C6347',      // Principal
+          600: '#4A5039',
+          700: '#383D2B',
+          800: '#2D3121',      // Deep
+          900: '#1F2216',
         },
-        gold: {
-          100: '#FDF6E3',
-          200: '#F5E6C8',
-          300: '#E8D5A3',
-          400: '#D9C17E',
-          500: '#C9A84C',
-          600: '#B8963A',
-          700: '#A68428',
+        lilas: {
+          50: '#F5F2FA',
+          100: '#EBE5F4',
+          200: '#D7CCE9',
+          300: '#C3B2DE',
+          400: '#AF99D3',
+          500: '#8E7AB5',      // Principal
+          600: '#726191',
+          700: '#56496E',
+          800: '#3A304A',
+          900: '#1E1825',
         },
-        // Mantendo as cores originais para não quebrar dashboards
+        // Mantendo cores originais para compatibilidade
         purple: {
           50: '#f5f3ff',
           100: '#ede9fe',
