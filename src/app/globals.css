@@ -1,258 +1,68 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;900&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-@layer base {
-  :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
-    --primary: 262.1 83.3% 57.8%;
-    --primary-foreground: 210 40% 98%;
-    --secondary: 45 93% 47%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
-    --border: 214.3 31.8% 91.4%;
-    --radius: 0.75rem;
-  }
+:root {
+  --trivor-lilas: #8E7AB5;
+  --trivor-oliva: #5C6347;
+  --trivor-deep: #2D3121;
+  --trivor-bg: #FDFCFB;
 }
 
 @layer base {
-  * {
-    border-color: hsl(var(--border));
-  }
   body {
-    background-color: #f9fafb;
-    color: #111827;
-    font-family: 'Montserrat', sans-serif;
-    -webkit-font-smoothing: antialiased;
+    @apply bg-trivor-bg text-trivor-deep font-sans antialiased;
+  }
+  
+  h1, h2, h3, .font-serif {
+    @apply font-serif;
   }
 }
 
-/* ===== SCROLLBAR ===== */
+@layer components {
+  /* Efeito de Vidro Luxuoso para o Header */
+  .glass {
+    @apply bg-white/70 backdrop-blur-lg border-b border-trivor-lilas/10;
+  }
+
+  /* Botão Principal com Neuro-estímulo */
+  .btn-premium {
+    @apply relative overflow-hidden transition-all duration-500 hover:scale-105 active:scale-95 shadow-xl hover:shadow-trivor-lilas/40;
+  }
+
+  /* Animação de Flutuação Suave para o Carrossel */
+  .animate-float {
+    animation: float 6s ease-in-out infinite;
+  }
+}
+
+@keyframes float {
+  0% { transform: translateY(0px) rotate(0deg); }
+  50% { transform: translateY(-20px) rotate(1deg); }
+  100% { transform: translateY(0px) rotate(0deg); }
+}
+
+/* Custom Scrollbar para combinar com a marca */
 ::-webkit-scrollbar {
   width: 8px;
-  height: 8px;
 }
+
 ::-webkit-scrollbar-track {
-  background: #f3f4f6;
+  background: var(--trivor-bg);
 }
+
 ::-webkit-scrollbar-thumb {
-  background: #7C3AED;
-  border-radius: 9999px;
+  background: var(--trivor-lilas);
+  border-radius: 10px;
 }
+
 ::-webkit-scrollbar-thumb:hover {
-  background: #5B21B6;
+  background: var(--trivor-oliva);
 }
 
-/* ===== BOTÕES ===== */
-.btn-primary {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
-  padding: 0.60rem 1.25rem;
-  background-color: #7C3AED;
-  color: #ffffff;
-  font-weight: 600;
-  font-size: 0.875rem;
-  border-radius: 0.75rem;
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 14px rgba(124, 58, 237, 0.3);
-  cursor: pointer;
-  border: none;
-  text-decoration: none;
+/* Ajuste de transição para o carrossel de vagas */
+.job-transition {
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
 }
-.btn-primary:hover {
-  background-color: #6D28D9;
-  box-shadow: 0 6px 20px rgba(124, 58, 237, 0.4);
-  transform: translateY(-2px);
-}
-.btn-primary:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-  transform: none;
-}
-
-.btn-secondary {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
-  padding: 0.60rem 1.25rem;
-  background-color: transparent;
-  color: #7C3AED;
-  font-weight: 600;
-  font-size: 0.875rem;
-  border-radius: 0.75rem;
-  border: 2px solid #7C3AED;
-  transition: all 0.3s ease;
-  cursor: pointer;
-  text-decoration: none;
-}
-.btn-secondary:hover {
-  background-color: #EDE9FE;
-  transform: translateY(-2px);
-}
-
-.btn-gold {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
-  padding: 0.60rem 1.25rem;
-  background-color: #F59E0B;
-  color: #ffffff;
-  font-weight: 600;
-  font-size: 0.875rem;
-  border-radius: 0.75rem;
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 14px rgba(245, 158, 11, 0.3);
-  cursor: pointer;
-  border: none;
-  text-decoration: none;
-}
-.btn-gold:hover {
-  background-color: #D97706;
-  box-shadow: 0 6px 20px rgba(245, 158, 11, 0.4);
-  transform: translateY(-2px);
-}
-
-.btn-outline {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
-  padding: 0.60rem 1.25rem;
-  background-color: transparent;
-  color: #6B7280;
-  font-weight: 500;
-  font-size: 0.875rem;
-  border-radius: 0.75rem;
-  border: 1px solid #D1D5DB;
-  transition: all 0.3s ease;
-  cursor: pointer;
-  text-decoration: none;
-}
-.btn-outline:hover {
-  background-color: #F9FAFB;
-  border-color: #9CA3AF;
-}
-
-/* ===== BOTÕES TAMANHOS ===== */
-.btn-sm {
-  padding: 0.40rem 0.80rem;
-  font-size: 0.75rem;
-}
-.btn-lg {
-  padding: 0.80rem 1.75rem;
-  font-size: 1rem;
-}
-.btn-full {
-  width: 100%;
-  justify-content: center;
-}
-
-/* ===== CARDS ===== */
-.card-premium {
-  background: #ffffff;
-  border-radius: 0.75rem;
-  padding: 1.5rem;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
-  border: 1px solid #f3f4f6;
-  transition: all 0.3s ease;
-}
-.card-premium:hover {
-  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.08);
-  border-color: #7C3AED;
-}
-
-/* ===== BADGES ===== */
-.badge-purple {
-  display: inline-block;
-  padding: 0.25rem 0.75rem;
-  background-color: #EDE9FE;
-  color: #7C3AED;
-  border-radius: 9999px;
-  font-size: 0.75rem;
-  font-weight: 500;
-}
-.badge-gold {
-  display: inline-block;
-  padding: 0.25rem 0.75rem;
-  background-color: #FEF3C7;
-  color: #D97706;
-  border-radius: 9999px;
-  font-size: 0.75rem;
-  font-weight: 500;
-}
-
-/* ===== TÍTULOS ===== */
-.title-purple {
-  font-size: 2.25rem;
-  font-weight: 700;
-  color: #111827;
-}
-.title-purple span {
-  color: #7C3AED;
-}
-@media (min-width: 768px) {
-  .title-purple {
-    font-size: 2.5rem;
-  }
-}
-
-.subtitle {
-  font-size: 1.125rem;
-  color: #6B7280;
-  max-width: 42rem;
-  margin-left: auto;
-  margin-right: auto;
-}
-.divider-gold {
-  width: 5rem;
-  height: 0.25rem;
-  background-color: #F59E0B;
-  border-radius: 9999px;
-  margin-left: auto;
-  margin-right: auto;
-}
-
-/* ===== INPUTS ===== */
-.input-default {
-  width: 100%;
-  padding: 0.75rem 1rem;
-  border: 1px solid #d1d5db;
-  border-radius: 0.5rem;
-  outline: none;
-  transition: all 0.3s ease;
-  background: #ffffff;
-}
-.input-default:focus {
-  border-color: #7C3AED;
-  box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.1);
-}
-
-/* ===== LINKS ===== */
-.link-purple {
-  color: #7C3AED;
-  font-weight: 500;
-  transition: color 0.3s ease;
-  text-decoration: none;
-}
-.link-purple:hover {
-  color: #5B21B6;
-}
-
-/* ===== SEÇÃO ===== */
-.section-purple-light {
-  background: linear-gradient(135deg, #f5f3ff 0%, #ffffff 50%, #f5f3ff 100%);
-}
-
-/* ===== CONTAINER ===== */
-.container-custom {
-  max-width: 1200px;
-  margin-left: auto;
-  margin-right: auto;
-  padding-left: 1rem;
-  padding-right: 1rem;
-}
-
