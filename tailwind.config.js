@@ -14,7 +14,20 @@ module.exports = {
       },
     },
     extend: {
+      // Adicionando a nova tipografia para o visual de elite
+      fontFamily: {
+        serif: ['Playfair Display', 'serif'],
+        sans: ['Inter', 'sans-serif'],
+      },
       colors: {
+        // Nova Identidade Visual Trivor (Lilás + Verde Oliva)
+        trivor: {
+          lilas: "#8E7AB5",      // Inovação e Visão
+          oliva: "#5C6347",      // Lucro e Estabilidade
+          deep: "#2D3121",       // Texto de Autoridade
+          bg: "#FDFCFB",         // Fundo Clean
+        },
+        // Mantendo as cores originais para não quebrar o que já existe
         purple: {
           50: '#f5f3ff',
           100: '#ede9fe',
