@@ -14,20 +14,28 @@ module.exports = {
       },
     },
     extend: {
-      // Adicionando a nova tipografia para o visual de elite
+      // Nova tipografia para visual internacional
       fontFamily: {
         serif: ['Playfair Display', 'serif'],
         sans: ['Inter', 'sans-serif'],
       },
       colors: {
-        // Nova Identidade Visual Trivor (Lilás + Verde Oliva)
-        trivor: {
-          lilas: "#8E7AB5",      // Inovação e Visão
-          oliva: "#5C6347",      // Lucro e Estabilidade
-          deep: "#2D3121",       // Texto de Autoridade
-          bg: "#FDFCFB",         // Fundo Clean
+        // Nova Identidade Internacional TRIVOR
+        navy: {
+          900: '#0F172A',
+          800: '#1E293B',
+          700: '#334155',
         },
-        // Mantendo as cores originais para não quebrar o que já existe
+        gold: {
+          100: '#FDF6E3',
+          200: '#F5E6C8',
+          300: '#E8D5A3',
+          400: '#D9C17E',
+          500: '#C9A84C',
+          600: '#B8963A',
+          700: '#A68428',
+        },
+        // Mantendo as cores originais para não quebrar dashboards
         purple: {
           50: '#f5f3ff',
           100: '#ede9fe',
