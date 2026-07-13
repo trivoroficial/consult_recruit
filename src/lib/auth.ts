@@ -2,7 +2,7 @@
 export const USERS = {
   admin: {
     id: '1',
-    name: 'Administrador',
+    name: 'Administrator',
     email: 'admin@trivor.com',
     password: 'trivor2026',
     role: 'admin',
@@ -10,7 +10,7 @@ export const USERS = {
   },
   empresa: {
     id: '2',
-    name: 'Empresa XPTO',
+    name: 'Company XPTO',
     email: 'empresa@trivor.com',
     password: 'trivor2026',
     role: 'empresa',
@@ -34,7 +34,7 @@ export function autenticar(email: string, password: string) {
       return { success: true, user }
     }
   }
-  return { success: false, error: 'Email ou senha inválidos' }
+  return { success: false, error: 'Invalid email or password', user: undefined }
 }
 
 export function getUserByEmail(email: string) {
