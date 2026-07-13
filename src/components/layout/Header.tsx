@@ -9,43 +9,36 @@ export function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
 
   const navItems = [
-    { label: 'Início', href: '/' },
-    { label: 'Sobre', href: '/sobre' },
-    { label: 'Serviços', href: '/servicos' },
-    { label: 'Contato', href: '/contato' },
+    { label: 'Home', href: '/' },
+    { label: 'About', href: '/sobre' },
+    { label: 'Services', href: '/servicos' },
+    { label: 'Contact', href: '/contato' },
   ]
 
   return (
-    <header className="sticky top-0 z-50 w-full bg-white/95 backdrop-blur-md border-b border-purple-100 shadow-sm">
-      <div className="container mx-auto flex h-24 items-center justify-between px-4">
-        {/* LOGO + TRIVOR + SLOGAN */}
-        <Link href="/" className="flex items-center gap-4 group">
-          <div className="flex items-center gap-4">
-            {/* LOGO PNG */}
-            <div className="relative w-16 h-16 md:w-20 md:h-20 flex-shrink-0">
-              <Image 
-                src="/logo.png" 
-                alt="TRIVOR"
-                fill
-                className="object-contain"
-                priority
-              />
-            </div>
-            
-            {/* TEXTO AO LADO DA LOGO */}
-            <div className="flex flex-col">
-              <div className="flex items-center gap-1">
-                <span className="text-2xl md:text-3xl font-extrabold text-purple-600 group-hover:text-purple-700 transition">
-                  TRIVOR
-                </span>
-                <span className="text-[10px] md:text-xs font-light text-purple-400 align-top mt-1">
-                  ™
-                </span>
-              </div>
-              <span className="text-[10px] md:text-xs font-light text-gray-500 tracking-wider uppercase">
-                Gestão & Estratégia Empresarial
+    <header className="sticky top-0 z-50 w-full bg-white/95 backdrop-blur-md border-b border-[#F1F1EF] shadow-sm">
+      <div className="container mx-auto flex h-20 items-center justify-between px-4">
+        {/* LOGO */}
+        <Link href="/" className="flex items-center gap-3 group">
+          <div className="relative w-12 h-12 md:w-14 md:h-14 flex-shrink-0">
+            <Image 
+              src="/logo.png" 
+              alt="TRIVOR"
+              fill
+              className="object-contain"
+              priority
+            />
+          </div>
+          <div className="flex flex-col">
+            <div className="flex items-center gap-1">
+              <span className="text-2xl md:text-3xl font-bold text-[#0F172A] group-hover:text-[#C9A84C] transition">
+                TRIVOR
               </span>
+              <span className="text-[10px] font-light text-[#C9A84C] align-top mt-1">™</span>
             </div>
+            <span className="text-[10px] font-light text-[#334155] tracking-wider uppercase">
+              Global Strategy & Consulting
+            </span>
           </div>
         </Link>
 
@@ -55,76 +48,76 @@ export function Header() {
             <Link
               key={item.href}
               href={item.href}
-              className="text-sm font-medium text-gray-600 transition-all duration-300 hover:text-purple-600 hover:scale-105 relative group"
+              className="text-sm font-medium text-[#334155] transition-all duration-300 hover:text-[#0F172A] hover:scale-105 relative group"
             >
               {item.label}
-              <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-purple-600 transition-all duration-300 group-hover:w-full"></span>
+              <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-[#C9A84C] transition-all duration-300 group-hover:w-full"></span>
             </Link>
           ))}
         </nav>
 
-        {/* BOTÕES DESKTOP */}
+        {/* BOTÕES */}
         <div className="hidden items-center gap-3 lg:flex">
           <Link href="/login">
-            <button className="btn-outline btn-sm">
+            <button className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-[#334155] hover:text-[#0F172A] hover:bg-[#F8F7F4] rounded-lg transition">
               <LogIn className="h-4 w-4" />
-              Entrar
+              Sign In
             </button>
           </Link>
           <Link href="/cadastro">
             <button className="btn-primary btn-sm">
               <UserPlus className="h-4 w-4" />
-              Cadastrar
+              Get Started
             </button>
           </Link>
           <Link href="/servicos">
             <button className="btn-gold btn-sm">
               <Crown className="h-4 w-4" />
-              Premium
+              Enterprise
             </button>
           </Link>
         </div>
 
-        {/* BOTÃO MENU MOBILE */}
+        {/* BOTÃO MOBILE */}
         <button 
-          className="lg:hidden p-2 hover:bg-purple-50 rounded-lg transition-colors"
+          className="lg:hidden p-2 hover:bg-[#F8F7F4] rounded-lg transition-colors"
           onClick={() => setIsMenuOpen(!isMenuOpen)}
         >
-          {isMenuOpen ? <X className="h-6 w-6 text-purple-600" /> : <Menu className="h-6 w-6 text-gray-600" />}
+          {isMenuOpen ? <X className="h-6 w-6 text-[#0F172A]" /> : <Menu className="h-6 w-6 text-[#334155]" />}
         </button>
       </div>
 
       {/* MENU MOBILE */}
       {isMenuOpen && (
-        <div className="lg:hidden border-t border-purple-100 bg-white shadow-lg">
+        <div className="lg:hidden border-t border-[#F1F1EF] bg-white shadow-lg">
           <div className="container mx-auto flex flex-col space-y-3 px-4 py-6">
             {navItems.map((item) => (
               <Link
                 key={item.href}
                 href={item.href}
-                className="text-base font-medium text-gray-600 hover:text-purple-600 hover:bg-purple-50 px-4 py-3 rounded-lg transition"
+                className="text-base font-medium text-[#334155] hover:text-[#0F172A] hover:bg-[#F8F7F4] px-4 py-3 rounded-lg transition"
                 onClick={() => setIsMenuOpen(false)}
               >
                 {item.label}
               </Link>
             ))}
-            <div className="flex flex-col gap-3 pt-4 border-t border-gray-100">
+            <div className="flex flex-col gap-3 pt-4 border-t border-[#F1F1EF]">
               <Link href="/login" onClick={() => setIsMenuOpen(false)}>
-                <button className="w-full btn-outline justify-center">
+                <button className="w-full flex items-center justify-center gap-2 px-4 py-3 border-2 border-[#0F172A] text-[#0F172A] font-medium rounded-lg hover:bg-[#F8F7F4] transition">
                   <LogIn className="h-4 w-4" />
-                  Entrar
+                  Sign In
                 </button>
               </Link>
               <Link href="/cadastro" onClick={() => setIsMenuOpen(false)}>
                 <button className="w-full btn-primary justify-center">
                   <UserPlus className="h-4 w-4" />
-                  Cadastrar
+                  Get Started
                 </button>
               </Link>
               <Link href="/servicos" onClick={() => setIsMenuOpen(false)}>
                 <button className="w-full btn-gold justify-center">
                   <Crown className="h-4 w-4" />
-                  Premium
+                  Enterprise
                 </button>
               </Link>
             </div>
