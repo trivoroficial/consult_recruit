@@ -20,7 +20,7 @@ const whatsappMessage = "Olá! Gostaria de conhecer as soluções da TRIVOR.";
 const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(whatsappMessage)}`;
 const emailContato = "contato@trivor.com.br";
 
-// ===== SERVIÇOS (CORRETOS) =====
+// ===== SERVIÇOS =====
 const servicos = [
   {
     icon: "👤",
@@ -119,7 +119,7 @@ export default function Home() {
       {/* ===== HEADER ===== */}
       <header className={cn(
         "fixed inset-x-0 top-0 z-50 border-b transition-all duration-500 bg-white/95 backdrop-blur-md",
-        scrolled ? "border-[#5C6347]/20 shadow-md" : "border-transparent"
+        scrolled ? "border-[#8E7AB5]/20 shadow-md" : "border-transparent"
       )}>
         <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3 sm:px-6 lg:px-8">
           <a href="#home" className="flex items-center gap-3">
@@ -147,51 +147,51 @@ export default function Home() {
 
           <div className="hidden items-center gap-3 lg:flex">
             <Link href="/login">
-              <button className="px-4 py-2 text-sm font-medium text-[#5C6347] hover:text-[#2D3121] hover:bg-[#F4F5F0] rounded-lg transition">
+              <button className="px-4 py-2 text-sm font-medium text-[#5C6347] hover:text-[#8E7AB5] hover:bg-[#F4F5F0] rounded-lg transition">
                 Entrar
               </button>
             </Link>
             <Link href="/cadastro">
-              <button className="px-5 py-2.5 text-sm font-semibold text-white bg-[#5C6347] rounded-full hover:bg-[#4A5039] transition shadow-md shadow-[#5C6347]/20 hover:shadow-lg hover:-translate-y-0.5">
+              <button className="px-5 py-2.5 text-sm font-semibold text-white bg-[#8E7AB5] rounded-full hover:bg-[#726191] transition shadow-md shadow-[#8E7AB5]/20 hover:shadow-lg hover:-translate-y-0.5">
                 Cadastrar
               </button>
             </Link>
-            <a href={whatsappUrl} target="_blank" rel="noopener noreferrer" className="px-5 py-2.5 text-sm font-semibold text-white bg-[#8E7AB5] rounded-full hover:bg-[#726191] transition shadow-md shadow-[#8E7AB5]/20 hover:shadow-lg hover:-translate-y-0.5">
+            <a href={whatsappUrl} target="_blank" rel="noopener noreferrer" className="px-5 py-2.5 text-sm font-semibold text-white bg-[#5C6347] rounded-full hover:bg-[#4A5039] transition shadow-md shadow-[#5C6347]/20 hover:shadow-lg hover:-translate-y-0.5">
               Especialista
             </a>
           </div>
 
           <button
-            className="inline-flex flex-col items-center justify-center gap-1 rounded-xl border border-[#5C6347]/20 bg-white px-4 py-3 lg:hidden"
+            className="inline-flex flex-col items-center justify-center gap-1 rounded-xl border border-[#8E7AB5]/20 bg-white px-4 py-3 lg:hidden"
             type="button"
             onClick={() => setMenuOpen((open) => !open)}
           >
-            <span className="block h-0.5 w-5 bg-[#5C6347]" />
-            <span className="block h-0.5 w-5 bg-[#5C6347]" />
-            <span className="block h-0.5 w-5 bg-[#5C6347]" />
+            <span className="block h-0.5 w-5 bg-[#8E7AB5]" />
+            <span className="block h-0.5 w-5 bg-[#8E7AB5]" />
+            <span className="block h-0.5 w-5 bg-[#8E7AB5]" />
           </button>
         </div>
 
         {menuOpen && (
-          <div className="border-t border-[#5C6347]/10 bg-white px-4 py-5 lg:hidden">
+          <div className="border-t border-[#8E7AB5]/10 bg-white px-4 py-5 lg:hidden">
             <div className="mx-auto flex max-w-7xl flex-col gap-3">
               {navLinks.map((link) => (
                 <a key={link.id} href={`#${link.id}`} className="block rounded-xl px-3 py-3 text-base font-medium text-[#2D3121] hover:bg-[#F4F5F0] hover:text-[#8E7AB5]" onClick={() => setMenuOpen(false)}>
                   {link.label}
                 </a>
               ))}
-              <div className="flex flex-col gap-3 pt-4 border-t border-[#5C6347]/10">
+              <div className="flex flex-col gap-3 pt-4 border-t border-[#8E7AB5]/10">
                 <Link href="/login" onClick={() => setMenuOpen(false)}>
-                  <button className="w-full py-3 text-sm font-medium text-[#5C6347] border border-[#5C6347] rounded-full hover:bg-[#F4F5F0] transition">
+                  <button className="w-full py-3 text-sm font-medium text-[#5C6347] border border-[#8E7AB5] rounded-full hover:bg-[#F4F5F0] transition">
                     Entrar
                   </button>
                 </Link>
                 <Link href="/cadastro" onClick={() => setMenuOpen(false)}>
-                  <button className="w-full py-3 text-sm font-semibold text-white bg-[#5C6347] rounded-full hover:bg-[#4A5039] transition">
+                  <button className="w-full py-3 text-sm font-semibold text-white bg-[#8E7AB5] rounded-full hover:bg-[#726191] transition">
                     Cadastrar
                   </button>
                 </Link>
-                <a href={whatsappUrl} target="_blank" rel="noopener noreferrer" className="w-full py-3 text-sm font-semibold text-white bg-[#8E7AB5] rounded-full hover:bg-[#726191] transition text-center">
+                <a href={whatsappUrl} target="_blank" rel="noopener noreferrer" className="w-full py-3 text-sm font-semibold text-white bg-[#5C6347] rounded-full hover:bg-[#4A5039] transition text-center">
                   Especialista
                 </a>
               </div>
@@ -204,26 +204,26 @@ export default function Home() {
         {/* ===== HERO ===== */}
         <section ref={heroRef} id="home" className="relative flex min-h-[90vh] items-center overflow-hidden pt-20">
           <motion.div className="absolute inset-0" style={{ y: videoY }}>
-            <div className="h-full w-full bg-gradient-to-br from-[#2D3121] via-[#5C6347] to-[#8E7AB5]"></div>
+            <div className="h-full w-full bg-gradient-to-br from-[#8E7AB5] via-[#726191] to-[#5C6347]"></div>
           </motion.div>
 
           <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(45,49,33,0.85)_0%,rgba(45,49,33,0.5)_40%,rgba(45,49,33,0.1)_100%)]" />
 
           <motion.div className="relative z-10 mx-auto flex w-full max-w-7xl px-4 sm:px-6 lg:px-8" style={{ y: overlayY }}>
             <div className="max-w-4xl space-y-8 py-12 lg:py-20">
-              <motion.div className="inline-flex items-center gap-3 rounded-full border border-[#8E7AB5]/30 bg-white/10 px-4 py-2 text-[11px] tracking-[0.34em] text-white/90 backdrop-blur-md uppercase" initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7 }}>
-                <span className="h-2 w-2 rounded-full bg-[#8E7AB5] shadow-[0_0_18px_rgba(142,122,181,0.6)]" />
+              <motion.div className="inline-flex items-center gap-3 rounded-full border border-white/30 bg-white/10 px-4 py-2 text-[11px] tracking-[0.34em] text-white/90 backdrop-blur-md uppercase" initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7 }}>
+                <span className="h-2 w-2 rounded-full bg-white shadow-[0_0_18px_rgba(255,255,255,0.4)]" />
                 Consultoria Estratégica
               </motion.div>
 
               <motion.div initial={{ opacity: 0, y: 22 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1, duration: 0.8 }}>
                 <p className="font-serif text-5xl tracking-[0.22em] text-white/95 sm:text-6xl lg:text-7xl">TRIVOR</p>
-                <p className="text-sm tracking-[0.32em] text-[#8E7AB5] uppercase sm:text-base">Gestão & Estratégia Empresarial</p>
+                <p className="text-sm tracking-[0.32em] text-[#5C6347] uppercase sm:text-base">Gestão & Estratégia Empresarial</p>
               </motion.div>
 
               <motion.h1 className="max-w-4xl font-serif text-5xl leading-[1.02] text-white sm:text-6xl lg:text-7xl" initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2, duration: 0.85 }}>
                 Transforme seu negócio com <br className="hidden sm:block" />
-                <span className="text-[#8E7AB5]">inteligência estratégica</span>
+                <span className="text-[#5C6347]">inteligência estratégica</span>
               </motion.h1>
 
               <motion.p className="max-w-2xl text-lg leading-8 text-white/85 md:text-xl" initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3, duration: 0.85 }}>
@@ -232,7 +232,7 @@ export default function Home() {
 
               <motion.div className="flex flex-col gap-3 sm:flex-row" initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4, duration: 0.85 }}>
                 <Link href="/cadastro">
-                  <button className="px-6 py-3 text-sm font-semibold text-white bg-[#8E7AB5] rounded-full shadow-lg shadow-[#8E7AB5]/30 hover:bg-[#726191] hover:-translate-y-0.5 transition-all">
+                  <button className="px-6 py-3 text-sm font-semibold text-white bg-[#5C6347] rounded-full shadow-lg shadow-[#5C6347]/30 hover:bg-[#4A5039] hover:-translate-y-0.5 transition-all">
                     Solicitar Diagnóstico →
                   </button>
                 </Link>
@@ -242,9 +242,9 @@ export default function Home() {
               </motion.div>
 
               <motion.div className="flex gap-8 text-white/80" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.6 }}>
-                <div><span className="text-2xl font-bold text-[#8E7AB5]">15+</span> <span className="text-sm">Anos</span></div>
-                <div><span className="text-2xl font-bold text-[#8E7AB5]">1.000+</span> <span className="text-sm">Clientes</span></div>
-                <div><span className="text-2xl font-bold text-[#8E7AB5]">96%</span> <span className="text-sm">Satisfação</span></div>
+                <div><span className="text-2xl font-bold text-[#5C6347]">15+</span> <span className="text-sm">Anos</span></div>
+                <div><span className="text-2xl font-bold text-[#5C6347]">1.000+</span> <span className="text-sm">Clientes</span></div>
+                <div><span className="text-2xl font-bold text-[#5C6347]">96%</span> <span className="text-sm">Satisfação</span></div>
               </motion.div>
             </div>
           </motion.div>
@@ -252,11 +252,11 @@ export default function Home() {
           <div className="pointer-events-none absolute bottom-0 left-0 right-0 h-40 bg-gradient-to-t from-[#FDFCFB] to-transparent" />
         </section>
 
-        {/* ===== SERVIÇOS (CORRETOS) ===== */}
+        {/* ===== SERVIÇOS ===== */}
         <section id="servicos" className="py-20 md:py-28 bg-[#FDFCFB]">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-14">
-              <p className="text-xs tracking-[0.36em] text-[#8E7AB5] uppercase font-medium">Serviços</p>
+              <p className="text-xs tracking-[0.36em] text-[#5C6347] uppercase font-medium">Serviços</p>
               <h2 className="mt-4 font-serif text-4xl text-[#2D3121] md:text-5xl">
                 Soluções <span className="text-[#8E7AB5]">Estratégicas</span>
               </h2>
@@ -268,7 +268,7 @@ export default function Home() {
 
             <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
               {servicos.map((servico, index) => (
-                <motion.div key={index} className="bg-white border border-[#E8EAE0] rounded-2xl p-6 shadow-sm hover:shadow-xl hover:-translate-y-2 hover:border-[#8E7AB5]/40 transition-all duration-300" initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0.3 }} variants={fadeUp}>
+                <motion.div key={index} className="bg-white border border-[#E8EAE0] rounded-2xl p-6 shadow-sm hover:shadow-xl hover:-translate-y-2 hover:border-[#8E7AB5] transition-all duration-300" initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0.3 }} variants={fadeUp}>
                   <div className="text-3xl mb-3">{servico.icon}</div>
                   <h3 className="text-xl font-bold text-[#2D3121]">{servico.title}</h3>
                   <p className="mt-2 text-sm text-[#5C6347]">{servico.description}</p>
@@ -289,7 +289,7 @@ export default function Home() {
         <section id="diferenciais" className="py-20 md:py-28 bg-white">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-14">
-              <p className="text-xs tracking-[0.36em] text-[#8E7AB5] uppercase font-medium">Diferenciais</p>
+              <p className="text-xs tracking-[0.36em] text-[#5C6347] uppercase font-medium">Diferenciais</p>
               <h2 className="mt-4 font-serif text-4xl text-[#2D3121] md:text-5xl">
                 Por que <span className="text-[#8E7AB5]">TRIVOR</span>
               </h2>
@@ -298,7 +298,7 @@ export default function Home() {
 
             <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
               {differentiators.map((item, index) => (
-                <motion.div key={index} className="bg-[#F8F7F4] border border-[#E8EAE0] rounded-2xl p-6 text-center hover:shadow-lg hover:-translate-y-2 hover:border-[#8E7AB5]/30 transition-all duration-300" initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0.3 }} variants={fadeUp}>
+                <motion.div key={index} className="bg-[#F8F7F4] border border-[#E8EAE0] rounded-2xl p-6 text-center hover:shadow-lg hover:-translate-y-2 hover:border-[#8E7AB5] transition-all duration-300" initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0.3 }} variants={fadeUp}>
                   <div className="w-14 h-14 bg-[#8E7AB5]/10 rounded-full flex items-center justify-center mx-auto mb-4 text-2xl text-[#8E7AB5]">
                     ✦
                   </div>
@@ -315,7 +315,7 @@ export default function Home() {
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <div className="grid gap-12 lg:grid-cols-2 items-center">
               <div>
-                <p className="text-xs tracking-[0.36em] text-[#8E7AB5] uppercase font-medium">Sobre Nós</p>
+                <p className="text-xs tracking-[0.36em] text-[#5C6347] uppercase font-medium">Sobre Nós</p>
                 <h2 className="mt-4 font-serif text-4xl text-[#2D3121] md:text-5xl">
                   Parceiros na <span className="text-[#8E7AB5]">evolução</span> do seu negócio
                 </h2>
@@ -338,10 +338,10 @@ export default function Home() {
                   </div>
                 </div>
               </div>
-              <div className="bg-[#5C6347] rounded-3xl p-8 text-white">
+              <div className="bg-[#8E7AB5] rounded-3xl p-8 text-white">
                 <p className="text-2xl font-serif">"Transformamos empresas através de pessoas, processos e inteligência."</p>
                 <div className="mt-6 flex items-center gap-4">
-                  <div className="w-12 h-12 bg-[#8E7AB5] rounded-full flex items-center justify-center text-xl">T</div>
+                  <div className="w-12 h-12 bg-[#5C6347] rounded-full flex items-center justify-center text-xl">T</div>
                   <div>
                     <p className="font-semibold">TRIVOR</p>
                     <p className="text-sm text-white/70">Gestão & Estratégia</p>
@@ -356,7 +356,7 @@ export default function Home() {
         <section id="resultados" className="py-20 md:py-28 bg-white">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-14">
-              <p className="text-xs tracking-[0.36em] text-[#8E7AB5] uppercase font-medium">Depoimentos</p>
+              <p className="text-xs tracking-[0.36em] text-[#5C6347] uppercase font-medium">Depoimentos</p>
               <h2 className="mt-4 font-serif text-4xl text-[#2D3121] md:text-5xl">
                 O que <span className="text-[#8E7AB5]">dizem</span> sobre nós
               </h2>
@@ -379,7 +379,7 @@ export default function Home() {
         </section>
 
         {/* ===== CTA ===== */}
-        <section className="py-16 md:py-20 bg-[#5C6347]">
+        <section className="py-16 md:py-20 bg-[#8E7AB5]">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center">
             <h2 className="font-serif text-3xl md:text-4xl text-white">Sua empresa pode ir muito mais longe</h2>
             <p className="mt-4 text-white/80 max-w-2xl mx-auto">
@@ -391,7 +391,7 @@ export default function Home() {
                   Solicitar Diagnóstico →
                 </button>
               </Link>
-              <a href={whatsappUrl} target="_blank" rel="noopener noreferrer" className="px-6 py-3 text-sm font-semibold text-white bg-[#8E7AB5] rounded-full hover:bg-[#726191] shadow-lg shadow-[#8E7AB5]/20 hover:-translate-y-0.5 transition-all">
+              <a href={whatsappUrl} target="_blank" rel="noopener noreferrer" className="px-6 py-3 text-sm font-semibold text-white bg-[#5C6347] rounded-full hover:bg-[#4A5039] shadow-lg shadow-[#5C6347]/20 hover:-translate-y-0.5 transition-all">
                 Falar com Especialista →
               </a>
             </div>
@@ -402,7 +402,7 @@ export default function Home() {
         <section id="contato" className="py-20 md:py-28 bg-[#FDFCFB]">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-14">
-              <p className="text-xs tracking-[0.36em] text-[#8E7AB5] uppercase font-medium">Contato</p>
+              <p className="text-xs tracking-[0.36em] text-[#5C6347] uppercase font-medium">Contato</p>
               <h2 className="mt-4 font-serif text-4xl text-[#2D3121] md:text-5xl">
                 Vamos <span className="text-[#8E7AB5]">conversar</span>
               </h2>
@@ -462,7 +462,7 @@ export default function Home() {
                     <label className="block text-sm font-medium text-[#2D3121]">Mensagem</label>
                     <textarea className="w-full px-4 py-3 border border-[#E8EAE0] rounded-xl focus:border-[#8E7AB5] focus:ring-2 focus:ring-[#8E7AB5]/20 outline-none transition min-h-[100px] resize-none" name="mensagem" placeholder="Conte sobre sua empresa e o objetivo da consultoria..." value={formState.mensagem} onChange={(e) => setFormState({...formState, mensagem: e.target.value})} required />
                   </div>
-                  <button type="submit" className="w-full py-3 text-white bg-[#5C6347] rounded-full hover:bg-[#4A5039] transition shadow-md shadow-[#5C6347]/20 hover:shadow-lg">
+                  <button type="submit" className="w-full py-3 text-white bg-[#8E7AB5] rounded-full hover:bg-[#726191] transition shadow-md shadow-[#8E7AB5]/20 hover:shadow-lg">
                     {formStatus === "sending" ? "Enviando..." : formStatus === "success" ? "✓ Enviado!" : "Enviar Mensagem"}
                   </button>
                 </form>
