@@ -21,26 +21,27 @@ export default function Login() {
 
     const result = autenticar(email, password)
 
-    if (!result.success) {
+    if (!result.success || !result.user) {
       setErro(result.error || 'Erro ao fazer login')
       setLoading(false)
       return
     }
 
+    const user = result.user
+
     // 1. Salvar no localStorage (para os sidebars)
-    localStorage.setItem('trivor_user', JSON.stringify(result.user))
-    localStorage.setItem('trivor_role', result.user.role)
+    localStorage.setItem('trivor_user', JSON.stringify(user))
+    localStorage.setItem('trivor_role', user.role)
 
     // 2. Salvar em cookie (para o middleware proteger as rotas)
-    // O cookie expira em 7 dias
-    const cookieData = JSON.stringify(result.user)
+    const cookieData = JSON.stringify(user)
     document.cookie = `trivor_user=${encodeURIComponent(cookieData)}; path=/; max-age=604800`
-    document.cookie = `trivor_role=${result.user.role}; path=/; max-age=604800`
+    document.cookie = `trivor_role=${user.role}; path=/; max-age=604800`
 
     setLoading(false)
 
     // 3. Redirecionar conforme o perfil
-    switch (result.user.role) {
+    switch (user.role) {
       case 'admin':
         router.push('/admin/dashboard')
         break
@@ -56,13 +57,13 @@ export default function Login() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-50 via-white to-purple-50 px-4">
+    <div className="min-h-screen flex items-center justify-center bg-[#F8F7F4] px-4">
       <div className="w-full max-w-md">
-        <div className="bg-white rounded-2xl shadow-xl p-8">
+        <div className="bg-white rounded-2xl shadow-xl p-8 border border-[#F1F1EF]">
           <div className="text-center">
-            <h1 className="text-3xl font-bold text-purple-600">TRIVOR</h1>
-            <h2 className="mt-2 text-xl font-semibold">Bem-vindo de volta</h2>
-            <p className="text-gray-500 text-sm">Entre com suas credenciais</p>
+            <h1 className="text-3xl font-bold text-[#0F172A]">TRIVOR</h1>
+            <h2 className="mt-2 text-xl font-semibold">Welcome Back</h2>
+            <p className="text-gray-500 text-sm">Sign in to your account</p>
           </div>
 
           {erro && (
@@ -80,12 +81,12 @@ export default function Login() {
                 className="input-default"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder="seu@email.com"
+                placeholder="you@company.com"
               />
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700">Senha</label>
+              <label className="block text-sm font-medium text-gray-700">Password</label>
               <div className="relative">
                 <input
                   type={showPassword ? 'text' : 'password'}
@@ -107,10 +108,10 @@ export default function Login() {
 
             <div className="flex items-center justify-between">
               <label className="flex items-center gap-2 text-sm text-gray-600">
-                <input type="checkbox" /> Lembrar-me
+                <input type="checkbox" /> Remember me
               </label>
-              <Link href="/recuperar-senha" className="text-sm text-purple-600 hover:text-purple-700">
-                Esqueceu a senha?
+              <Link href="/recuperar-senha" className="text-sm text-[#C9A84C] hover:text-[#B8963A]">
+                Forgot password?
               </Link>
             </div>
 
@@ -119,24 +120,23 @@ export default function Login() {
               disabled={loading}
               className="btn-primary btn-full"
             >
-              {loading ? 'Entrando...' : 'Entrar'}
+              {loading ? 'Signing in...' : 'Sign In'}
             </button>
           </form>
 
-          {/* DADOS PARA TESTE */}
           <div className="mt-6 text-center">
-            <p className="text-sm text-gray-500">Contas para teste:</p>
+            <p className="text-sm text-gray-500">Test Accounts:</p>
             <div className="mt-2 text-xs text-gray-400 space-y-1">
               <p>👑 Admin: admin@trivor.com / trivor2026</p>
-              <p>🏢 Empresa: empresa@trivor.com / trivor2026</p>
-              <p>👤 Candidato: candidato@trivor.com / trivor2026</p>
+              <p>🏢 Company: empresa@trivor.com / trivor2026</p>
+              <p>👤 Talent: candidato@trivor.com / trivor2026</p>
             </div>
           </div>
 
           <p className="mt-6 text-center text-sm text-gray-600">
-            Não tem uma conta?{' '}
-            <Link href="/cadastro" className="text-purple-600 font-medium hover:text-purple-700">
-              Cadastre-se
+            Don't have an account?{' '}
+            <Link href="/cadastro" className="text-[#C9A84C] font-medium hover:text-[#B8963A]">
+              Create one
             </Link>
           </p>
         </div>
