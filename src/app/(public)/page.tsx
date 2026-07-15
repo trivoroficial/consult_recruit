@@ -141,25 +141,21 @@ export default function Home() {
               Ajudamos empresas a crescer por meio da melhoria de processos, desenvolvimento humano, tecnologia e inteligência organizacional.
             </motion.p>
 
-            {/* BOTÕES: Diagnóstico e Especialista */}
+            {/* BOTÕES: Diagnóstico e Especialista - SEM TEXTO REPETIDO */}
             <motion.div className="flex flex-col gap-4 sm:flex-row" initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3, duration: 0.85 }}>
               <Link href="/cadastro">
-                <button className="group relative px-8 py-4 text-sm font-semibold tracking-wider text-white bg-[#8B0000] rounded-lg overflow-hidden transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
-                  <span className="relative z-10">Solicitar Diagnóstico</span>
-                  <span className="absolute inset-0 bg-[#E3C9A8] transform translate-y-full group-hover:translate-y-0 transition-transform duration-300"></span>
+                <button className="relative px-8 py-3.5 text-sm font-medium tracking-wider text-white bg-[#8B0000] rounded-lg overflow-hidden transition-all duration-300 hover:shadow-xl hover:-translate-y-1 group">
                   <span className="relative z-10 flex items-center gap-2">
-                    Diagnóstico <ArrowRight className="h-5 w-5" />
+                    Solicitar Diagnóstico <ArrowRight className="h-4 w-4" />
                   </span>
+                  <span className="absolute inset-0 bg-[#E3C9A8] transform translate-y-full group-hover:translate-y-0 transition-transform duration-300"></span>
                 </button>
               </Link>
-              <a href={whatsappUrl} target="_blank" rel="noopener noreferrer" className="group relative px-8 py-4 text-sm font-semibold tracking-wider text-white border-2 border-white/40 rounded-lg overflow-hidden transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
+              <a href={whatsappUrl} target="_blank" rel="noopener noreferrer" className="relative px-8 py-3.5 text-sm font-medium tracking-wider text-white border border-white/40 rounded-lg overflow-hidden transition-all duration-300 hover:shadow-xl hover:-translate-y-1 group">
                 <span className="relative z-10 flex items-center gap-2">
-                  <Phone className="h-5 w-5" /> Falar com Especialista
+                  <Phone className="h-4 w-4" /> Falar com Especialista
                 </span>
                 <span className="absolute inset-0 bg-white transform translate-y-full group-hover:translate-y-0 transition-transform duration-300"></span>
-                <span className="relative z-10 text-transparent group-hover:text-[#8B0000] transition-colors duration-300 flex items-center gap-2">
-                  <Phone className="h-5 w-5" /> Falar com Especialista
-                </span>
               </a>
             </motion.div>
 
@@ -321,16 +317,18 @@ export default function Home() {
           <p className="mt-4 text-[#A1A8AE] max-w-2xl mx-auto">Vamos conversar e construir juntos o próximo capítulo da sua história.</p>
           <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row">
             <Link href="/cadastro">
-              <button className="group relative px-8 py-4 text-sm font-semibold tracking-wider text-white bg-[#8B0000] rounded-lg overflow-hidden transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
-                <span className="relative z-10 flex items-center gap-2">Diagnóstico <ArrowRight className="h-5 w-5" /></span>
+              <button className="relative px-8 py-3.5 text-sm font-medium tracking-wider text-white bg-[#8B0000] rounded-lg overflow-hidden transition-all duration-300 hover:shadow-xl hover:-translate-y-1 group">
+                <span className="relative z-10 flex items-center gap-2">
+                  Solicitar Diagnóstico <ArrowRight className="h-4 w-4" />
+                </span>
                 <span className="absolute inset-0 bg-[#E3C9A8] transform translate-y-full group-hover:translate-y-0 transition-transform duration-300"></span>
-                <span className="relative z-10 text-transparent group-hover:text-[#8B0000] transition-colors duration-300 flex items-center gap-2">Diagnóstico <ArrowRight className="h-5 w-5" /></span>
               </button>
             </Link>
-            <a href={whatsappUrl} target="_blank" rel="noopener noreferrer" className="group relative px-8 py-4 text-sm font-semibold tracking-wider text-white border-2 border-white/40 rounded-lg overflow-hidden transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
-              <span className="relative z-10 flex items-center gap-2"><Phone className="h-5 w-5" /> Especialista</span>
+            <a href={whatsappUrl} target="_blank" rel="noopener noreferrer" className="relative px-8 py-3.5 text-sm font-medium tracking-wider text-white border border-white/40 rounded-lg overflow-hidden transition-all duration-300 hover:shadow-xl hover:-translate-y-1 group">
+              <span className="relative z-10 flex items-center gap-2">
+                <Phone className="h-4 w-4" /> Falar com Especialista
+              </span>
               <span className="absolute inset-0 bg-white transform translate-y-full group-hover:translate-y-0 transition-transform duration-300"></span>
-              <span className="relative z-10 text-transparent group-hover:text-[#8B0000] transition-colors duration-300 flex items-center gap-2"><Phone className="h-5 w-5" /> Especialista</span>
             </a>
           </div>
         </div>
