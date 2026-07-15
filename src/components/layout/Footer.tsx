@@ -19,37 +19,40 @@ const navLinks = [
 
 export function Footer() {
   return (
-    <footer className="bg-[#2D343A] text-white py-16 border-t border-white/10">
+    <footer className="bg-[#2D343A] text-white py-12 border-t border-white/10">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid gap-12 md:grid-cols-2 lg:grid-cols-4">
+        <div className="grid gap-10 md:grid-cols-2 lg:grid-cols-4">
           
-          {/* COLUNA 1: MARCA ZENTHOS */}
+          {/* ===== COLUNA 1: MARCA ZENTHOS ===== */}
           <div className="lg:col-span-1">
-            <div className="flex items-center gap-3 mb-6">
+            <Link href="/" className="flex items-center gap-3 group">
               <img 
                 src="/logo-zenthos.png" 
                 alt="ZENTHOS" 
                 className="h-[1.5cm] w-auto object-contain brightness-0 invert" 
               />
-              <div className="flex flex-col justify-center">
-                <span className="text-xl font-bold text-white leading-none">ZENTHOS</span>
-                <span className="text-[10px] font-light text-[#E3C9A8] tracking-[0.2em] uppercase mt-1 whitespace-nowrap">
+              <div className="flex flex-col leading-none">
+                <div className="flex items-center gap-1">
+                  <span className="text-xl font-bold tracking-tight text-white">ZENTHOS</span>
+                  <span className="text-[8px] font-light text-[#E3C9A8] align-top mt-[-2px]">™</span>
+                </div>
+                <span className="text-[9px] font-light text-[#A1A8AE] tracking-[0.15em] uppercase whitespace-nowrap">
                   Gestão, Estratégia & Transformação
                 </span>
               </div>
-            </div>
-            <p className="text-sm text-white/70 leading-relaxed mb-6">
+            </Link>
+            <p className="mt-4 text-sm text-white/60 leading-relaxed max-w-xs">
               Transformando organizações através de estratégia, tecnologia e inteligência humana.
             </p>
-            <p className="text-xs text-white/50">
+            <p className="mt-6 text-xs text-white/40">
               © {new Date().getFullYear()} ZENTHOS. Todos os direitos reservados.
             </p>
           </div>
           
-          {/* COLUNA 2: NAVEGAÇÃO */}
+          {/* ===== COLUNA 2: NAVEGAÇÃO ===== */}
           <div>
-            <h4 className="font-bold text-white text-sm uppercase tracking-wider mb-4">Navegação</h4>
-            <ul className="space-y-3 text-sm text-white/70">
+            <h4 className="font-semibold text-white text-sm uppercase tracking-wider mb-4">Navegação</h4>
+            <ul className="space-y-3 text-sm text-white/60">
               {navLinks.map((link) => (
                 <li key={link.id}>
                   <a href={link.href} className="hover:text-[#E3C9A8] transition-colors duration-200">
@@ -60,10 +63,10 @@ export function Footer() {
             </ul>
           </div>
           
-          {/* COLUNA 3: CONTATO */}
+          {/* ===== COLUNA 3: CONTATO ===== */}
           <div>
-            <h4 className="font-bold text-white text-sm uppercase tracking-wider mb-4">Contato</h4>
-            <ul className="space-y-3 text-sm text-white/70">
+            <h4 className="font-semibold text-white text-sm uppercase tracking-wider mb-4">Contato</h4>
+            <ul className="space-y-3 text-sm text-white/60">
               <li>
                 <a href={whatsappUrl} target="_blank" rel="noopener noreferrer" className="hover:text-[#E3C9A8] transition-colors duration-200 flex items-center gap-2">
                   <span>📱</span> {whatsappDisplay}
@@ -77,13 +80,18 @@ export function Footer() {
             </ul>
           </div>
           
-          {/* COLUNA 4: ACESSO AO SISTEMA */}
+          {/* ===== COLUNA 4: ACESSO AO SISTEMA ===== */}
           <div>
-            <h4 className="font-bold text-white text-sm uppercase tracking-wider mb-4">Acesso ao Sistema</h4>
-            <ul className="space-y-3 text-sm text-white/70">
+            <h4 className="font-semibold text-white text-sm uppercase tracking-wider mb-4">Acesso</h4>
+            <ul className="space-y-3 text-sm text-white/60">
               <li>
                 <Link href="/login" className="hover:text-[#E3C9A8] transition-colors duration-200 flex items-center gap-2">
                   <span>🔒</span> Área do Cliente
+                </Link>
+              </li>
+              <li>
+                <Link href="/cadastro" className="hover:text-[#E3C9A8] transition-colors duration-200 flex items-center gap-2">
+                  <span>🚀</span> Solicitar Acesso
                 </Link>
               </li>
             </ul>
