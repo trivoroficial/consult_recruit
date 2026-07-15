@@ -26,7 +26,7 @@ import {
 // ===== DADOS =====
 const navLinks = [
   { id: "home", label: "Início" },
-  { id: "sobre", label: "Quem Somos" },
+  { id: "sobre", label: "Sobre" },
   { id: "servicos", label: "Serviços" },
   { id: "solucoes", label: "Soluções" },
   { id: "tecnologia", label: "Tecnologia" },
@@ -34,7 +34,7 @@ const navLinks = [
   { id: "contato", label: "Contato" },
 ];
 
-const whatsappNumber = "5534991177058";
+const whatsappNumber = "5537991177058";
 const whatsappMessage = "Olá! Gostaria de conhecer as soluções da ZENTHOS.";
 const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(whatsappMessage)}`;
 const emailContato = "contato@zenthos.com.br";
@@ -133,12 +133,17 @@ export default function Home() {
       )}>
         <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3 sm:px-6 lg:px-8">
           <a href="#home" className="flex items-center gap-3">
-            <div className="relative w-12 h-12 md:w-14 md:h-14">
-              <img src="/logo-zenthos.png" alt="ZENTHOS" className="w-full h-full object-contain" />
+            {/* LOGO ZENTHOS - 1.5cm de altura */}
+            <div className="h-[1.5cm] w-auto relative">
+              <img 
+                src="/logo-zenthos.png" 
+                alt="ZENTHOS" 
+                className="h-full w-auto object-contain"
+              />
             </div>
             <div className="flex flex-col">
               <span className="text-2xl md:text-3xl font-bold text-[#2D343A]">ZENTHOS</span>
-              <span className="text-[10px] font-light text-[#708090] tracking-wider uppercase">
+              <span className="text-[10px] font-light text-[#708090] tracking-wider uppercase whitespace-nowrap">
                 Gestão, Estratégia & Transformação
               </span>
             </div>
@@ -300,7 +305,7 @@ export default function Home() {
                     viewport={{ once: true, amount: 0.3 }} 
                     variants={fadeUp}
                   >
-                    <div className="w-14 h-14 rounded-xl flex items-center justify-center mb-4 bg-[#8B0000]/10 text-[#8B0000] transition group-hover:bg-[#8B0000] group-hover:text-white">
+                    <div className="w-14 h-14 rounded-xl flex items-center justify-center mb-4 bg-[#8B0000]/10 text-[#8B0000]">
                       <Icon className="h-7 w-7" />
                     </div>
                     <h3 className="text-xl font-bold text-[#2D343A]">{servico.title}</h3>
@@ -319,12 +324,12 @@ export default function Home() {
           </div>
         </section>
 
-        {/* ===== QUEM SOMOS ===== */}
+        {/* ===== SOBRE (antes Quem Somos) ===== */}
         <section id="sobre" className="py-20 md:py-28 bg-[#F8F4E6]">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <div className="grid gap-12 lg:grid-cols-2 items-center">
               <div>
-                <p className="text-xs tracking-[0.36em] text-[#8B0000] uppercase font-medium">Quem Somos</p>
+                <p className="text-xs tracking-[0.36em] text-[#8B0000] uppercase font-medium">Sobre</p>
                 <h2 className="mt-4 font-serif text-4xl text-[#2D343A] md:text-5xl">
                   Parceiros na <span className="text-[#8B0000]">transformação</span> do seu negócio
                 </h2>
@@ -620,16 +625,27 @@ export default function Home() {
         </section>
       </main>
 
-      {/* ===== RODAPÉ ===== */}
+      {/* ===== RODAPÉ ZENTHOS ===== */}
       <footer className="bg-[#2D343A] text-white py-12">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid gap-8 md:grid-cols-4">
             <div>
-              <div className="flex items-center gap-2">
-                <span className="text-xl font-bold text-white">ZENTHOS</span>
-                <span className="text-[#E3C9A8]">™</span>
+              <div className="flex items-center gap-3">
+                {/* LOGO RODAPÉ - 1.5cm de altura */}
+                <div className="h-[1.5cm] w-auto relative">
+                  <img 
+                    src="/logo-zenthos.png" 
+                    alt="ZENTHOS" 
+                    className="h-full w-auto object-contain brightness-0 invert"
+                  />
+                </div>
+                <div className="flex flex-col">
+                  <span className="text-xl font-bold text-white">ZENTHOS</span>
+                  <span className="text-[10px] font-light text-[#A1A8AE] tracking-wider uppercase whitespace-nowrap">
+                    Gestão, Estratégia & Transformação
+                  </span>
+                </div>
               </div>
-              <p className="mt-2 text-sm text-[#A1A8AE]">Gestão, Estratégia & Transformação</p>
               <p className="mt-4 text-sm text-[#A1A8AE]">© 2026 ZENTHOS. Todos os direitos reservados.</p>
             </div>
             <div>
