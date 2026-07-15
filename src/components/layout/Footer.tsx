@@ -17,7 +17,7 @@ const navLinks = [
   { id: "contato", label: "Contato", href: "/#contato" },
 ]
 
-export function Footer() {
+export default function Footer() {
   return (
     <footer className="bg-[#2D343A] text-white py-12 border-t border-white/10">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -26,17 +26,19 @@ export function Footer() {
           {/* ===== COLUNA 1: MARCA ZENTHOS ===== */}
           <div className="lg:col-span-1">
             <Link href="/" className="flex items-center gap-3 group">
+              {/* CAMINHO CORRIGIDO PARA logo.png */}
               <img 
-                src="/logo-zenthos.png" 
+                src="/logo.png" 
                 alt="ZENTHOS" 
                 className="h-[1.5cm] w-auto object-contain brightness-0 invert" 
               />
               <div className="flex flex-col leading-none">
-                <div className="flex items-center gap-1">
-                  <span className="text-xl font-bold tracking-tight text-white">ZENTHOS</span>
-                  <span className="text-[8px] font-light text-[#E3C9A8] align-top mt-[-2px]">™</span>
+                <div className="flex items-baseline gap-0.5">
+                  <span className="text-xl font-bold tracking-tight text-white">
+                    ZENTHOS<span className="text-[10px] font-light text-[#E3C9A8] align-super">™</span>
+                  </span>
                 </div>
-                <span className="text-[9px] font-light text-[#A1A8AE] tracking-[0.15em] uppercase whitespace-nowrap">
+                <span className="text-[9px] font-light text-[#A1A8AE] tracking-[0.15em] uppercase whitespace-nowrap mt-0.5">
                   Gestão, Estratégia & Transformação
                 </span>
               </div>
