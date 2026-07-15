@@ -2,18 +2,17 @@ import type { Metadata } from 'next'
 import { Montserrat } from 'next/font/google'
 import './globals.css'
 import { Header } from '@/components/layout/Header'
-import { Footer } from '@/components/layout/Footer'
+import Footer from '@/components/layout/Footer'
 import { WhatsAppButton } from '@/components/layout/WhatsAppButton'
 
 const montserrat = Montserrat({ 
   subsets: ['latin'],
-  weight: ['300', '400', '500', '600', '700', '800']
+  variable: '--font-montserrat',
 })
 
 export const metadata: Metadata = {
-  title: 'TRIVOR - Gestão & Estratégia Empresarial',
-  description: 'Plataforma inteligente de consultoria empresarial, recrutamento e gestão de pessoas.',
-  keywords: 'consultoria, recrutamento, gestão de pessoas, RH, estratégia empresarial',
+  title: 'ZENTHOS | Gestão, Estratégia & Transformação',
+  description: 'Ajudamos empresas a crescer por meio da melhoria de processos, desenvolvimento humano, tecnologia e inteligência organizacional.',
 }
 
 export default function RootLayout({
@@ -22,10 +21,10 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="pt-BR">
-      <body className={`${montserrat.className} bg-gray-50`}>
+    <html lang="pt-BR" className={montserrat.variable}>
+      <body className="bg-[#F8F4E6] text-[#2D343A] antialiased">
         <Header />
-        <main className="min-h-screen">{children}</main>
+        {children}
         <Footer />
         <WhatsAppButton />
       </body>
