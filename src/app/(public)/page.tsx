@@ -133,14 +133,12 @@ export default function Home() {
       )}>
         <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3 sm:px-6 lg:px-8">
           <a href="#home" className="flex items-center gap-3">
-            {/* LOGO ZENTHOS - 1.5cm de altura */}
-            <div className="h-[1.5cm] w-auto relative">
-              <img 
-                src="/logo-zenthos.png" 
-                alt="ZENTHOS" 
-                className="h-full w-auto object-contain"
-              />
-            </div>
+            {/* LOGO ZENTHOS */}
+            <img 
+              src="/logo-zenthos.png" 
+              alt="ZENTHOS" 
+              className="h-[1.5cm] w-auto object-contain"
+            />
             <div className="flex flex-col">
               <span className="text-2xl md:text-3xl font-bold text-[#2D343A]">ZENTHOS</span>
               <span className="text-[10px] font-light text-[#708090] tracking-wider uppercase whitespace-nowrap">
@@ -207,20 +205,29 @@ export default function Home() {
       </header>
 
       <main>
-        {/* ===== HERO ===== */}
+        {/* ===== HERO COM IMAGEM DE FUNDO ===== */}
         <section ref={heroRef} id="home" className="relative flex min-h-[90vh] items-center overflow-hidden pt-20 bg-[#F8F4E6]">
           
-          <div className="absolute inset-0 bg-gradient-to-br from-[#8B0000]/5 via-transparent to-[#E3C9A8]/10"></div>
+          {/* IMAGEM DE FUNDO */}
+          <div className="absolute inset-0">
+            <img 
+              src="/recrutamento.png" 
+              alt="ZENTHOS - Gestão, Estratégia & Transformação" 
+              className="w-full h-full object-cover"
+            />
+            {/* OVERLAY */}
+            <div className="absolute inset-0 bg-gradient-to-r from-[#2D343A]/85 via-[#2D343A]/60 to-[#2D343A]/20"></div>
+          </div>
 
           <motion.div className="relative z-10 mx-auto flex w-full max-w-7xl px-4 sm:px-6 lg:px-8" style={{ y: overlayY }}>
             <div className="max-w-4xl space-y-8 py-12 lg:py-20">
               <motion.div 
-                className="inline-flex items-center gap-3 px-4 py-2 text-[11px] tracking-[0.34em] text-[#8B0000] uppercase font-medium border border-[#8B0000]/20 rounded-full bg-white/80 backdrop-blur-sm" 
+                className="inline-flex items-center gap-3 px-4 py-2 text-[11px] tracking-[0.34em] text-[#E3C9A8] uppercase font-medium border border-[#E3C9A8]/30 rounded-full bg-white/10 backdrop-blur-sm" 
                 initial={{ opacity: 0, y: 18 }} 
                 animate={{ opacity: 1, y: 0 }} 
                 transition={{ duration: 0.7 }}
               >
-                <span className="h-2 w-2 rounded-full bg-[#8B0000]" />
+                <span className="h-2 w-2 rounded-full bg-[#E3C9A8]" />
                 Gestão, Estratégia & Transformação
               </motion.div>
 
@@ -229,14 +236,14 @@ export default function Home() {
                 animate={{ opacity: 1, y: 0 }} 
                 transition={{ delay: 0.1, duration: 0.8 }}
               >
-                <h1 className="font-serif text-5xl leading-[1.05] text-[#2D343A] sm:text-6xl lg:text-7xl">
+                <h1 className="font-serif text-5xl leading-[1.05] text-white sm:text-6xl lg:text-7xl">
                   Transformamos empresas através da <br className="hidden sm:block" />
-                  <span className="text-[#8B0000]">Gestão, Estratégia e Transformação</span>
+                  <span className="text-[#E3C9A8]">Gestão, Estratégia e Transformação</span>
                 </h1>
               </motion.div>
 
               <motion.p 
-                className="max-w-2xl text-lg leading-8 text-[#708090] md:text-xl" 
+                className="max-w-2xl text-lg leading-8 text-white/85 md:text-xl" 
                 initial={{ opacity: 0, y: 24 }} 
                 animate={{ opacity: 1, y: 0 }} 
                 transition={{ delay: 0.2, duration: 0.85 }}
@@ -251,27 +258,27 @@ export default function Home() {
                 transition={{ delay: 0.3, duration: 0.85 }}
               >
                 <Link href="/cadastro">
-                  <button className="px-6 py-3 text-sm font-semibold text-white bg-[#8B0000] rounded-lg hover:bg-[#700000] transition shadow-lg shadow-[#8B0000]/25 hover:-translate-y-0.5 flex items-center gap-2">
+                  <button className="px-6 py-3 text-sm font-semibold text-[#2D343A] bg-[#E3C9A8] rounded-lg hover:bg-[#D4B894] transition shadow-lg shadow-[#E3C9A8]/30 hover:-translate-y-0.5 flex items-center gap-2">
                     Solicitar Diagnóstico
                     <ArrowRight className="h-5 w-5" />
                   </button>
                 </Link>
                 <Link href="/servicos">
-                  <button className="px-6 py-3 text-sm font-semibold text-[#8B0000] border-2 border-[#8B0000] rounded-lg hover:bg-[#8B0000] hover:text-white transition hover:-translate-y-0.5">
+                  <button className="px-6 py-3 text-sm font-semibold text-white border-2 border-white/60 rounded-lg hover:bg-white/10 hover:-translate-y-0.5 transition">
                     Conhecer Soluções
                   </button>
                 </Link>
               </motion.div>
 
               <motion.div 
-                className="flex gap-8 text-[#708090]" 
+                className="flex gap-8 text-white/80" 
                 initial={{ opacity: 0 }} 
                 animate={{ opacity: 1 }} 
                 transition={{ delay: 0.5 }}
               >
-                <div><span className="text-2xl font-bold text-[#8B0000]">15+</span> <span className="text-sm">Anos de Mercado</span></div>
-                <div><span className="text-2xl font-bold text-[#8B0000]">500+</span> <span className="text-sm">Empresas Atendidas</span></div>
-                <div><span className="text-2xl font-bold text-[#8B0000]">96%</span> <span className="text-sm">Satisfação</span></div>
+                <div><span className="text-2xl font-bold text-[#E3C9A8]">15+</span> <span className="text-sm">Anos de Mercado</span></div>
+                <div><span className="text-2xl font-bold text-[#E3C9A8]">500+</span> <span className="text-sm">Empresas Atendidas</span></div>
+                <div><span className="text-2xl font-bold text-[#E3C9A8]">96%</span> <span className="text-sm">Satisfação</span></div>
               </motion.div>
             </div>
           </motion.div>
@@ -324,7 +331,7 @@ export default function Home() {
           </div>
         </section>
 
-        {/* ===== SOBRE (antes Quem Somos) ===== */}
+        {/* ===== SOBRE ===== */}
         <section id="sobre" className="py-20 md:py-28 bg-[#F8F4E6]">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <div className="grid gap-12 lg:grid-cols-2 items-center">
@@ -485,7 +492,7 @@ export default function Home() {
             </p>
             <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row">
               <Link href="/cadastro">
-                <button className="px-6 py-3 text-sm font-semibold text-white bg-[#8B0000] rounded-lg hover:bg-[#700000] transition shadow-lg shadow-[#8B0000]/25 hover:-translate-y-0.5 flex items-center gap-2">
+                <button className="px-6 py-3 text-sm font-semibold text-[#2D343A] bg-[#E3C9A8] rounded-lg hover:bg-[#D4B894] transition shadow-lg shadow-[#E3C9A8]/30 hover:-translate-y-0.5 flex items-center gap-2">
                   Solicitar Diagnóstico
                   <ArrowRight className="h-5 w-5" />
                 </button>
@@ -625,20 +632,17 @@ export default function Home() {
         </section>
       </main>
 
-      {/* ===== RODAPÉ ZENTHOS ===== */}
+      {/* ===== RODAPÉ ZENTHOS (ÚNICO) ===== */}
       <footer className="bg-[#2D343A] text-white py-12">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid gap-8 md:grid-cols-4">
             <div>
               <div className="flex items-center gap-3">
-                {/* LOGO RODAPÉ - 1.5cm de altura */}
-                <div className="h-[1.5cm] w-auto relative">
-                  <img 
-                    src="/logo-zenthos.png" 
-                    alt="ZENTHOS" 
-                    className="h-full w-auto object-contain brightness-0 invert"
-                  />
-                </div>
+                <img 
+                  src="/logo-zenthos.png" 
+                  alt="ZENTHOS" 
+                  className="h-[1.5cm] w-auto object-contain brightness-0 invert"
+                />
                 <div className="flex flex-col">
                   <span className="text-xl font-bold text-white">ZENTHOS</span>
                   <span className="text-[10px] font-light text-[#A1A8AE] tracking-wider uppercase whitespace-nowrap">
