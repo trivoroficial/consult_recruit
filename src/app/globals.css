@@ -8,8 +8,6 @@
     --foreground: 222.2 84% 4.9%;
     --primary: 262.1 83.3% 57.8%;
     --primary-foreground: 210 40% 98%;
-    --secondary: 45 93% 47%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
     --border: 214.3 31.8% 91.4%;
     --radius: 0.75rem;
   }
@@ -20,27 +18,27 @@
     border-color: hsl(var(--border));
   }
   body {
-    background-color: #FDFCFB;
-    color: #2D3121;
+    background-color: #F8F4E6;
+    color: #2D343A;
     font-family: 'Inter', sans-serif;
     -webkit-font-smoothing: antialiased;
   }
 }
 
-/* ===== SCROLLBAR PREMIUM ===== */
+/* ===== SCROLLBAR ===== */
 ::-webkit-scrollbar {
   width: 8px;
   height: 8px;
 }
 ::-webkit-scrollbar-track {
-  background: #FDFCFB;
+  background: #F8F4E6;
 }
 ::-webkit-scrollbar-thumb {
-  background: #8E7AB5;
+  background: #8B0000;
   border-radius: 9999px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #726191;
+  background: #700000;
 }
 
 /* ===== BOTÕES ===== */
@@ -50,45 +48,44 @@
   justify-content: center;
   gap: 0.5rem;
   padding: 0.75rem 1.75rem;
-  background-color: #5C6347;
+  background-color: #8B0000;
   color: #ffffff;
   font-weight: 600;
   font-size: 0.875rem;
-  border-radius: 0.75rem;
+  border-radius: 0.5rem;
   transition: all 0.3s ease;
-  box-shadow: 0 4px 14px rgba(92, 99, 71, 0.3);
+  box-shadow: 0 4px 14px rgba(139, 0, 0, 0.25);
   cursor: pointer;
   border: none;
   text-decoration: none;
   letter-spacing: 0.025em;
 }
 .btn-primary:hover {
-  background-color: #4A5039;
-  box-shadow: 0 6px 20px rgba(92, 99, 71, 0.4);
+  background-color: #700000;
+  box-shadow: 0 6px 20px rgba(139, 0, 0, 0.35);
   transform: translateY(-2px);
 }
 
-.btn-lilas {
+.btn-secondary {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
   padding: 0.75rem 1.75rem;
-  background-color: #8E7AB5;
-  color: #ffffff;
+  background-color: transparent;
+  color: #8B0000;
   font-weight: 600;
   font-size: 0.875rem;
-  border-radius: 0.75rem;
+  border-radius: 0.5rem;
+  border: 2px solid #8B0000;
   transition: all 0.3s ease;
-  box-shadow: 0 4px 14px rgba(142, 122, 181, 0.3);
   cursor: pointer;
-  border: none;
   text-decoration: none;
   letter-spacing: 0.025em;
 }
-.btn-lilas:hover {
-  background-color: #726191;
-  box-shadow: 0 6px 20px rgba(142, 122, 181, 0.4);
+.btn-secondary:hover {
+  background-color: #8B0000;
+  color: #ffffff;
   transform: translateY(-2px);
 }
 
@@ -99,41 +96,18 @@
   gap: 0.5rem;
   padding: 0.75rem 1.75rem;
   background-color: transparent;
-  color: #5C6347;
+  color: #708090;
   font-weight: 600;
   font-size: 0.875rem;
-  border-radius: 0.75rem;
-  border: 2px solid #5C6347;
+  border-radius: 0.5rem;
+  border: 2px solid #708090;
   transition: all 0.3s ease;
   cursor: pointer;
   text-decoration: none;
   letter-spacing: 0.025em;
 }
 .btn-outline:hover {
-  background-color: #5C6347;
-  color: #ffffff;
-  transform: translateY(-2px);
-}
-
-.btn-outline-lilas {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
-  padding: 0.75rem 1.75rem;
-  background-color: transparent;
-  color: #8E7AB5;
-  font-weight: 600;
-  font-size: 0.875rem;
-  border-radius: 0.75rem;
-  border: 2px solid #8E7AB5;
-  transition: all 0.3s ease;
-  cursor: pointer;
-  text-decoration: none;
-  letter-spacing: 0.025em;
-}
-.btn-outline-lilas:hover {
-  background-color: #8E7AB5;
+  background-color: #708090;
   color: #ffffff;
   transform: translateY(-2px);
 }
@@ -158,7 +132,7 @@
   font-size: 3.5rem;
   font-weight: 700;
   line-height: 1.1;
-  color: #2D3121;
+  color: #2D343A;
 }
 @media (min-width: 768px) {
   .title-hero {
@@ -170,7 +144,7 @@
   font-family: 'Playfair Display', serif;
   font-size: 2.5rem;
   font-weight: 700;
-  color: #2D3121;
+  color: #2D343A;
 }
 @media (min-width: 768px) {
   .title-section {
@@ -180,17 +154,17 @@
 
 .subtitle {
   font-size: 1.125rem;
-  color: #5C6347;
+  color: #708090;
   max-width: 42rem;
   margin-left: auto;
   margin-right: auto;
   font-weight: 400;
 }
 
-.divider-lilas {
+.divider-burgundy {
   width: 4rem;
   height: 0.25rem;
-  background-color: #8E7AB5;
+  background-color: #8B0000;
   border-radius: 9999px;
   margin-left: auto;
   margin-right: auto;
@@ -202,12 +176,12 @@
   border-radius: 0.75rem;
   padding: 2rem;
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.03);
-  border: 1px solid #f0f0ed;
+  border: 1px solid #F8F4E6;
   transition: all 0.4s ease;
 }
 .card-premium:hover {
-  box-shadow: 0 20px 40px -10px rgba(45, 49, 33, 0.08);
-  border-color: #8E7AB5;
+  box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.08);
+  border-color: #E3C9A8;
   transform: translateY(-4px);
 }
 
@@ -223,52 +197,52 @@
   font-family: 'Inter', sans-serif;
 }
 .input-default:focus {
-  border-color: #8E7AB5;
-  box-shadow: 0 0 0 3px rgba(142, 122, 181, 0.15);
+  border-color: #8B0000;
+  box-shadow: 0 0 0 3px rgba(139, 0, 0, 0.1);
 }
 
 /* ===== LINKS ===== */
-.link-lilas {
-  color: #8E7AB5;
+.link-burgundy {
+  color: #8B0000;
   font-weight: 500;
   transition: color 0.3s ease;
   text-decoration: none;
 }
-.link-lilas:hover {
-  color: #726191;
+.link-burgundy:hover {
+  color: #E3C9A8;
 }
 
 /* ===== SEÇÕES ===== */
 .section-light {
-  background-color: #FDFCFB;
+  background-color: #F8F4E6;
 }
-.section-oliva {
-  background-color: #5C6347;
+.section-dark {
+  background-color: #2D343A;
   color: #ffffff;
 }
-.section-oliva .title-hero,
-.section-oliva .title-section {
+.section-dark .title-hero,
+.section-dark .title-section {
   color: #ffffff;
 }
-.section-oliva .subtitle {
-  color: #D1D5C1;
+.section-dark .subtitle {
+  color: #A1A8AE;
 }
 
 /* ===== BADGES ===== */
-.badge-lilas {
+.badge-burgundy {
   display: inline-block;
   padding: 0.25rem 0.75rem;
-  background-color: #EBE5F4;
-  color: #8E7AB5;
+  background-color: #FDF2F2;
+  color: #8B0000;
   border-radius: 9999px;
   font-size: 0.75rem;
   font-weight: 500;
 }
-.badge-oliva {
+.badge-slate {
   display: inline-block;
   padding: 0.25rem 0.75rem;
-  background-color: #E8EAE0;
-  color: #5C6347;
+  background-color: #F1F2F3;
+  color: #708090;
   border-radius: 9999px;
   font-size: 0.75rem;
   font-weight: 500;
