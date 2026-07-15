@@ -4,7 +4,6 @@ import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { Eye, EyeOff } from 'lucide-react'
-import { autenticar } from '@/lib/auth'
 
 export default function Login() {
   const router = useRouter()
@@ -18,52 +17,25 @@ export default function Login() {
     e.preventDefault()
     setLoading(true)
     setErro('')
-
-    const result = autenticar(email, password)
-
-    if (!result.success || !result.user) {
-      setErro(result.error || 'Erro ao fazer login')
+    
+    // SIMULAÇÃO DE LOGIN
+    if (email === 'admin@zenthos.com' && password === 'admin123') {
+      router.push('/admin/dashboard')
+    } else {
+      setErro('Email ou senha inválidos')
       setLoading(false)
-      return
-    }
-
-    const user = result.user
-
-    // 1. Salvar no localStorage (para os sidebars)
-    localStorage.setItem('trivor_user', JSON.stringify(user))
-    localStorage.setItem('trivor_role', user.role)
-
-    // 2. Salvar em cookie (para o middleware proteger as rotas)
-    const cookieData = JSON.stringify(user)
-    document.cookie = `trivor_user=${encodeURIComponent(cookieData)}; path=/; max-age=604800`
-    document.cookie = `trivor_role=${user.role}; path=/; max-age=604800`
-
-    setLoading(false)
-
-    // 3. Redirecionar conforme o perfil
-    switch (user.role) {
-      case 'admin':
-        router.push('/admin/dashboard')
-        break
-      case 'empresa':
-        router.push('/empresa/dashboard')
-        break
-      case 'candidato':
-        router.push('/candidato/dashboard')
-        break
-      default:
-        router.push('/')
     }
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-[#F8F7F4] px-4">
+    <div className="min-h-screen flex items-center justify-center bg-[#F8F4E6] px-4">
       <div className="w-full max-w-md">
-        <div className="bg-white rounded-2xl shadow-xl p-8 border border-[#F1F1EF]">
+        <div className="bg-white rounded-2xl shadow-xl p-8 border border-[#F8F4E6]">
           <div className="text-center">
-            <h1 className="text-3xl font-bold text-[#0F172A]">TRIVOR</h1>
-            <h2 className="mt-2 text-xl font-semibold">Welcome Back</h2>
-            <p className="text-gray-500 text-sm">Sign in to your account</p>
+            <h1 className="text-3xl font-bold text-[#2D343A]">ZENTHOS</h1>
+            <p className="text-xs font-light text-[#708090] tracking-wider uppercase mt-1">Gestão, Estratégia & Transformação</p>
+            <h2 className="mt-4 text-xl font-semibold text-[#2D343A]">Bem-vindo</h2>
+            <p className="text-sm text-[#708090]">Acesse sua conta</p>
           </div>
 
           {erro && (
@@ -74,31 +46,31 @@ export default function Login() {
 
           <form onSubmit={handleSubmit} className="mt-8 space-y-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700">Email</label>
+              <label className="block text-sm font-medium text-[#2D343A]">Email</label>
               <input
                 type="email"
                 required
-                className="input-default"
+                className="w-full px-4 py-3 border border-[#F8F4E6] rounded-xl focus:border-[#8B0000] focus:ring-2 focus:ring-[#8B0000]/20 outline-none transition"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder="you@company.com"
+                placeholder="admin@zenthos.com"
               />
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700">Password</label>
+              <label className="block text-sm font-medium text-[#2D343A]">Senha</label>
               <div className="relative">
                 <input
                   type={showPassword ? 'text' : 'password'}
                   required
-                  className="input-default pr-10"
+                  className="w-full px-4 py-3 border border-[#F8F4E6] rounded-xl focus:border-[#8B0000] focus:ring-2 focus:ring-[#8B0000]/20 outline-none transition pr-10"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="••••••••"
                 />
                 <button
                   type="button"
-                  className="absolute right-3 top-3 text-gray-500"
+                  className="absolute right-3 top-3 text-[#708090]"
                   onClick={() => setShowPassword(!showPassword)}
                 >
                   {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
@@ -106,37 +78,19 @@ export default function Login() {
               </div>
             </div>
 
-            <div className="flex items-center justify-between">
-              <label className="flex items-center gap-2 text-sm text-gray-600">
-                <input type="checkbox" /> Remember me
-              </label>
-              <Link href="/recuperar-senha" className="text-sm text-[#C9A84C] hover:text-[#B8963A]">
-                Forgot password?
-              </Link>
-            </div>
-
             <button
               type="submit"
               disabled={loading}
-              className="btn-primary btn-full"
+              className="w-full py-3 text-white bg-[#8B0000] rounded-lg hover:bg-[#700000] transition font-semibold shadow-md shadow-[#8B0000]/20"
             >
-              {loading ? 'Signing in...' : 'Sign In'}
+              {loading ? 'Entrando...' : 'Entrar'}
             </button>
           </form>
 
-          <div className="mt-6 text-center">
-            <p className="text-sm text-gray-500">Test Accounts:</p>
-            <div className="mt-2 text-xs text-gray-400 space-y-1">
-              <p>👑 Admin: admin@trivor.com / trivor2026</p>
-              <p>🏢 Company: empresa@trivor.com / trivor2026</p>
-              <p>👤 Talent: candidato@trivor.com / trivor2026</p>
-            </div>
-          </div>
-
-          <p className="mt-6 text-center text-sm text-gray-600">
-            Don't have an account?{' '}
-            <Link href="/cadastro" className="text-[#C9A84C] font-medium hover:text-[#B8963A]">
-              Create one
+          <p className="mt-6 text-center text-sm text-[#708090]">
+            Não tem uma conta?{' '}
+            <Link href="/cadastro" className="text-[#8B0000] font-semibold hover:text-[#E3C9A8] transition">
+              Solicitar acesso
             </Link>
           </p>
         </div>
