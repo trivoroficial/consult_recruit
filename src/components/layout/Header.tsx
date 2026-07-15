@@ -1,123 +1,112 @@
 'use client'
 
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
-import Image from 'next/image'
-import { useState } from 'react'
-import { Menu, X, LogIn, UserPlus, Crown } from 'lucide-react'
+import { Menu, X } from 'lucide-react'
+
+const navLinks = [
+  { id: "home", label: "Início", href: "/#home" },
+  { id: "sobre", label: "Sobre", href: "/#sobre" },
+  { id: "servicos", label: "Serviços", href: "/#servicos" },
+  { id: "solucoes", label: "Soluções", href: "/#solucoes" },
+  { id: "tecnologia", label: "Tecnologia", href: "/#tecnologia" },
+  { id: "contato", label: "Contato", href: "/#contato" },
+]
 
 export function Header() {
-  const [isMenuOpen, setIsMenuOpen] = useState(false)
+  const [scrolled, setScrolled] = useState(false)
+  const [menuOpen, setMenuOpen] = useState(false)
 
-  const navItems = [
-    { label: 'Início', href: '/' },
-    { label: 'Sobre', href: '/sobre' },
-    { label: 'Serviços', href: '/servicos' },
-    { label: 'Contato', href: '/contato' },
-  ]
+  useEffect(() => {
+    const handleScroll = () => setScrolled(window.scrollY > 20)
+    window.addEventListener('scroll', handleScroll)
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [])
 
   return (
-    <header className="sticky top-0 z-50 w-full bg-white/95 backdrop-blur-md border-b border-[#F0F0ED] shadow-sm">
-      <div className="container mx-auto flex h-20 items-center justify-between px-4">
-        {/* LOGO */}
-        <Link href="/" className="flex items-center gap-3 group">
-          <div className="relative w-12 h-12 md:w-14 md:h-14 flex-shrink-0">
-            <Image 
+    <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+      scrolled ? 'bg-white/95 backdrop-blur-md shadow-md border-b border-[#E3C9A8]/30' : 'bg-transparent'
+    }`}>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex items-center justify-between h-20">
+          
+          {/* LOGO E TEXTO (1.5cm de altura, proporcional, texto ZENTHOS) */}
+          <Link href="/" className="flex items-center gap-3 group">
+            <img 
               src="/logo.png" 
-              alt="TRIVOR"
-              fill
-              className="object-contain"
-              priority
+              alt="ZENTHOS Logo" 
+              className="h-[1.5cm] w-auto object-contain transition-transform group-hover:scale-105" 
             />
-          </div>
-          <div className="flex flex-col">
-            <div className="flex items-center gap-1">
-              <span className="text-2xl md:text-3xl font-bold text-[#2D3121] group-hover:text-[#8E7AB5] transition">
-                TRIVOR
+            <div className="flex flex-col justify-center">
+              <span className="text-xl md:text-2xl font-bold text-[#2D343A] leading-none">
+                ZENTHOS
               </span>
-              <span className="text-[10px] font-light text-[#8E7AB5] align-top mt-1">™</span>
+              <span className="text-[10px] font-light text-[#708090] tracking-[0.2em] uppercase mt-1">
+                Gestão, Estratégia & Transformação
+              </span>
             </div>
-            <span className="text-[10px] font-light text-[#5C6347] tracking-wider uppercase">
-              Gestão & Estratégia Empresarial
-            </span>
-          </div>
-        </Link>
+          </Link>
 
-        {/* MENU DESKTOP */}
-        <nav className="hidden items-center gap-8 lg:flex">
-          {navItems.map((item) => (
-            <Link
-              key={item.href}
-              href={item.href}
-              className="text-sm font-medium text-[#5C6347] transition-all duration-300 hover:text-[#2D3121] hover:scale-105 relative group"
-            >
-              {item.label}
-              <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-[#8E7AB5] transition-all duration-300 group-hover:w-full"></span>
+          {/* MENU DESKTOP */}
+          <nav className="hidden lg:flex items-center gap-8">
+            {navLinks.map((link) => (
+              <a 
+                key={link.id} 
+                href={link.href} 
+                className="text-sm font-medium text-[#708090] hover:text-[#8B0000] transition-colors"
+              >
+                {link.label}
+              </a>
+            ))}
+          </nav>
+
+          {/* BOTÕES DESKTOP (Sem Trivor) */}
+          <div className="hidden lg:flex items-center gap-4">
+            <Link href="/login">
+              <button className="text-sm font-semibold text-[#708090] hover:text-[#8B0000] transition-colors px-4 py-2">
+                Entrar
+              </button>
             </Link>
-          ))}
-        </nav>
+            <Link href="/cadastro">
+              <button className="text-sm font-bold text-white bg-[#8B0000] hover:bg-[#E3C9A8] hover:text-[#8B0000] px-6 py-2.5 rounded-lg transition-all duration-300 shadow-md hover:shadow-lg hover:-translate-y-0.5">
+                Solicitar Diagnóstico
+              </button>
+            </Link>
+          </div>
 
-        {/* BOTÕES */}
-        <div className="hidden items-center gap-3 lg:flex">
-          <Link href="/login">
-            <button className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-[#5C6347] hover:text-[#2D3121] hover:bg-[#F5F2FA] rounded-lg transition">
-              <LogIn className="h-4 w-4" />
-              Entrar
-            </button>
-          </Link>
-          <Link href="/cadastro">
-            <button className="btn-primary btn-sm">
-              <UserPlus className="h-4 w-4" />
-              Cadastrar
-            </button>
-          </Link>
-          <Link href="/servicos">
-            <button className="btn-lilas btn-sm">
-              <Crown className="h-4 w-4" />
-              Premium
-            </button>
-          </Link>
+          {/* BOTÃO MENU MOBILE */}
+          <button 
+            className="lg:hidden p-2 text-[#8B0000]"
+            onClick={() => setMenuOpen(!menuOpen)}
+          >
+            {menuOpen ? <X size={28} /> : <Menu size={28} />}
+          </button>
         </div>
-
-        {/* BOTÃO MOBILE */}
-        <button 
-          className="lg:hidden p-2 hover:bg-[#F5F2FA] rounded-lg transition-colors"
-          onClick={() => setIsMenuOpen(!isMenuOpen)}
-        >
-          {isMenuOpen ? <X className="h-6 w-6 text-[#2D3121]" /> : <Menu className="h-6 w-6 text-[#5C6347]" />}
-        </button>
       </div>
 
       {/* MENU MOBILE */}
-      {isMenuOpen && (
-        <div className="lg:hidden border-t border-[#F0F0ED] bg-white shadow-lg">
-          <div className="container mx-auto flex flex-col space-y-3 px-4 py-6">
-            {navItems.map((item) => (
-              <Link
-                key={item.href}
-                href={item.href}
-                className="text-base font-medium text-[#5C6347] hover:text-[#2D3121] hover:bg-[#F5F2FA] px-4 py-3 rounded-lg transition"
-                onClick={() => setIsMenuOpen(false)}
+      {menuOpen && (
+        <div className="lg:hidden bg-white border-t border-[#E3C9A8]/30 absolute w-full shadow-xl">
+          <div className="px-4 py-6 space-y-4">
+            {navLinks.map((link) => (
+              <a 
+                key={link.id} 
+                href={link.href} 
+                className="block text-base font-medium text-[#708090] hover:text-[#8B0000] py-2"
+                onClick={() => setMenuOpen(false)}
               >
-                {item.label}
-              </Link>
+                {link.label}
+              </a>
             ))}
-            <div className="flex flex-col gap-3 pt-4 border-t border-[#F0F0ED]">
-              <Link href="/login" onClick={() => setIsMenuOpen(false)}>
-                <button className="w-full flex items-center justify-center gap-2 px-4 py-3 border-2 border-[#5C6347] text-[#5C6347] font-medium rounded-lg hover:bg-[#F4F5F0] transition">
-                  <LogIn className="h-4 w-4" />
+            <div className="pt-4 border-t border-gray-100 space-y-3">
+              <Link href="/login" onClick={() => setMenuOpen(false)}>
+                <button className="w-full text-center py-3 text-sm font-semibold text-[#708090] border border-[#708090] rounded-lg">
                   Entrar
                 </button>
               </Link>
-              <Link href="/cadastro" onClick={() => setIsMenuOpen(false)}>
-                <button className="w-full btn-primary justify-center">
-                  <UserPlus className="h-4 w-4" />
-                  Cadastrar
-                </button>
-              </Link>
-              <Link href="/servicos" onClick={() => setIsMenuOpen(false)}>
-                <button className="w-full btn-lilas justify-center">
-                  <Crown className="h-4 w-4" />
-                  Premium
+              <Link href="/cadastro" onClick={() => setMenuOpen(false)}>
+                <button className="w-full text-center py-3 text-sm font-bold text-white bg-[#8B0000] rounded-lg">
+                  Solicitar Diagnóstico
                 </button>
               </Link>
             </div>
