@@ -28,20 +28,18 @@ export function Header() {
       scrolled ? 'bg-white/95 backdrop-blur-md shadow-lg border-b border-[#E3C9A8]/20' : 'bg-white'
     }`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-20">
+        <div className="flex items-center justify-between h-24"> {/* Aumentado um pouco para acomodar a logo de 2cm */}
           
           {/* ===== LOGO ZENTHOS ===== */}
           <Link href="/" className="flex items-center gap-3 group">
-            {/* CAMINHO CORRIGIDO PARA logo.png */}
-            <div className="relative w-12 h-12 md:w-14 md:h-14 flex-shrink-0">
+            <div className="relative flex-shrink-0">
               <img 
                 src="/logo.png" 
                 alt="ZENTHOS" 
-                className="w-full h-full object-contain"
+                className="h-[2cm] w-auto object-contain" /* TAMANHO 2CM SOLICITADO */
               />
             </div>
             
-            {/* TEXTO ZENTHOS + TM (COM align-super) */}
             <div className="flex flex-col leading-none">
               <div className="flex items-baseline gap-0.5">
                 <span className="text-2xl md:text-3xl font-bold tracking-tight">
@@ -68,7 +66,7 @@ export function Header() {
             ))}
           </nav>
 
-          {/* ===== BOTÕES DESKTOP (PREMIUM) ===== */}
+          {/* ===== BOTÕES DESKTOP ===== */}
           <div className="hidden lg:flex items-center gap-3">
             <Link href="/login">
               <button className="text-sm font-medium text-[#708090] hover:text-[#8B0000] px-4 py-2 rounded-lg transition-all duration-200 hover:bg-[#F8F4E6]">
@@ -77,14 +75,15 @@ export function Header() {
             </Link>
             <Link href="/servicos">
               <button className="text-sm font-medium text-[#8B0000] border border-[#8B0000]/30 hover:border-[#8B0000] px-5 py-2 rounded-lg transition-all duration-200 hover:bg-[#8B0000] hover:text-white hover:shadow-lg hover:-translate-y-0.5">
-                Serviços Premium
+                Serviços
               </button>
             </Link>
-            <Link href="/cadastro">
+            {/* BOTÃO DIAGNÓSTICO LEVANDO AO FORMULÁRIO (#contato) */}
+            <a href="#contato">
               <button className="text-sm font-medium text-white bg-[#8B0000] hover:bg-[#700000] px-6 py-2.5 rounded-lg transition-all duration-200 shadow-md shadow-[#8B0000]/20 hover:shadow-xl hover:-translate-y-0.5">
-                Solicitar Acesso
+                Solicitar Diagnóstico
               </button>
-            </Link>
+            </a>
           </div>
 
           {/* BOTÃO MENU MOBILE */}
@@ -117,16 +116,11 @@ export function Header() {
                   Entrar
                 </button>
               </Link>
-              <Link href="/servicos" onClick={() => setMenuOpen(false)}>
-                <button className="w-full text-center py-3 text-sm font-medium text-[#8B0000] border border-[#8B0000] rounded-lg">
-                  Serviços Premium
-                </button>
-              </Link>
-              <Link href="/cadastro" onClick={() => setMenuOpen(false)}>
+              <a href="#contato" onClick={() => setMenuOpen(false)}>
                 <button className="w-full text-center py-3 text-sm font-medium text-white bg-[#8B0000] rounded-lg">
-                  Solicitar Acesso
+                  Solicitar Diagnóstico
                 </button>
-              </Link>
+              </a>
             </div>
           </div>
         </div>
