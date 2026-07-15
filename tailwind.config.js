@@ -19,32 +19,51 @@ module.exports = {
         sans: ['Inter', 'sans-serif'],
       },
       colors: {
-        // Nova Identidade TRIVOR - Verde Oliva + Lilás
-        oliva: {
-          50: '#F4F5F0',
-          100: '#E8EAE0',
-          200: '#D1D5C1',
-          300: '#B9BFA2',
-          400: '#A2AA83',
-          500: '#5C6347',      // Principal
-          600: '#4A5039',
-          700: '#383D2B',
-          800: '#2D3121',      // Deep
-          900: '#1F2216',
+        // NOVA IDENTIDADE ZENTHOS
+        burgundy: {
+          50: '#FDF2F2',
+          100: '#FCE8E8',
+          200: '#F5C5C5',
+          300: '#EBA3A3',
+          400: '#D96060',
+          500: '#C41D1D',
+          600: '#8B0000',      // Principal
+          700: '#700000',
+          800: '#550000',
+          900: '#3A0000',
         },
-        lilas: {
-          50: '#F5F2FA',
-          100: '#EBE5F4',
-          200: '#D7CCE9',
-          300: '#C3B2DE',
-          400: '#AF99D3',
-          500: '#8E7AB5',      // Principal
-          600: '#726191',
-          700: '#56496E',
-          800: '#3A304A',
-          900: '#1E1825',
+        slate: {
+          50: '#F8F9FA',
+          100: '#F1F2F3',
+          200: '#DDE0E2',
+          300: '#C9CDD1',
+          400: '#A1A8AE',
+          500: '#78858B',
+          600: '#708090',      // Principal
+          700: '#5A6773',
+          800: '#434D56',
+          900: '#2D343A',
         },
-        // Mantendo cores originais para compatibilidade
+        champagne: {
+          50: '#FDFBF7',
+          100: '#FCF8F0',
+          200: '#F7EDDC',
+          300: '#F2E2C8',
+          400: '#E8D0AD',
+          500: '#E3C9A8',      // Principal
+          600: '#D4B894',
+          700: '#C5A780',
+          800: '#B6966C',
+          900: '#A78558',
+        },
+        offwhite: {
+          DEFAULT: '#F8F4E6',   // Principal
+          50: '#FDFCF8',
+          100: '#F8F4E6',
+          200: '#F0E8D0',
+          300: '#E8DCBA',
+        },
+        // MANTENDO CORES LEGADAS PARA NÃO QUEBRAR
         purple: {
           50: '#f5f3ff',
           100: '#ede9fe',
