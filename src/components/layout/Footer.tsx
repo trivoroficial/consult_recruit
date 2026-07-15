@@ -17,26 +17,23 @@ const navLinks = [
   { id: "contato", label: "Contato", href: "/#contato" },
 ]
 
-export default function Footer() {
+export function Footer() {
   return (
-    <footer className="bg-[#708090] text-white py-16 border-t border-white/10">
+    <footer className="bg-[#2D343A] text-white py-16 border-t border-white/10">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid gap-12 md:grid-cols-2 lg:grid-cols-4">
           
-          {/* COLUNA 1: MARCA - ZEN marrom, THOS cinza */}
+          {/* COLUNA 1: MARCA ZENTHOS */}
           <div className="lg:col-span-1">
             <div className="flex items-center gap-3 mb-6">
               <img 
-                src="/logo.png" 
-                alt="ZENTHOS Logo" 
+                src="/logo-zenthos.png" 
+                alt="ZENTHOS" 
                 className="h-[1.5cm] w-auto object-contain brightness-0 invert" 
               />
               <div className="flex flex-col justify-center">
-                <div className="flex items-baseline">
-                  <span className="text-xl font-bold text-[#E3C9A8] leading-none">ZEN</span>
-                  <span className="text-xl font-bold text-white leading-none">THOS</span>
-                </div>
-                <span className="text-[10px] font-light text-[#E3C9A8] tracking-[0.2em] uppercase mt-1">
+                <span className="text-xl font-bold text-white leading-none">ZENTHOS</span>
+                <span className="text-[10px] font-light text-[#E3C9A8] tracking-[0.2em] uppercase mt-1 whitespace-nowrap">
                   Gestão, Estratégia & Transformação
                 </span>
               </div>
@@ -87,11 +84,6 @@ export default function Footer() {
               <li>
                 <Link href="/login" className="hover:text-[#E3C9A8] transition-colors duration-200 flex items-center gap-2">
                   <span>🔒</span> Área do Cliente
-                </Link>
-              </li>
-              <li>
-                <Link href="/cadastro" className="hover:text-[#E3C9A8] transition-colors duration-200 flex items-center gap-2">
-                  <span>🚀</span> Cadastrar
                 </Link>
               </li>
             </ul>
