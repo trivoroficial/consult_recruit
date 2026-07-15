@@ -26,11 +26,11 @@ export default function Footer() {
           {/* ===== COLUNA 1: MARCA ZENTHOS ===== */}
           <div className="lg:col-span-1">
             <Link href="/" className="flex items-center gap-3 group">
-              {/* CAMINHO CORRIGIDO PARA logo.png */}
+              {/* CAMINHO EXATO E SEM FILTROS DE COR */}
               <img 
                 src="/logo.png" 
                 alt="ZENTHOS" 
-                className="h-[1.5cm] w-auto object-contain brightness-0 invert" 
+                className="h-[2cm] w-auto object-contain" 
               />
               <div className="flex flex-col leading-none">
                 <div className="flex items-baseline gap-0.5">
@@ -93,7 +93,7 @@ export default function Footer() {
               </li>
               <li>
                 <Link href="/cadastro" className="hover:text-[#E3C9A8] transition-colors duration-200 flex items-center gap-2">
-                  <span>🚀</span> Solicitar Acesso
+                  <span>🚀</span> Criar Conta
                 </Link>
               </li>
             </ul>
