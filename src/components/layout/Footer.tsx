@@ -1,109 +1,89 @@
-import Link from 'next/link'
-import Image from 'next/image'
-import { Linkedin, Instagram, Youtube, Mail, Phone, MapPin } from 'lucide-react'
+'use client'
 
-export function Footer() {
+import Link from 'next/link'
+
+const whatsappNumber = "5537991177058";
+const whatsappDisplay = "+55 37 99117-7058";
+const whatsappMessage = "Olá! Gostaria de conhecer as soluções da ZENTHOS.";
+const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(whatsappMessage)}`;
+const emailContato = "contato@zenthos.com.br";
+
+const navLinks = [
+  { id: "home", label: "Início", href: "/#home" },
+  { id: "sobre", label: "Sobre", href: "/#sobre" },
+  { id: "servicos", label: "Serviços", href: "/#servicos" },
+  { id: "solucoes", label: "Soluções", href: "/#solucoes" },
+  { id: "tecnologia", label: "Tecnologia", href: "/#tecnologia" },
+  { id: "contato", label: "Contato", href: "/#contato" },
+];
+
+export default function Footer() {
   return (
-    <footer className="bg-gray-900 text-gray-300">
-      {/* Linha dourada no topo */}
-      <div className="h-1 bg-gradient-to-r from-purple-600 via-yellow-500 to-purple-600"></div>
-      
-      <div className="container mx-auto px-4 py-16">
-        <div className="grid grid-cols-1 gap-8 md:grid-cols-4">
+    <footer className="bg-[#708090] text-white py-16 border-t border-white/10">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="grid gap-12 md:grid-cols-4">
           
-          {/* COLUNA 1 - LOGO (MESMA IMAGEM COM FILTRO BRANCO) */}
-          <div>
-            <Link href="/" className="flex items-center gap-3">
-              {/* LOGO - FILTRO BRANCO PARA FUNDO ESCURO */}
-              <div className="relative w-14 h-14 flex-shrink-0">
-                <Image 
-                  src="/logo.png" 
-                  alt="TRIVOR"
-                  fill
-                  className="object-contain brightness-0 invert"
-                />
-              </div>
+          <div className="md:col-span-1">
+            <div className="flex items-center gap-3">
+              <img src="/logo.png" alt="ZENTHOS" className="h-10 w-auto object-contain brightness-0 invert" />
               <div className="flex flex-col">
-                <div className="flex items-center gap-0.5">
-                  <span className="text-xl font-extrabold text-white">
-                    TRIVOR
-                  </span>
-                  <span className="text-[8px] font-light text-gray-400 align-top">
-                    ™
-                  </span>
-                </div>
-                <span className="text-[10px] font-light text-gray-400 tracking-wider uppercase">
-                  Gestão & Estratégia Empresarial
+                <span className="text-xl font-bold text-white tracking-tight">ZENTHOS</span>
+                <span className="text-[10px] font-light text-[#E3C9A8] tracking-widest uppercase whitespace-nowrap">
+                  Gestão, Estratégia & Transformação
                 </span>
               </div>
-            </Link>
-            <p className="mt-4 text-sm text-gray-500 leading-relaxed">
-              Transformando empresas através de pessoas, processos e inteligência.
+            </div>
+            <p className="mt-6 text-sm text-white/70 leading-relaxed">
+              Transformando organizações através de estratégia, tecnologia e inteligência humana.
             </p>
-            <div className="mt-6 flex gap-4">
-              <a href="#" className="text-gray-500 hover:text-purple-400 transition-colors">
-                <Linkedin className="h-5 w-5" />
-              </a>
-              <a href="#" className="text-gray-500 hover:text-purple-400 transition-colors">
-                <Instagram className="h-5 w-5" />
-              </a>
-              <a href="#" className="text-gray-500 hover:text-purple-400 transition-colors">
-                <Youtube className="h-5 w-5" />
-              </a>
-            </div>
+            <p className="mt-6 text-xs text-white/50">
+              © {new Date().getFullYear()} ZENTHOS. Todos os direitos reservados.
+            </p>
           </div>
-
-          {/* COLUNA 2 - NAVEGAÇÃO */}
+          
           <div>
-            <h3 className="text-white font-semibold mb-4">Navegação</h3>
-            <ul className="space-y-3 text-sm">
-              <li><Link href="/" className="hover:text-purple-400 transition-colors">Início</Link></li>
-              <li><Link href="/sobre" className="hover:text-purple-400 transition-colors">Sobre</Link></li>
-              <li><Link href="/servicos" className="hover:text-purple-400 transition-colors">Serviços</Link></li>
-              <li><Link href="/contato" className="hover:text-purple-400 transition-colors">Contato</Link></li>
+            <h4 className="font-bold text-white text-sm uppercase tracking-wider">Navegação</h4>
+            <ul className="mt-4 space-y-3 text-sm text-white/70">
+              {navLinks.map((link) => (
+                <li key={link.id}>
+                  <a href={link.href} className="hover:text-[#E3C9A8] transition-colors duration-200">{link.label}</a>
+                </li>
+              ))}
             </ul>
           </div>
-
-          {/* COLUNA 3 - SERVIÇOS */}
+          
           <div>
-            <h3 className="text-white font-semibold mb-4">Serviços</h3>
-            <ul className="space-y-3 text-sm text-gray-400">
-              <li className="hover:text-purple-400 transition-colors cursor-pointer">Recrutamento & Seleção</li>
-              <li className="hover:text-purple-400 transition-colors cursor-pointer">Gestão de Pessoas</li>
-              <li className="hover:text-purple-400 transition-colors cursor-pointer">Consultoria Financeira</li>
-              <li className="hover:text-purple-400 transition-colors cursor-pointer">Segurança dos Alimentos</li>
+            <h4 className="font-bold text-white text-sm uppercase tracking-wider">Contato</h4>
+            <ul className="mt-4 space-y-3 text-sm text-white/70">
+              <li>
+                <a href={whatsappUrl} target="_blank" rel="noopener noreferrer" className="hover:text-[#E3C9A8] transition-colors duration-200 flex items-center gap-2">
+                  <span>📱</span> {whatsappDisplay}
+                </a>
+              </li>
+              <li>
+                <a href={`mailto:${emailContato}`} className="hover:text-[#E3C9A8] transition-colors duration-200 flex items-center gap-2">
+                  <span>✉️</span> {emailContato}
+                </a>
+              </li>
             </ul>
           </div>
-
-          {/* COLUNA 4 - CONTATO */}
+          
           <div>
-            <h3 className="text-white font-semibold mb-4">Contato</h3>
-            <ul className="space-y-3 text-sm">
-              <li className="flex items-center gap-3 text-gray-400">
-                <Mail className="h-4 w-4 text-purple-400" />
-                contato@trivor.com.br
+            <h4 className="font-bold text-white text-sm uppercase tracking-wider">Acesso ao Sistema</h4>
+            <ul className="mt-4 space-y-3 text-sm text-white/70">
+              <li>
+                <Link href="/login" className="hover:text-[#E3C9A8] transition-colors duration-200 flex items-center gap-2">
+                  <span>🔒</span> Área do Cliente
+                </Link>
               </li>
-              <li className="flex items-center gap-3 text-gray-400">
-                <Phone className="h-4 w-4 text-purple-400" />
-                (34) 99117-7058
-              </li>
-              <li className="flex items-center gap-3 text-gray-400">
-                <MapPin className="h-4 w-4 text-purple-400" />
-                Uberlândia - MG
+              <li>
+                <Link href="/cadastro" className="hover:text-[#E3C9A8] transition-colors duration-200 flex items-center gap-2">
+                  <span>🚀</span> Solicitar Diagnóstico
+                </Link>
               </li>
             </ul>
           </div>
 
-        </div>
-
-        <div className="mt-12 pt-8 border-t border-gray-800">
-          <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-            <p className="text-sm text-gray-500">&copy; 2026 TRIVOR. Todos os direitos reservados.</p>
-            <div className="flex gap-6 text-sm">
-              <Link href="/privacidade" className="text-gray-500 hover:text-purple-400 transition-colors">Política de Privacidade</Link>
-              <Link href="/termos" className="text-gray-500 hover:text-purple-400 transition-colors">Termos de Uso</Link>
-            </div>
-          </div>
         </div>
       </div>
     </footer>
