@@ -30,19 +30,16 @@ export function Header() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-20">
           
-          {/* LOGO ZENTHOS - ZEN marrom, THOS cinza */}
+          {/* LOGO ZENTHOS */}
           <Link href="/" className="flex items-center gap-3 group">
             <img 
-              src="/logo.png" 
-              alt="ZENTHOS Logo" 
+              src="/logo-zenthos.png" 
+              alt="ZENTHOS" 
               className="h-[1.5cm] w-auto object-contain transition-transform group-hover:scale-105" 
             />
             <div className="flex flex-col justify-center">
-              <div className="flex items-baseline">
-                <span className="text-xl md:text-2xl font-bold text-[#8B4513] leading-none">ZEN</span>
-                <span className="text-xl md:text-2xl font-bold text-[#708090] leading-none">THOS</span>
-              </div>
-              <span className="text-[10px] font-light text-[#708090] tracking-[0.2em] uppercase mt-1">
+              <span className="text-xl md:text-2xl font-bold text-[#2D343A] leading-none">ZENTHOS</span>
+              <span className="text-[10px] font-light text-[#708090] tracking-[0.2em] uppercase mt-1 whitespace-nowrap">
                 Gestão, Estratégia & Transformação
               </span>
             </div>
@@ -74,8 +71,8 @@ export function Header() {
               </button>
             </Link>
             <Link href="/cadastro">
-              <button className="text-sm font-bold text-white bg-[#8B0000] hover:bg-[#E3C9A8] hover:text-[#8B0000] px-6 py-2.5 rounded-lg transition-all duration-300 shadow-md hover:shadow-lg hover:-translate-y-0.5">
-                Cadastrar
+              <button className="text-sm font-bold text-white bg-[#8B0000] hover:bg-[#700000] px-6 py-2.5 rounded-lg transition-all duration-300 shadow-md hover:shadow-lg hover:-translate-y-0.5">
+                Solicitar Acesso
               </button>
             </Link>
           </div>
@@ -117,7 +114,7 @@ export function Header() {
               </Link>
               <Link href="/cadastro" onClick={() => setMenuOpen(false)}>
                 <button className="w-full text-center py-3 text-sm font-bold text-white bg-[#8B0000] rounded-lg">
-                  Cadastrar
+                  Solicitar Acesso
                 </button>
               </Link>
             </div>
