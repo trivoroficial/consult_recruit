@@ -69,12 +69,12 @@ const servicos = [
 
 // 6 CARDS DE SOLUÇÕES
 const solucoes = [
-  { icon: Users, color: "bg-purple-500", title: "Recrutamento & Seleção", desc: "Encontramos os profissionais certos para sua empresa." },
-  { icon: Users, color: "bg-green-500", title: "Consultoria em Gestão de Pessoas", desc: "Desenvolvemos equipes, líderes e processos de RH." },
-  { icon: DollarSign, color: "bg-orange-500", title: "Consultoria Financeira", desc: "Organizamos as finanças para aumentar a lucratividade." },
-  { icon: Building2, color: "bg-blue-500", title: "Consultoria Empresarial", desc: "Planejamento, indicadores e melhoria da gestão." },
-  { icon: Settings, color: "bg-yellow-500", title: "Consultoria em Processos", desc: "Mapeamento, padronização e aumento da produtividade." },
-  { icon: Shield, color: "bg-purple-500", title: "Segurança dos Alimentos", desc: "Adequação às normas sanitárias e implantação de BPF." },
+  { icon: Users, title: "Recrutamento & Seleção", desc: "Encontramos os profissionais certos para sua empresa." },
+  { icon: Users, title: "Consultoria em Gestão de Pessoas", desc: "Desenvolvemos equipes, líderes e processos de RH." },
+  { icon: DollarSign, title: "Consultoria Financeira", desc: "Organizamos as finanças para aumentar a lucratividade." },
+  { icon: Building2, title: "Consultoria Empresarial", desc: "Planejamento, indicadores e melhoria da gestão." },
+  { icon: Settings, title: "Consultoria em Processos", desc: "Mapeamento, padronização e aumento da produtividade." },
+  { icon: Shield, title: "Segurança dos Alimentos", desc: "Adequação às normas sanitárias e implantação de BPF." },
 ];
 
 const testimonials = [
@@ -141,17 +141,26 @@ export default function Home() {
               Ajudamos empresas a crescer por meio da melhoria de processos, desenvolvimento humano, tecnologia e inteligência organizacional.
             </motion.p>
 
+            {/* BOTÕES: Diagnóstico e Especialista */}
             <motion.div className="flex flex-col gap-4 sm:flex-row" initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3, duration: 0.85 }}>
               <Link href="/cadastro">
-                <button className="px-8 py-4 text-sm font-bold text-white bg-[#8B0000] rounded-lg hover:bg-[#E3C9A8] hover:text-[#8B0000] transition-all duration-300 shadow-lg shadow-[#8B0000]/20 hover:shadow-xl hover:-translate-y-1 flex items-center justify-center gap-2">
-                  Cadastrar <ArrowRight className="h-5 w-5" />
+                <button className="group relative px-8 py-4 text-sm font-semibold tracking-wider text-white bg-[#8B0000] rounded-lg overflow-hidden transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
+                  <span className="relative z-10">Solicitar Diagnóstico</span>
+                  <span className="absolute inset-0 bg-[#E3C9A8] transform translate-y-full group-hover:translate-y-0 transition-transform duration-300"></span>
+                  <span className="relative z-10 flex items-center gap-2">
+                    Diagnóstico <ArrowRight className="h-5 w-5" />
+                  </span>
                 </button>
               </Link>
-              <Link href="/servicos">
-                <button className="px-8 py-4 text-sm font-bold text-white border-2 border-white/40 rounded-lg hover:bg-white hover:text-[#8B0000] hover:border-white transition-all duration-300 flex items-center justify-center gap-2">
-                  Serviços Premium
-                </button>
-              </Link>
+              <a href={whatsappUrl} target="_blank" rel="noopener noreferrer" className="group relative px-8 py-4 text-sm font-semibold tracking-wider text-white border-2 border-white/40 rounded-lg overflow-hidden transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
+                <span className="relative z-10 flex items-center gap-2">
+                  <Phone className="h-5 w-5" /> Falar com Especialista
+                </span>
+                <span className="absolute inset-0 bg-white transform translate-y-full group-hover:translate-y-0 transition-transform duration-300"></span>
+                <span className="relative z-10 text-transparent group-hover:text-[#8B0000] transition-colors duration-300 flex items-center gap-2">
+                  <Phone className="h-5 w-5" /> Falar com Especialista
+                </span>
+              </a>
             </motion.div>
 
             <motion.div className="flex gap-8 text-white/80" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.5 }}>
@@ -238,7 +247,7 @@ export default function Home() {
               const Icon = item.icon
               return (
                 <motion.div key={index} className="group bg-white border border-[#F8F4E6] rounded-xl p-8 hover:shadow-xl hover:-translate-y-2 transition-all duration-300" initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0.3 }} variants={fadeUp}>
-                  <div className={`w-16 h-16 ${item.color} rounded-2xl flex items-center justify-center mb-6 text-white`}>
+                  <div className="w-16 h-16 bg-[#8B0000]/10 rounded-2xl flex items-center justify-center mb-6 text-[#8B0000]">
                     <Icon className="h-8 w-8" />
                   </div>
                   <h3 className="text-xl font-bold text-[#2D343A] group-hover:text-[#8B0000] transition-colors">{item.title}</h3>
@@ -312,12 +321,16 @@ export default function Home() {
           <p className="mt-4 text-[#A1A8AE] max-w-2xl mx-auto">Vamos conversar e construir juntos o próximo capítulo da sua história.</p>
           <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row">
             <Link href="/cadastro">
-              <button className="px-8 py-4 text-sm font-bold text-white bg-[#8B0000] rounded-lg hover:bg-[#E3C9A8] hover:text-[#8B0000] transition-all duration-300 shadow-lg shadow-[#8B0000]/20 hover:shadow-xl flex items-center justify-center gap-2">
-                Cadastrar <ArrowRight className="h-5 w-5" />
+              <button className="group relative px-8 py-4 text-sm font-semibold tracking-wider text-white bg-[#8B0000] rounded-lg overflow-hidden transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
+                <span className="relative z-10 flex items-center gap-2">Diagnóstico <ArrowRight className="h-5 w-5" /></span>
+                <span className="absolute inset-0 bg-[#E3C9A8] transform translate-y-full group-hover:translate-y-0 transition-transform duration-300"></span>
+                <span className="relative z-10 text-transparent group-hover:text-[#8B0000] transition-colors duration-300 flex items-center gap-2">Diagnóstico <ArrowRight className="h-5 w-5" /></span>
               </button>
             </Link>
-            <a href={whatsappUrl} target="_blank" rel="noopener noreferrer" className="px-8 py-4 text-sm font-bold text-white border-2 border-white/40 rounded-lg hover:bg-white hover:text-[#8B0000] hover:border-white transition-all duration-300 flex items-center justify-center gap-2">
-              <Phone className="h-5 w-5" /> Falar com Especialista
+            <a href={whatsappUrl} target="_blank" rel="noopener noreferrer" className="group relative px-8 py-4 text-sm font-semibold tracking-wider text-white border-2 border-white/40 rounded-lg overflow-hidden transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
+              <span className="relative z-10 flex items-center gap-2"><Phone className="h-5 w-5" /> Especialista</span>
+              <span className="absolute inset-0 bg-white transform translate-y-full group-hover:translate-y-0 transition-transform duration-300"></span>
+              <span className="relative z-10 text-transparent group-hover:text-[#8B0000] transition-colors duration-300 flex items-center gap-2"><Phone className="h-5 w-5" /> Especialista</span>
             </a>
           </div>
         </div>
