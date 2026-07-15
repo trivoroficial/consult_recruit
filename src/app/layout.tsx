@@ -1,18 +1,18 @@
 import type { Metadata } from 'next'
-import { Montserrat } from 'next/font/google'
+import { Inter } from 'next/font/google'
 import './globals.css'
 import { Header } from '@/components/layout/Header'
-import Footer from '@/components/layout/Footer'
+import { Footer } from '@/components/layout/Footer'
 import { WhatsAppButton } from '@/components/layout/WhatsAppButton'
 
-const montserrat = Montserrat({ 
+const inter = Inter({ 
   subsets: ['latin'],
-  variable: '--font-montserrat',
+  variable: '--font-inter',
 })
 
 export const metadata: Metadata = {
-  title: 'ZENTHOS | Gestão, Estratégia & Transformação',
-  description: 'Ajudamos empresas a crescer por meio da melhoria de processos, desenvolvimento humano, tecnologia e inteligência organizacional.',
+  title: 'ZENTHOS - Gestão, Estratégia & Transformação',
+  description: 'Consultoria especializada em gestão empresarial, recursos humanos e transformação organizacional.',
 }
 
 export default function RootLayout({
@@ -21,10 +21,10 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="pt-BR" className={montserrat.variable}>
-      <body className="bg-[#F8F4E6] text-[#2D343A] antialiased">
+    <html lang="pt-BR">
+      <body className={inter.className}>
         <Header />
-        {children}
+        <main className="min-h-screen pt-20 bg-[#F8F4E6]">{children}</main>
         <Footer />
         <WhatsAppButton />
       </body>
