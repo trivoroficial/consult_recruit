@@ -32,24 +32,24 @@ export function Header() {
           
           {/* ===== LOGO ZENTHOS ===== */}
           <Link href="/" className="flex items-center gap-3 group">
-            {/* ÍCONE DA LOGO */}
+            {/* CAMINHO CORRIGIDO PARA logo.png */}
             <div className="relative w-12 h-12 md:w-14 md:h-14 flex-shrink-0">
               <img 
-                src="/logo-zenthos.png" 
+                src="/logo.png" 
                 alt="ZENTHOS" 
                 className="w-full h-full object-contain"
               />
             </div>
             
-            {/* TEXTO ZENTHOS + TM */}
+            {/* TEXTO ZENTHOS + TM (COM align-super) */}
             <div className="flex flex-col leading-none">
-              <div className="flex items-center gap-1">
+              <div className="flex items-baseline gap-0.5">
                 <span className="text-2xl md:text-3xl font-bold tracking-tight">
                   <span className="text-[#8B4513]">ZEN</span><span className="text-[#708090]">THOS</span>
                 </span>
-                <span className="text-[8px] font-light text-[#8B0000] align-top mt-[-2px]">™</span>
+                <span className="text-[10px] font-light text-[#8B0000] align-super">™</span>
               </div>
-              <span className="text-[9px] font-light text-[#708090] tracking-[0.15em] uppercase whitespace-nowrap">
+              <span className="text-[9px] font-light text-[#708090] tracking-[0.15em] uppercase whitespace-nowrap mt-0.5">
                 Gestão, Estratégia & Transformação
               </span>
             </div>
