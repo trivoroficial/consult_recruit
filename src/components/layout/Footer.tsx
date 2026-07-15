@@ -23,19 +23,19 @@ export default function Footer() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid gap-12 md:grid-cols-2 lg:grid-cols-4">
           
-          {/* COLUNA 1: MARCA (Logo + Texto alinhados corretamente) */}
+          {/* COLUNA 1: MARCA - ZEN marrom, THOS cinza */}
           <div className="lg:col-span-1">
             <div className="flex items-center gap-3 mb-6">
-              {/* Logo com 1.5cm e filtro para ficar branca no fundo escuro */}
               <img 
                 src="/logo.png" 
                 alt="ZENTHOS Logo" 
                 className="h-[1.5cm] w-auto object-contain brightness-0 invert" 
               />
               <div className="flex flex-col justify-center">
-                <span className="text-xl font-bold text-white leading-none">
-                  ZENTHOS
-                </span>
+                <div className="flex items-baseline">
+                  <span className="text-xl font-bold text-[#E3C9A8] leading-none">ZEN</span>
+                  <span className="text-xl font-bold text-white leading-none">THOS</span>
+                </div>
                 <span className="text-[10px] font-light text-[#E3C9A8] tracking-[0.2em] uppercase mt-1">
                   Gestão, Estratégia & Transformação
                 </span>
@@ -91,7 +91,7 @@ export default function Footer() {
               </li>
               <li>
                 <Link href="/cadastro" className="hover:text-[#E3C9A8] transition-colors duration-200 flex items-center gap-2">
-                  <span>🚀</span> Solicitar Diagnóstico
+                  <span>🚀</span> Cadastrar
                 </Link>
               </li>
             </ul>
