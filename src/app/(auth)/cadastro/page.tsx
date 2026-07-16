@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
-import { Eye, EyeOff, ArrowRight, UserPlus } from 'lucide-react'
+import { Eye, EyeOff, ArrowRight } from 'lucide-react'
 
 export default function Cadastro() {
   const router = useRouter()
@@ -21,17 +21,14 @@ export default function Cadastro() {
     setLoading(true)
     setErro('')
     
-    // SIMULAÇÃO DE CADASTRO
     setTimeout(() => {
       setLoading(false)
       
-      // VALIDAÇÃO BÁSICA
       if (!form.nome || !form.email || !form.password) {
         setErro('Preencha todos os campos')
         return
       }
 
-      // CRIA CONTA E FAZ LOGIN AUTOMÁTICO
       localStorage.setItem('zenthos_user', JSON.stringify({ 
         name: form.nome, 
         email: form.email, 
@@ -40,9 +37,7 @@ export default function Cadastro() {
         isNew: true
       }))
 
-      // REDIRECIONA PARA COMPLETAR PERFIL
       router.push('/candidato/completar-perfil')
-      
     }, 1500)
   }
 
@@ -55,7 +50,7 @@ export default function Cadastro() {
           <div className="text-center mb-8">
             <Link href="/" className="inline-flex items-center gap-3 group">
               <img 
-                src="/logo-zenthos.png" 
+                src="/logo.png" 
                 alt="ZENTHOS" 
                 className="h-12 w-auto object-contain"
               />
@@ -67,7 +62,7 @@ export default function Cadastro() {
                   <span className="text-[8px] font-light text-[#8B0000] align-top mt-[-2px]">™</span>
                 </div>
                 <span className="text-[9px] font-light text-[#708090] tracking-[0.15em] uppercase whitespace-nowrap">
-                  Gestão, Estratégia & Transformación
+                  Gestão, Estratégia & Transformação
                 </span>
               </div>
             </Link>
@@ -142,7 +137,6 @@ export default function Cadastro() {
               className="w-full py-3.5 bg-[#8B0000] hover:bg-[#700000] text-white font-semibold rounded-lg transition-all duration-300 shadow-md shadow-[#8B0000]/20 hover:shadow-lg hover:-translate-y-0.5 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {loading ? 'Criando conta...' : 'Criar conta'}
-              <ArrowRight className="h-4 w-4" />
             </button>
           </form>
 
