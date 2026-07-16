@@ -28,13 +28,13 @@ export function Header() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-20">
           
-          {/* ===== LOGO ===== */}
+          {/* ===== LOGO - 1.5cm de altura ===== */}
           <Link href="/" className="flex items-center gap-3 group">
-            <div className="relative w-12 h-12 md:w-14 md:h-14 flex-shrink-0">
+            <div className="relative h-[1.5cm] w-auto flex-shrink-0">
               <img 
                 src="/logo.png" 
                 alt="ZENTHOS" 
-                className="w-full h-full object-contain"
+                className="h-full w-auto object-contain"
               />
             </div>
             <div className="flex flex-col leading-none">
