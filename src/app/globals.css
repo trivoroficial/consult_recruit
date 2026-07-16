@@ -7,9 +7,21 @@
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
-    --border: 214.3 31.8% 91.4%;
+    --background: 248 245 230;    /* #F8F4E6 */
+    --foreground: 45 52 58;        /* #2D343A */
+    --primary: 139 0 0;           /* #8B0000 */
+    --primary-foreground: 255 255 255;
+    --secondary: 112 128 144;      /* #708090 */
+    --secondary-foreground: 255 255 255;
+    --muted: 248 245 230;
+    --muted-foreground: 112 128 144;
+    --accent: 227 201 168;        /* #E3C9A8 */
+    --accent-foreground: 45 52 58;
+    --destructive: 220 38 38;
+    --destructive-foreground: 255 255 255;
+    --border: 227 201 168 / 0.3;
+    --input: 227 201 168 / 0.3;
+    --ring: 139 0 0;
     --radius: 0.5rem;
   }
 }
@@ -19,7 +31,8 @@
     @apply border-border;
   }
   body {
-    @apply bg-[#F8F4E6] text-[#2D343A];
+    @apply bg-[#F8F4E6] text-[#2D343A] antialiased;
+    font-family: 'Inter', sans-serif;
   }
   
   .font-serif {
@@ -45,4 +58,17 @@
 }
 ::-webkit-scrollbar-thumb:hover {
   background: #700000;
+}
+
+/* ===== UTILITÁRIOS ===== */
+@layer utilities {
+  .border-border {
+    border-color: rgb(227 201 168 / 0.3);
+  }
+  .bg-background {
+    background-color: #F8F4E6;
+  }
+  .text-foreground {
+    color: #2D343A;
+  }
 }
