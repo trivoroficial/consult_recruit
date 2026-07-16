@@ -9,12 +9,10 @@ const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(w
 const emailContato = "contato@zenthos.com.br"
 
 const navLinks = [
-  { id: "home", label: "Início", href: "/#home" },
-  { id: "sobre", label: "Sobre", href: "/#sobre" },
-  { id: "servicos", label: "Serviços", href: "/#servicos" },
-  { id: "solucoes", label: "Soluções", href: "/#solucoes" },
-  { id: "tecnologia", label: "Tecnologia", href: "/#tecnologia" },
-  { id: "contato", label: "Contato", href: "/#contato" },
+  { id: "home", label: "Início", href: "/" },
+  { id: "sobre", label: "Sobre", href: "/sobre" },
+  { id: "servicos", label: "Serviços", href: "/servicos" },
+  { id: "contato", label: "Contato", href: "/contato" },
 ]
 
 export function Footer() {
@@ -23,14 +21,17 @@ export function Footer() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid gap-10 md:grid-cols-2 lg:grid-cols-4">
           
-          {/* ===== COLUNA 1: MARCA ZENTHOS ===== */}
+          {/* ===== COLUNA 1: LOGO ===== */}
           <div className="lg:col-span-1">
             <Link href="/" className="flex items-center gap-3 group">
-              <img 
-                src="/logo-zenthos.png" 
-                alt="ZENTHOS" 
-                className="h-[1.5cm] w-auto object-contain brightness-0 invert" 
-              />
+              {/* LOGO - 1.5cm de altura */}
+              <div className="relative h-[1.5cm] w-auto">
+                <img 
+                  src="/logo.png" 
+                  alt="ZENTHOS" 
+                  className="h-full w-auto object-contain brightness-0 invert" 
+                />
+              </div>
               <div className="flex flex-col leading-none">
                 <div className="flex items-center gap-1">
                   <span className="text-xl font-bold tracking-tight text-white">ZENTHOS</span>
@@ -55,9 +56,9 @@ export function Footer() {
             <ul className="space-y-3 text-sm text-white/60">
               {navLinks.map((link) => (
                 <li key={link.id}>
-                  <a href={link.href} className="hover:text-[#E3C9A8] transition-colors duration-200">
+                  <Link href={link.href} className="hover:text-[#E3C9A8] transition-colors duration-200">
                     {link.label}
-                  </a>
+                  </Link>
                 </li>
               ))}
             </ul>
@@ -80,18 +81,18 @@ export function Footer() {
             </ul>
           </div>
           
-          {/* ===== COLUNA 4: ACESSO AO SISTEMA ===== */}
+          {/* ===== COLUNA 4: ACESSO ===== */}
           <div>
             <h4 className="font-semibold text-white text-sm uppercase tracking-wider mb-4">Acesso</h4>
             <ul className="space-y-3 text-sm text-white/60">
               <li>
                 <Link href="/login" className="hover:text-[#E3C9A8] transition-colors duration-200 flex items-center gap-2">
-                  <span>🔒</span> Área do Cliente
+                  <span>🔒</span> Entrar
                 </Link>
               </li>
               <li>
                 <Link href="/cadastro" className="hover:text-[#E3C9A8] transition-colors duration-200 flex items-center gap-2">
-                  <span>🚀</span> Solicitar Acesso
+                  <span>🚀</span> Cadastrar
                 </Link>
               </li>
             </ul>
