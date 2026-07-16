@@ -57,7 +57,6 @@ export default function Login() {
         return
       }
       
-      // USUÁRIO NÃO ENCONTRADO
       setErro('Email ou senha inválidos')
     }, 1500)
   }
@@ -67,7 +66,7 @@ export default function Login() {
       <div className="w-full max-w-md">
         <div className="bg-white rounded-2xl shadow-xl p-8 border border-[#E8EAE0]">
           
-          {/* LOGO - 1.5cm de altura */}
+          {/* LOGO */}
           <div className="text-center mb-8">
             <Link href="/" className="inline-flex items-center gap-3 group">
               <div className="relative h-[1.5cm] w-auto">
