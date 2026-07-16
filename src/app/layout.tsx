@@ -1,15 +1,13 @@
 import type { Metadata } from 'next'
-import { Inter } from 'next/font/google'
+import { Inter, Playfair_Display } from 'next/font/google'
 import './globals.css'
-import { Header } from '@/components/layout/Header'
-import Footer from '@/components/layout/Footer'
-import { WhatsAppButton } from '@/components/layout/WhatsAppButton'
 
 const inter = Inter({ subsets: ['latin'] })
+const playfair = Playfair_Display({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: 'ZENTHOS | Gestão, Estratégia & Transformação',
-  description: 'Ajudamos empresas a crescer por meio da melhoria de processos, desenvolvimento humano, tecnologia e inteligência organizacional.',
+  title: 'ZENTHOS - Gestão, Estratégia & Transformação',
+  description: 'Recrutamento & Seleção de alta performance para sua empresa',
 }
 
 export default function RootLayout({
@@ -19,11 +17,8 @@ export default function RootLayout({
 }) {
   return (
     <html lang="pt-BR">
-      <body className={inter.className}>
-        <Header />
+      <body className={`${inter.className} antialiased bg-[#F8F4E6]`}>
         {children}
-        <Footer />
-        <WhatsAppButton />
       </body>
     </html>
   )
