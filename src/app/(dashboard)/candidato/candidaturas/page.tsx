@@ -1,66 +1,98 @@
 'use client'
 
-import { SidebarCandidato } from '@/components/layout/SidebarCandidato'
-import { Briefcase, Calendar, CheckCircle, Clock, XCircle } from 'lucide-react'
+import { useState } from 'react'
+import { Search, Eye, Clock, CheckCircle, XCircle, AlertCircle } from 'lucide-react'
 
 const candidaturas = [
-  { id: 1, vaga: 'Analista Administrativo', empresa: 'Empresa XPTO', status: 'Entrevista', data: '09/07/2026', descricao: 'Entrevista agendada para amanhã às 14h' },
-  { id: 2, vaga: 'Auxiliar de RH', empresa: 'Indústria ABC', status: 'Análise', data: '08/07/2026', descricao: 'Currículo em análise pela equipe de RH' },
-  { id: 3, vaga: 'Assistente Financeiro', empresa: 'Grupo Financeiro', status: 'Aprovado', data: '05/07/2026', descricao: 'Parabéns! Você foi aprovado para a próxima etapa' },
-  { id: 4, vaga: 'Supervisor de Produção', empresa: 'Indústria XYZ', status: 'Encerrado', data: '01/07/2026', descricao: 'Processo encerrado - candidato não selecionado' },
+  { id: 1, vaga: 'Desenvolvedor Full Stack', empresa: 'XPTO Tech', status: 'Em andamento', data: '15/07/2026', etapa: 'Entrevista agendada' },
+  { id: 2, vaga: 'UX Designer Sênior', empresa: 'XPTO Tech', status: 'Aprovado', data: '14/07/2026', etapa: 'Oferta enviada' },
+  { id: 3, vaga: 'Product Owner', empresa: 'XPTO Tech', status: 'Em análise', data: '12/07/2026', etapa: 'Currículo em análise' },
+  { id: 4, vaga: 'Analista de Dados', empresa: 'XPTO Tech', status: 'Reprovado', data: '10/07/2026', etapa: 'Não passou na triagem' }
 ]
 
-const statusConfig = {
-  'Entrevista': { icon: Calendar, color: 'text-blue-600', bg: 'bg-blue-100' },
-  'Análise': { icon: Clock, color: 'text-yellow-600', bg: 'bg-yellow-100' },
-  'Aprovado': { icon: CheckCircle, color: 'text-green-600', bg: 'bg-green-100' },
-  'Encerrado': { icon: XCircle, color: 'text-red-600', bg: 'bg-red-100' },
-}
+export default function CandidatoCandidaturas() {
+  const [searchTerm, setSearchTerm] = useState('')
 
-export default function CandidaturasCandidato() {
+  const filtered = candidaturas.filter(c => 
+    c.vaga.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    c.empresa.toLowerCase().includes(searchTerm.toLowerCase())
+  )
+
+  const getStatusConfig = (status: string) => {
+    switch(status) {
+      case 'Em andamento': return { color: 'bg-yellow-100 text-yellow-700', icon: <Clock className="h-4 w-4" /> }
+      case 'Aprovado': return { color: 'bg-green-100 text-green-700', icon: <CheckCircle className="h-4 w-4" /> }
+      case 'Reprovado': return { color: 'bg-red-100 text-red-700', icon: <XCircle className="h-4 w-4" /> }
+      default: return { color: 'bg-gray-100 text-gray-600', icon: <AlertCircle className="h-4 w-4" /> }
+    }
+  }
+
   return (
-    <div className="flex min-h-screen bg-gray-50">
-      <SidebarCandidato />
-      <div className="flex-1 ml-64 p-8">
-        <div className="flex items-center justify-between mb-8">
-          <h1 className="text-3xl font-bold">
-            Minhas <span className="text-purple-600">Candidaturas</span>
-          </h1>
-          <span className="text-sm text-gray-500">Total: {candidaturas.length}</span>
+    <div className="min-h-screen bg-gray-50/80">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        
+        {/* ===== HEADER ===== */}
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
+          <div>
+            <h1 className="text-2xl font-bold text-gray-900">Minhas Candidaturas</h1>
+            <p className="text-sm text-gray-500 mt-1">Acompanhe todas as suas inscrições</p>
+          </div>
+          <div className="flex items-center gap-3">
+            <span className="text-sm text-gray-600">Total: <strong className="text-[#8B0000]">{candidaturas.length}</strong></span>
+          </div>
         </div>
 
-        <div className="bg-white rounded-xl shadow-sm border p-6">
-          {candidaturas.length === 0 ? (
-            <p className="text-gray-500 text-center py-8">Você ainda não se candidatou a nenhuma vaga.</p>
-          ) : (
-            <div className="space-y-4">
-              {candidaturas.map((item) => {
-                const config = statusConfig[item.status as keyof typeof statusConfig] || { icon: Briefcase, color: 'text-gray-600', bg: 'bg-gray-100' }
-                const Icon = config.icon
-                return (
-                  <div key={item.id} className="flex items-center justify-between p-4 border rounded-lg hover:bg-gray-50 transition">
-                    <div className="flex items-start gap-4">
-                      <div className={`p-2 ${config.bg} rounded-lg`}>
-                        <Icon className={`h-5 w-5 ${config.color}`} />
-                      </div>
-                      <div>
-                        <h3 className="font-semibold">{item.vaga}</h3>
-                        <p className="text-sm text-gray-500">{item.empresa}</p>
-                        <p className="text-sm text-gray-400 mt-1">{item.descricao}</p>
-                      </div>
-                    </div>
-                    <div className="text-right">
-                      <span className={`px-3 py-1 rounded-full text-xs font-medium ${config.bg} ${config.color}`}>
-                        {item.status}
+        {/* ===== BUSCA ===== */}
+        <div className="bg-white rounded-2xl border border-gray-100/80 p-4 shadow-sm mb-6">
+          <div className="relative">
+            <Search className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
+            <input
+              type="text"
+              placeholder="Buscar candidaturas..."
+              className="w-full px-4 py-2.5 pl-10 text-sm border border-gray-200 rounded-xl focus:border-[#8B0000] focus:ring-2 focus:ring-[#8B0000]/20 outline-none transition"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
+          </div>
+        </div>
+
+        {/* ===== LISTA ===== */}
+        <div className="space-y-4">
+          {filtered.map((candidatura) => {
+            const statusConfig = getStatusConfig(candidatura.status)
+            return (
+              <div key={candidatura.id} className="bg-white rounded-2xl border border-gray-100/80 p-6 shadow-sm hover:shadow-lg transition-all">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                  <div className="flex-1">
+                    <h3 className="text-lg font-semibold text-gray-900">{candidatura.vaga}</h3>
+                    <p className="text-sm text-gray-600">{candidatura.empresa}</p>
+                    <div className="flex flex-wrap items-center gap-3 mt-2">
+                      <span className={`flex items-center gap-1 text-xs font-medium px-2 py-1 rounded-full ${statusConfig.color}`}>
+                        {statusConfig.icon} {candidatura.status}
                       </span>
-                      <p className="text-xs text-gray-400 mt-1">{item.data}</p>
+                      <span className="text-sm text-gray-500">
+                        Etapa: {candidatura.etapa}
+                      </span>
+                      <span className="text-sm text-gray-400">
+                        {candidatura.data}
+                      </span>
                     </div>
                   </div>
-                )
-              })}
+                  <button className="px-4 py-2 text-sm font-medium text-[#8B0000] border border-[#8B0000]/30 rounded-lg hover:bg-[#8B0000] hover:text-white transition-all">
+                    <Eye className="h-4 w-4 inline mr-1" />
+                    Detalhes
+                  </button>
+                </div>
+              </div>
+            )
+          })}
+          {filtered.length === 0 && (
+            <div className="text-center py-8 text-gray-400">
+              <p>Nenhuma candidatura encontrada</p>
             </div>
           )}
         </div>
+
       </div>
     </div>
   )
