@@ -1,102 +1,176 @@
 'use client'
 
+import { useEffect, useState } from 'react'
+import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { 
-  Briefcase, Clock, CheckCircle, TrendingUp,
-  ArrowRight, Eye, Search, Plus
+  Users, Briefcase, TrendingUp, FileText, 
+  Settings, User, Bell, LogOut, Home, Search, CheckCircle
 } from 'lucide-react'
 
-// ===== DADOS =====
-const kpis = [
-  { title: 'Candidaturas', value: 12, change: 8, icon: <Briefcase className="h-6 w-6" />, color: 'bg-blue-500' },
-  { title: 'Em Andamento', value: 5, change: -2, icon: <Clock className="h-6 w-6" />, color: 'bg-yellow-500' },
-  { title: 'Entrevistas', value: 3, change: 15, icon: <CheckCircle className="h-6 w-6" />, color: 'bg-green-500' },
-  { title: 'Taxa de Sucesso', value: '68%', change: 12, icon: <TrendingUp className="h-6 w-6" />, color: 'bg-purple-500' }
-]
-
-const vagasRecomendadas = [
-  { title: 'Desenvolvedor Full Stack', empresa: 'XPTO Tech', local: 'Remoto', salario: 'R$ 8.000 - R$ 12.000' },
-  { title: 'UX Designer Sênior', empresa: 'XPTO Tech', local: 'Híbrido', salario: 'R$ 7.000 - R$ 10.000' },
-  { title: 'Product Owner', empresa: 'XPTO Tech', local: 'Presencial', salario: 'R$ 9.000 - R$ 14.000' }
-]
-
 export default function CandidatoDashboard() {
+  const router = useRouter()
+  const [loading, setLoading] = useState(true)
+  const [user, setUser] = useState<any>(null)
+
+  useEffect(() => {
+    const userData = localStorage.getItem('zenthos_user')
+    if (!userData) {
+      router.push('/login')
+      return
+    }
+    setUser(JSON.parse(userData))
+    setLoading(false)
+  }, [router])
+
+  const handleLogout = () => {
+    localStorage.removeItem('zenthos_user')
+    document.cookie = 'zenthos_user=; path=/; max-age=0'
+    router.push('/login')
+  }
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-[#F8F4E6]">
+        <div className="text-[#8B0000] text-xl">Carregando...</div>
+      </div>
+    )
+  }
+
   return (
-    <div className="min-h-screen bg-gray-50/80">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        
-        {/* ===== HEADER ===== */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
-          <div>
-            <h1 className="text-2xl font-bold text-gray-900">Olá, João! 👋</h1>
-            <p className="text-sm text-gray-500 mt-1">Acompanhe sua jornada profissional</p>
-          </div>
-          <Link href="/candidato/vagas">
-            <button className="px-4 py-2.5 text-sm font-semibold text-white bg-[#8B0000] rounded-xl hover:bg-[#700000] transition shadow-md shadow-[#8B0000]/20 flex items-center gap-2">
-              <Search className="h-4 w-4" />
-              Buscar Vagas
-            </button>
-          </Link>
-        </div>
-
-        {/* ===== KPIS ===== */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-          {kpis.map((kpi, index) => (
-            <div key={index} className="bg-white rounded-2xl border border-gray-100/80 p-6 shadow-sm hover:shadow-lg transition-all">
-              <div className="flex items-start justify-between">
-                <div>
-                  <p className="text-sm font-medium text-gray-500">{kpi.title}</p>
-                  <p className="mt-2 text-2xl font-bold text-gray-900">{kpi.value}</p>
-                </div>
-                <div className={`${kpi.color} rounded-xl p-3 text-white shadow-lg`}>
-                  {kpi.icon}
-                </div>
-              </div>
-              <div className="mt-4 flex items-center gap-2">
-                <span className={`text-sm font-medium ${kpi.change > 0 ? 'text-green-600' : 'text-red-600'}`}>
-                  {kpi.change > 0 ? '↑' : '↓'} {kpi.change > 0 ? '+' : ''}{kpi.change}%
-                </span>
-                <span className="text-sm text-gray-400">vs mês anterior</span>
-              </div>
+    <div className="min-h-screen bg-[#F8F4E6] flex">
+      {/* SIDEBAR CANDIDATO */}
+      <aside className="w-64 bg-white border-r border-[#E8EAE0] min-h-screen flex flex-col fixed left-0 top-20">
+        <div className="p-4 border-b border-[#E8EAE0]">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 bg-[#8B0000]/10 rounded-full flex items-center justify-center text-[#8B0000] font-bold text-sm">
+              {user?.name?.charAt(0) || 'C'}
             </div>
-          ))}
-        </div>
-
-        {/* ===== VAGAS RECOMENDADAS ===== */}
-        <div className="bg-white rounded-2xl border border-gray-100/80 p-6 shadow-sm">
-          <div className="flex items-center justify-between mb-6">
             <div>
-              <h3 className="text-lg font-semibold text-gray-900">Vagas Recomendadas</h3>
-              <p className="text-sm text-gray-500">Com base no seu perfil</p>
+              <p className="font-semibold text-sm">{user?.name || 'Candidato'}</p>
+              <p className="text-xs text-[#708090]">Candidato</p>
             </div>
-            <Link href="/candidato/vagas">
-              <button className="text-sm font-semibold text-[#8B0000] hover:text-[#700000] transition flex items-center gap-1">
-                Ver todas <ArrowRight className="h-4 w-4" />
-              </button>
-            </Link>
-          </div>
-
-          <div className="space-y-4">
-            {vagasRecomendadas.map((vaga, index) => (
-              <div key={index} className="flex flex-col sm:flex-row sm:items-center justify-between p-4 border border-gray-100 rounded-xl hover:border-[#8B0000]/30 hover:bg-gray-50/50 transition-all">
-                <div>
-                  <h4 className="font-semibold text-gray-900">{vaga.title}</h4>
-                  <div className="flex flex-wrap items-center gap-3 mt-1">
-                    <span className="text-sm text-gray-600">{vaga.empresa}</span>
-                    <span className="text-xs text-gray-400">•</span>
-                    <span className="text-sm text-gray-500">{vaga.local}</span>
-                    <span className="text-xs text-gray-400">•</span>
-                    <span className="text-sm font-medium text-[#8B0000]">{vaga.salario}</span>
-                  </div>
-                </div>
-                <button className="mt-3 sm:mt-0 px-4 py-2 text-sm font-medium text-[#8B0000] border border-[#8B0000]/30 rounded-lg hover:bg-[#8B0000] hover:text-white transition-all">
-                  Candidatar-se
-                </button>
-              </div>
-            ))}
           </div>
         </div>
 
+        <nav className="flex-1 p-4 space-y-1 overflow-y-auto">
+          <Link href="/candidato/dashboard" className="flex items-center gap-3 px-4 py-2.5 rounded-lg bg-[#8B0000]/10 text-[#8B0000] font-medium">
+            <Home className="h-5 w-5" />
+            <span className="text-sm">Dashboard</span>
+          </Link>
+          <Link href="/candidato/perfil" className="flex items-center gap-3 px-4 py-2.5 rounded-lg text-[#708090] hover:bg-[#F8F4E6] transition">
+            <User className="h-5 w-5" />
+            <span className="text-sm">Meu Perfil</span>
+          </Link>
+          <Link href="/candidato/curriculo" className="flex items-center gap-3 px-4 py-2.5 rounded-lg text-[#708090] hover:bg-[#F8F4E6] transition">
+            <FileText className="h-5 w-5" />
+            <span className="text-sm">Currículo</span>
+          </Link>
+          <Link href="/candidato/vagas" className="flex items-center gap-3 px-4 py-2.5 rounded-lg text-[#708090] hover:bg-[#F8F4E6] transition">
+            <Search className="h-5 w-5" />
+            <span className="text-sm">Buscar Vagas</span>
+          </Link>
+          <Link href="/candidato/candidaturas" className="flex items-center gap-3 px-4 py-2.5 rounded-lg text-[#708090] hover:bg-[#F8F4E6] transition">
+            <CheckCircle className="h-5 w-5" />
+            <span className="text-sm">Minhas Candidaturas</span>
+          </Link>
+          <Link href="/candidato/configuracoes" className="flex items-center gap-3 px-4 py-2.5 rounded-lg text-[#708090] hover:bg-[#F8F4E6] transition">
+            <Settings className="h-5 w-5" />
+            <span className="text-sm">Configurações</span>
+          </Link>
+        </nav>
+
+        <div className="p-4 border-t border-[#E8EAE0]">
+          <button
+            onClick={handleLogout}
+            className="flex items-center gap-3 px-4 py-2.5 text-red-600 hover:bg-red-50 rounded-lg transition w-full"
+          >
+            <LogOut className="h-5 w-5" />
+            <span className="text-sm font-medium">Sair</span>
+          </button>
+        </div>
+      </aside>
+
+      {/* CONTEÚDO */}
+      <div className="flex-1 ml-64 p-8">
+        <div className="flex items-center justify-between mb-8">
+          <div>
+            <h1 className="text-3xl font-bold text-[#2D343A]">
+              Dashboard <span className="text-[#8B0000]">Candidato</span>
+            </h1>
+            <p className="text-[#708090] text-sm mt-1">
+              Olá, {user?.name || 'Candidato'}! 👋
+            </p>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+          <div className="bg-white p-6 rounded-xl shadow-sm border border-[#E8EAE0]">
+            <div className="flex items-center gap-3">
+              <div className="p-3 bg-[#8B0000]/10 rounded-lg">
+                <Briefcase className="h-6 w-6 text-[#8B0000]" />
+              </div>
+              <div>
+                <p className="text-2xl font-bold text-[#2D343A]">0</p>
+                <p className="text-sm text-[#708090]">Candidaturas</p>
+              </div>
+            </div>
+          </div>
+          <div className="bg-white p-6 rounded-xl shadow-sm border border-[#E8EAE0]">
+            <div className="flex items-center gap-3">
+              <div className="p-3 bg-[#8B0000]/10 rounded-lg">
+                <Search className="h-6 w-6 text-[#8B0000]" />
+              </div>
+              <div>
+                <p className="text-2xl font-bold text-[#2D343A]">0</p>
+                <p className="text-sm text-[#708090]">Vagas Recomendadas</p>
+              </div>
+            </div>
+          </div>
+          <div className="bg-white p-6 rounded-xl shadow-sm border border-[#E8EAE0]">
+            <div className="flex items-center gap-3">
+              <div className="p-3 bg-[#8B0000]/10 rounded-lg">
+                <CheckCircle className="h-6 w-6 text-[#8B0000]" />
+              </div>
+              <div>
+                <p className="text-2xl font-bold text-[#2D343A]">0</p>
+                <p className="text-sm text-[#708090]">Entrevistas</p>
+              </div>
+            </div>
+          </div>
+          <div className="bg-white p-6 rounded-xl shadow-sm border border-[#E8EAE0]">
+            <div className="flex items-center gap-3">
+              <div className="p-3 bg-[#8B0000]/10 rounded-lg">
+                <FileText className="h-6 w-6 text-[#8B0000]" />
+              </div>
+              <div>
+                <p className="text-2xl font-bold text-[#2D343A]">0%</p>
+                <p className="text-sm text-[#708090]">Perfil Completo</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="bg-white p-6 rounded-xl shadow-sm border border-[#E8EAE0]">
+            <h2 className="text-lg font-semibold text-[#2D343A] mb-4">Vagas Recomendadas</h2>
+            <p className="text-[#708090] text-center py-8">Nenhuma vaga recomendada ainda.</p>
+          </div>
+          <div className="bg-white p-6 rounded-xl shadow-sm border border-[#E8EAE0]">
+            <h2 className="text-lg font-semibold text-[#2D343A] mb-4">Seu Progresso</h2>
+            <div className="space-y-4">
+              <div>
+                <p className="text-sm text-[#708090]">Perfil</p>
+                <div className="w-full bg-[#E8EAE0] rounded-full h-2 mt-1">
+                  <div className="bg-[#8B0000] h-2 rounded-full" style={{ width: '0%' }}></div>
+                </div>
+              </div>
+              <button className="w-full py-2.5 bg-[#8B0000] text-white rounded-lg hover:bg-[#700000] transition font-medium">
+                Completar Perfil
+              </button>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   )
