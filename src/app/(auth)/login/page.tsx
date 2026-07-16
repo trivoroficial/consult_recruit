@@ -21,6 +21,7 @@ export default function Login() {
     setTimeout(() => {
       setLoading(false)
       
+      // ADMIN
       if (email === 'admin@zenthos.com' && password === 'admin123') {
         localStorage.setItem('zenthos_user', JSON.stringify({ 
           name: 'Administrador', 
@@ -29,8 +30,11 @@ export default function Login() {
           perfilCompleto: true 
         }))
         router.push('/admin/dashboard')
+        return
       } 
-      else if (email === 'empresa@zenthos.com' && password === 'empresa123') {
+      
+      // EMPRESA
+      if (email === 'empresa@zenthos.com' && password === 'empresa123') {
         localStorage.setItem('zenthos_user', JSON.stringify({ 
           name: 'Empresa XPTO', 
           email, 
@@ -38,8 +42,11 @@ export default function Login() {
           perfilCompleto: true 
         }))
         router.push('/empresa/dashboard')
+        return
       } 
-      else if (email === 'candidato@zenthos.com' && password === 'candidato123') {
+      
+      // CANDIDATO
+      if (email === 'candidato@zenthos.com' && password === 'candidato123') {
         localStorage.setItem('zenthos_user', JSON.stringify({ 
           name: 'João Silva', 
           email, 
@@ -47,10 +54,11 @@ export default function Login() {
           perfilCompleto: true 
         }))
         router.push('/candidato/dashboard')
+        return
       }
-      else {
-        setErro('Email ou senha inválidos')
-      }
+      
+      // USUÁRIO NÃO ENCONTRADO
+      setErro('Email ou senha inválidos')
     }, 1500)
   }
 
@@ -59,14 +67,16 @@ export default function Login() {
       <div className="w-full max-w-md">
         <div className="bg-white rounded-2xl shadow-xl p-8 border border-[#E8EAE0]">
           
-          {/* LOGO - MESMA DO HEADER */}
+          {/* LOGO - 1.5cm de altura */}
           <div className="text-center mb-8">
             <Link href="/" className="inline-flex items-center gap-3 group">
-              <img 
-                src="/logo.png" 
-                alt="ZENTHOS" 
-                className="h-12 w-auto object-contain"
-              />
+              <div className="relative h-[1.5cm] w-auto">
+                <img 
+                  src="/logo.png" 
+                  alt="ZENTHOS" 
+                  className="h-full w-auto object-contain"
+                />
+              </div>
               <div className="flex flex-col text-left">
                 <div className="flex items-center gap-1">
                   <span className="text-xl font-bold tracking-tight">
