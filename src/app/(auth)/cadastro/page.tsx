@@ -46,7 +46,7 @@ export default function Cadastro() {
       <div className="w-full max-w-md">
         <div className="bg-white rounded-2xl shadow-xl p-8 border border-[#E8EAE0]">
           
-          {/* LOGO */}
+          {/* LOGO - MESMA DO HEADER */}
           <div className="text-center mb-8">
             <Link href="/" className="inline-flex items-center gap-3 group">
               <img 
