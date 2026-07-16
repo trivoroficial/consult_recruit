@@ -18,43 +18,49 @@ export default function Login() {
     setLoading(true)
     setErro('')
     
-    // SIMULAÇÃO DE LOGIN
     setTimeout(() => {
       setLoading(false)
       
       // ADMIN
       if (email === 'admin@zenthos.com' && password === 'admin123') {
-        localStorage.setItem('zenthos_user', JSON.stringify({ 
+        const userData = JSON.stringify({ 
           name: 'Administrador', 
           email, 
           role: 'admin',
           perfilCompleto: true 
-        }))
-        window.location.href = '/admin/dashboard'
+        })
+        localStorage.setItem('zenthos_user', userData)
+        // SALVAR COOKIE PARA O MIDDLEWARE
+        document.cookie = `zenthos_user=${encodeURIComponent(userData)}; path=/; max-age=86400`
+        router.push('/admin/dashboard')
         return
       } 
       
       // EMPRESA
       if (email === 'empresa@zenthos.com' && password === 'empresa123') {
-        localStorage.setItem('zenthos_user', JSON.stringify({ 
+        const userData = JSON.stringify({ 
           name: 'Empresa XPTO', 
           email, 
           role: 'empresa',
           perfilCompleto: true 
-        }))
-        window.location.href = '/empresa/dashboard'
+        })
+        localStorage.setItem('zenthos_user', userData)
+        document.cookie = `zenthos_user=${encodeURIComponent(userData)}; path=/; max-age=86400`
+        router.push('/empresa/dashboard')
         return
       } 
       
       // CANDIDATO
       if (email === 'candidato@zenthos.com' && password === 'candidato123') {
-        localStorage.setItem('zenthos_user', JSON.stringify({ 
+        const userData = JSON.stringify({ 
           name: 'João Silva', 
           email, 
           role: 'candidato',
           perfilCompleto: true 
-        }))
-        window.location.href = '/candidato/dashboard'
+        })
+        localStorage.setItem('zenthos_user', userData)
+        document.cookie = `zenthos_user=${encodeURIComponent(userData)}; path=/; max-age=86400`
+        router.push('/candidato/dashboard')
         return
       }
       
