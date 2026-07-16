@@ -1,108 +1,20 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
+import Link from 'next/link'
 import { 
   Building2, Users, Briefcase, TrendingUp, 
-  ArrowUp, ArrowDown, Eye, Calendar, Clock,
-  ChevronRight, Plus, Search, Filter,
-  BarChart3, PieChart
+  ArrowUp, ArrowDown, Eye, Clock, Plus,
+  ChevronRight, Search, Filter, BarChart3,
+  PieChart, Calendar, CheckCircle, AlertCircle
 } from 'lucide-react'
-import Link from 'next/link'
 
-// ===== TIPOS =====
-interface KPI {
-  id: string
-  title: string
-  value: number
-  change: number
-  icon: React.ReactNode
-  color: string
-}
-
-interface Activity {
-  id: string
-  type: 'empresa' | 'candidato' | 'vaga' | 'processo'
-  title: string
-  description: string
-  time: string
-  status?: 'pending' | 'approved' | 'rejected'
-}
-
-// ===== DADOS MOCK =====
-const kpis: KPI[] = [
-  {
-    id: '1',
-    title: 'Empresas Ativas',
-    value: 32,
-    change: 8.5,
-    icon: <Building2 className="h-6 w-6" />,
-    color: 'bg-blue-500'
-  },
-  {
-    id: '2',
-    title: 'Candidatos',
-    value: 1547,
-    change: 12.3,
-    icon: <Users className="h-6 w-6" />,
-    color: 'bg-green-500'
-  },
-  {
-    id: '3',
-    title: 'Vagas Abertas',
-    value: 45,
-    change: -3.2,
-    icon: <Briefcase className="h-6 w-6" />,
-    color: 'bg-purple-500'
-  },
-  {
-    id: '4',
-    title: 'Contratações',
-    value: 28,
-    change: 15.7,
-    icon: <TrendingUp className="h-6 w-6" />,
-    color: 'bg-orange-500'
-  }
-]
-
-const activities: Activity[] = [
-  {
-    id: '1',
-    type: 'empresa',
-    title: 'Nova empresa cadastrada',
-    description: 'XPTO Tecnologia - Solicitou recrutamento',
-    time: 'Há 2 horas',
-    status: 'pending'
-  },
-  {
-    id: '2',
-    type: 'candidato',
-    title: 'Novo candidato',
-    description: 'João Silva - Desenvolvedor Full Stack',
-    time: 'Há 4 horas'
-  },
-  {
-    id: '3',
-    type: 'vaga',
-    title: 'Vaga publicada',
-    description: 'UX Designer - Salário: R$ 8.000',
-    time: 'Há 6 horas',
-    status: 'approved'
-  },
-  {
-    id: '4',
-    type: 'processo',
-    title: 'Processo encerrado',
-    description: 'Desenvolvedor Frontend - 3 contratados',
-    time: 'Há 1 dia'
-  },
-  {
-    id: '5',
-    type: 'empresa',
-    title: 'Empresa bloqueada',
-    description: 'Financeira ABC - Pendência documental',
-    time: 'Há 2 dias',
-    status: 'rejected'
-  }
+// ===== DADOS =====
+const kpis = [
+  { title: 'Empresas Ativas', value: 32, change: 8.5, icon: <Building2 className="h-6 w-6" />, color: 'bg-blue-500' },
+  { title: 'Candidatos', value: 1547, change: 12.3, icon: <Users className="h-6 w-6" />, color: 'bg-green-500' },
+  { title: 'Vagas Abertas', value: 45, change: -3.2, icon: <Briefcase className="h-6 w-6" />, color: 'bg-purple-500' },
+  { title: 'Contratações', value: 28, change: 15.7, icon: <TrendingUp className="h-6 w-6" />, color: 'bg-orange-500' }
 ]
 
 const processosStatus = [
@@ -112,49 +24,24 @@ const processosStatus = [
   { label: 'Cancelados', value: 3, color: 'bg-red-500' }
 ]
 
-// ===== COMPONENTES =====
-function KPICard({ kpi }: { kpi: KPI }) {
-  const isPositive = kpi.change > 0
-  const isNegative = kpi.change < 0
+const atividadesRecentes = [
+  { id: 1, tipo: 'empresa', titulo: 'Nova empresa cadastrada', descricao: 'XPTO Tecnologia - Solicitou recrutamento', tempo: 'Há 2 horas', status: 'pending' },
+  { id: 2, tipo: 'candidato', titulo: 'Novo candidato', descricao: 'João Silva - Desenvolvedor Full Stack', tempo: 'Há 4 horas', status: '' },
+  { id: 3, tipo: 'vaga', titulo: 'Vaga publicada', descricao: 'UX Designer - Salário: R$ 8.000', tempo: 'Há 6 horas', status: 'approved' },
+  { id: 4, tipo: 'processo', titulo: 'Processo encerrado', descricao: 'Desenvolvedor Frontend - 3 contratados', tempo: 'Há 1 dia', status: '' },
+  { id: 5, tipo: 'empresa', titulo: 'Empresa bloqueada', descricao: 'Financeira ABC - Pendência documental', tempo: 'Há 2 dias', status: 'rejected' }
+]
 
-  return (
-    <div className="group bg-white rounded-2xl border border-gray-100/80 p-6 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
-      <div className="flex items-start justify-between">
-        <div>
-          <p className="text-sm font-medium text-gray-500">{kpi.title}</p>
-          <p className="mt-2 text-3xl font-bold text-gray-900">
-            {kpi.value.toLocaleString()}
-          </p>
-        </div>
-        <div className={`${kpi.color} rounded-xl p-3 text-white shadow-lg`}>
-          {kpi.icon}
-        </div>
-      </div>
-      <div className="mt-4 flex items-center gap-2">
-        <span className={`inline-flex items-center text-sm font-medium ${
-          isPositive ? 'text-green-600' : isNegative ? 'text-red-600' : 'text-gray-500'
-        }`}>
-          {isPositive ? <ArrowUp className="h-3 w-3 mr-1" /> : isNegative ? <ArrowDown className="h-3 w-3 mr-1" /> : null}
-          {isPositive ? `+${kpi.change}%` : isNegative ? `${kpi.change}%` : '0%'}
-        </span>
-        <span className="text-sm text-gray-400">vs mês anterior</span>
-      </div>
-    </div>
+export default function AdminDashboard() {
+  const [searchTerm, setSearchTerm] = useState('')
+
+  const filtered = atividadesRecentes.filter(a => 
+    a.titulo.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    a.descricao.toLowerCase().includes(searchTerm.toLowerCase())
   )
-}
 
-function ActivityItem({ activity }: { activity: Activity }) {
-  const getIcon = () => {
-    switch (activity.type) {
-      case 'empresa': return <Building2 className="h-4 w-4 text-blue-500" />
-      case 'candidato': return <Users className="h-4 w-4 text-green-500" />
-      case 'vaga': return <Briefcase className="h-4 w-4 text-purple-500" />
-      case 'processo': return <TrendingUp className="h-4 w-4 text-orange-500" />
-    }
-  }
-
-  const getStatusColor = () => {
-    switch (activity.status) {
+  const getStatusColor = (status: string) => {
+    switch(status) {
       case 'pending': return 'bg-yellow-100 text-yellow-700'
       case 'approved': return 'bg-green-100 text-green-700'
       case 'rejected': return 'bg-red-100 text-red-700'
@@ -162,8 +49,8 @@ function ActivityItem({ activity }: { activity: Activity }) {
     }
   }
 
-  const getStatusLabel = () => {
-    switch (activity.status) {
+  const getStatusLabel = (status: string) => {
+    switch(status) {
       case 'pending': return 'Pendente'
       case 'approved': return 'Aprovado'
       case 'rejected': return 'Rejeitado'
@@ -171,63 +58,15 @@ function ActivityItem({ activity }: { activity: Activity }) {
     }
   }
 
-  return (
-    <div className="flex items-start gap-4 py-4 border-b border-gray-50 last:border-0 hover:bg-gray-50/50 px-3 rounded-lg transition-all">
-      <div className="w-10 h-10 rounded-xl bg-gray-100 flex items-center justify-center flex-shrink-0">
-        {getIcon()}
-      </div>
-      <div className="flex-1 min-w-0">
-        <div className="flex items-center gap-2">
-          <p className="text-sm font-semibold text-gray-900">{activity.title}</p>
-          {activity.status && (
-            <span className={`text-xs font-medium px-2 py-0.5 rounded-full ${getStatusColor()}`}>
-              {getStatusLabel()}
-            </span>
-          )}
-        </div>
-        <p className="text-sm text-gray-500 truncate">{activity.description}</p>
-        <div className="flex items-center gap-3 mt-1">
-          <span className="text-xs text-gray-400 flex items-center gap-1">
-            <Clock className="h-3 w-3" /> {activity.time}
-          </span>
-        </div>
-      </div>
-      <button className="text-gray-400 hover:text-gray-600 transition-colors">
-        <ChevronRight className="h-5 w-5" />
-      </button>
-    </div>
-  )
-}
-
-function StatusCard({ label, value, color }: { label: string; value: number; color: string }) {
-  return (
-    <div className="flex items-center justify-between py-3 border-b border-gray-50 last:border-0">
-      <div className="flex items-center gap-3">
-        <div className={`w-3 h-3 rounded-full ${color}`} />
-        <span className="text-sm text-gray-600">{label}</span>
-      </div>
-      <span className="text-sm font-semibold text-gray-900">{value}</span>
-    </div>
-  )
-}
-
-// ===== PÁGINA PRINCIPAL =====
-export default function AdminDashboard() {
-  const [searchTerm, setSearchTerm] = useState('')
-  const [filteredActivities, setFilteredActivities] = useState(activities)
-
-  useEffect(() => {
-    if (searchTerm) {
-      setFilteredActivities(
-        activities.filter(a => 
-          a.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          a.description.toLowerCase().includes(searchTerm.toLowerCase())
-        )
-      )
-    } else {
-      setFilteredActivities(activities)
+  const getIcon = (tipo: string) => {
+    switch(tipo) {
+      case 'empresa': return <Building2 className="h-4 w-4 text-blue-500" />
+      case 'candidato': return <Users className="h-4 w-4 text-green-500" />
+      case 'vaga': return <Briefcase className="h-4 w-4 text-purple-500" />
+      case 'processo': return <TrendingUp className="h-4 w-4 text-orange-500" />
+      default: return <AlertCircle className="h-4 w-4 text-gray-500" />
     }
-  }, [searchTerm])
+  }
 
   return (
     <div className="min-h-screen bg-gray-50/80">
@@ -241,6 +80,7 @@ export default function AdminDashboard() {
           </div>
           <div className="flex items-center gap-3">
             <div className="relative">
+              <Search className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
               <input
                 type="text"
                 placeholder="Buscar atividades..."
@@ -248,26 +88,44 @@ export default function AdminDashboard() {
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
               />
-              <Search className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
             </div>
-            <button className="px-4 py-2.5 text-sm font-semibold text-white bg-[#8B0000] rounded-xl hover:bg-[#700000] transition shadow-md shadow-[#8B0000]/20 hover:shadow-lg flex items-center gap-2">
-              <Plus className="h-4 w-4" />
-              Nova Ação
-            </button>
+            <Link href="/admin/empresas/nova">
+              <button className="px-4 py-2.5 text-sm font-semibold text-white bg-[#8B0000] rounded-xl hover:bg-[#700000] transition shadow-md shadow-[#8B0000]/20 flex items-center gap-2">
+                <Plus className="h-4 w-4" />
+                Nova Empresa
+              </button>
+            </Link>
           </div>
         </div>
 
         {/* ===== KPIS ===== */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-          {kpis.map((kpi) => (
-            <KPICard key={kpi.id} kpi={kpi} />
+          {kpis.map((kpi, index) => (
+            <div key={index} className="group bg-white rounded-2xl border border-gray-100/80 p-6 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
+              <div className="flex items-start justify-between">
+                <div>
+                  <p className="text-sm font-medium text-gray-500">{kpi.title}</p>
+                  <p className="mt-2 text-2xl font-bold text-gray-900">{kpi.value.toLocaleString()}</p>
+                </div>
+                <div className={`${kpi.color} rounded-xl p-3 text-white shadow-lg`}>
+                  {kpi.icon}
+                </div>
+              </div>
+              <div className="mt-4 flex items-center gap-2">
+                <span className={`text-sm font-medium ${kpi.change > 0 ? 'text-green-600' : 'text-red-600'}`}>
+                  {kpi.change > 0 ? <ArrowUp className="h-3 w-3 inline mr-1" /> : <ArrowDown className="h-3 w-3 inline mr-1" />}
+                  {kpi.change > 0 ? '+' : ''}{kpi.change}%
+                </span>
+                <span className="text-sm text-gray-400">vs mês anterior</span>
+              </div>
+            </div>
           ))}
         </div>
 
-        {/* ===== GRÁFICOS E STATUS ===== */}
+        {/* ===== GRÁFICOS ===== */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
           
-          {/* GRÁFICO DE PROCESSOS */}
+          {/* PROCESSOS */}
           <div className="lg:col-span-2 bg-white rounded-2xl border border-gray-100/80 p-6 shadow-sm">
             <div className="flex items-center justify-between mb-6">
               <div>
@@ -284,7 +142,6 @@ export default function AdminDashboard() {
               </div>
             </div>
             
-            {/* GRÁFICO DE BARRAS SIMULADO */}
             <div className="space-y-4">
               {processosStatus.map((status, index) => (
                 <div key={index} className="space-y-1">
@@ -303,7 +160,7 @@ export default function AdminDashboard() {
             </div>
           </div>
 
-          {/* STATUS RÁPIDO */}
+          {/* RESUMO RÁPIDO */}
           <div className="bg-white rounded-2xl border border-gray-100/80 p-6 shadow-sm">
             <h3 className="text-lg font-semibold text-gray-900 mb-4">Resumo Rápido</h3>
             <div className="space-y-1">
@@ -348,28 +205,38 @@ export default function AdminDashboard() {
             </Link>
           </div>
 
-          <div className="divide-y divide-gray-100">
-            {filteredActivities.length > 0 ? (
-              filteredActivities.map((activity) => (
-                <ActivityItem key={activity.id} activity={activity} />
-              ))
-            ) : (
+          <div className="space-y-2">
+            {filtered.map((item) => (
+              <div key={item.id} className="flex items-start gap-4 py-3 px-3 hover:bg-gray-50/50 rounded-xl transition-all border-b border-gray-50 last:border-0">
+                <div className="w-10 h-10 rounded-xl bg-gray-100 flex items-center justify-center flex-shrink-0">
+                  {getIcon(item.tipo)}
+                </div>
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center gap-2">
+                    <p className="text-sm font-semibold text-gray-900">{item.titulo}</p>
+                    {item.status && (
+                      <span className={`text-xs font-medium px-2 py-0.5 rounded-full ${getStatusColor(item.status)}`}>
+                        {getStatusLabel(item.status)}
+                      </span>
+                    )}
+                  </div>
+                  <p className="text-sm text-gray-500 truncate">{item.descricao}</p>
+                  <div className="flex items-center gap-3 mt-1">
+                    <span className="text-xs text-gray-400 flex items-center gap-1">
+                      <Clock className="h-3 w-3" /> {item.tempo}
+                    </span>
+                  </div>
+                </div>
+                <button className="text-gray-400 hover:text-gray-600 transition">
+                  <ChevronRight className="h-5 w-5" />
+                </button>
+              </div>
+            ))}
+            {filtered.length === 0 && (
               <div className="text-center py-8 text-gray-400">
                 <p>Nenhuma atividade encontrada</p>
               </div>
             )}
-          </div>
-        </div>
-
-        {/* ===== RODAPÉ DO DASHBOARD ===== */}
-        <div className="mt-8 flex items-center justify-between text-xs text-gray-400 border-t border-gray-200 pt-6">
-          <p>© 2026 ZENTHOS™ - Todos os direitos reservados</p>
-          <div className="flex items-center gap-4">
-            <span className="flex items-center gap-1">
-              <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
-              Sistema em produção
-            </span>
-            <span>v2.0.0</span>
           </div>
         </div>
 
