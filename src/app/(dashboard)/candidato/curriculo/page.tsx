@@ -114,4 +114,28 @@ export default function CandidatoCurriculo() {
           <div className="space-y-2">
             <div className="flex items-center justify-between p-3 bg-gray-50 rounded-xl border border-gray-100">
               <div className="flex items-center gap-3">
-                <FileText className="h-4 w
+                <FileText className="h-4 w-4 text-gray-400" />
+                <span className="text-sm text-gray-600">curriculo_v2.pdf</span>
+                <span className="text-xs text-gray-400">15/07/2026</span>
+              </div>
+              <button className="text-sm text-[#8B0000] hover:text-[#700000] transition">
+                Baixar
+              </button>
+            </div>
+            <div className="flex items-center justify-between p-3 bg-gray-50 rounded-xl border border-gray-100">
+              <div className="flex items-center gap-3">
+                <FileText className="h-4 w-4 text-gray-400" />
+                <span className="text-sm text-gray-600">curriculo_v1.pdf</span>
+                <span className="text-xs text-gray-400">10/07/2026</span>
+              </div>
+              <button className="text-sm text-[#8B0000] hover:text-[#700000] transition">
+                Baixar
+              </button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  )
+}
