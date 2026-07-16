@@ -1,69 +1,139 @@
 'use client'
 
-import { SidebarAdmin } from '@/components/layout/SidebarAdmin'
-import { BarChart3, Users, Building2, Briefcase, TrendingUp, Download, Calendar, Filter } from 'lucide-react'
+import { useState } from 'react'
+import { Download, FileText, BarChart3, Users, Building2, Briefcase, TrendingUp, Calendar } from 'lucide-react'
 
 const relatorios = [
-  { id: 1, titulo: 'Relatório de Usuários', descricao: 'Total de usuários cadastrados por período', icon: Users, cor: 'bg-purple-100 text-purple-600' },
-  { id: 2, titulo: 'Relatório de Empresas', descricao: 'Empresas ativas e crescimento mensal', icon: Building2, cor: 'bg-blue-100 text-blue-600' },
-  { id: 3, titulo: 'Relatório de Vagas', descricao: 'Vagas publicadas e taxa de ocupação', icon: Briefcase, cor: 'bg-green-100 text-green-600' },
-  { id: 4, titulo: 'Relatório Financeiro', descricao: 'Receitas, despesas e margem de lucro', icon: TrendingUp, cor: 'bg-yellow-100 text-yellow-600' },
+  { id: 1, titulo: 'Relatório de Empresas', descricao: 'Lista completa de todas as empresas cadastradas', icone: <Building2 className="h-5 w-5" />, cor: 'bg-blue-500' },
+  { id: 2, titulo: 'Relatório de Candidatos', descricao: 'Todos os candidatos cadastrados na plataforma', icone: <Users className="h-5 w-5" />, cor: 'bg-green-500' },
+  { id: 3, titulo: 'Relatório de Vagas', descricao: 'Todas as vagas publicadas e seus status', icone: <Briefcase className="h-5 w-5" />, cor: 'bg-purple-500' },
+  { id: 4, titulo: 'Relatório de Contratações', descricao: 'Contratações realizadas por período', icone: <TrendingUp className="h-5 w-5" />, cor: 'bg-orange-500' },
+  { id: 5, titulo: 'Relatório de Processos', descricao: 'Processos seletivos por status e etapa', icone: <BarChart3 className="h-5 w-5" />, cor: 'bg-red-500' },
+  { id: 6, titulo: 'Relatório de Entrevistas', descricao: 'Entrevistas realizadas e resultados', icone: <Calendar className="h-5 w-5" />, cor: 'bg-yellow-500' }
 ]
 
 export default function AdminRelatorios() {
+  const [periodo, setPeriodo] = useState('30')
+
   return (
-    <div className="flex min-h-screen bg-gray-50">
-      <SidebarAdmin />
-      <div className="flex-1 ml-64 p-8">
-        <div className="flex items-center justify-between mb-8">
-          <h1 className="text-3xl font-bold">
-            <span className="text-purple-600">Relatórios</span>
-          </h1>
-          <div className="flex gap-2">
-            <button className="btn-outline btn-sm flex items-center gap-2">
-              <Calendar className="h-4 w-4" />
-              Julho 2026
-            </button>
-            <button className="btn-outline btn-sm flex items-center gap-2">
-              <Filter className="h-4 w-4" />
-              Filtrar
-            </button>
-            <button className="btn-primary btn-sm flex items-center gap-2">
-              <Download className="h-4 w-4" />
-              Exportar
+    <div className="min-h-screen bg-gray-50/80">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        
+        {/* ===== HEADER ===== */}
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
+          <div>
+            <h1 className="text-2xl font-bold text-gray-900">Central de Relatórios</h1>
+            <p className="text-sm text-gray-500 mt-1">Gere relatórios completos da plataforma</p>
+          </div>
+          <div className="flex items-center gap-3">
+            <select 
+              className="px-4 py-2.5 text-sm border border-gray-200 rounded-xl focus:border-[#8B0000] focus:ring-2 focus:ring-[#8B0000]/20 outline-none transition bg-white"
+              value={periodo}
+              onChange={(e) => setPeriodo(e.target.value)}
+            >
+              <option value="7">Últimos 7 dias</option>
+              <option value="30">Últimos 30 dias</option>
+              <option value="90">Últimos 90 dias</option>
+              <option value="365">Último ano</option>
+            </select>
+            <button className="px-4 py-2.5 text-sm font-semibold text-white bg-[#8B0000] rounded-xl hover:bg-[#700000] transition shadow-md shadow-[#8B0000]/20 flex items-center gap-2">
+              <FileText className="h-4 w-4" />
+              Gerar Relatório
             </button>
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {relatorios.map((item) => {
-            const Icon = item.icon
-            return (
-              <div key={item.id} className="bg-white rounded-xl shadow-sm border p-6 hover:shadow-md transition cursor-pointer group">
-                <div className="flex items-start gap-4">
-                  <div className={`p-3 rounded-xl ${item.cor}`}>
-                    <Icon className="h-6 w-6" />
-                  </div>
-                  <div className="flex-1">
-                    <h3 className="text-lg font-semibold group-hover:text-purple-600 transition">{item.titulo}</h3>
-                    <p className="text-sm text-gray-500">{item.descricao}</p>
-                    <div className="mt-4 flex items-center gap-4 text-sm">
-                      <span className="text-purple-600 font-medium">Gerar Relatório →</span>
-                      <span className="text-gray-400">Último: 08/07/2026</span>
-                    </div>
-                  </div>
+        {/* ===== CARDS DE RELATÓRIOS ===== */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {relatorios.map((relatorio) => (
+            <div key={relatorio.id} className="group bg-white rounded-2xl border border-gray-100/80 p-6 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
+              <div className="flex items-start gap-4">
+                <div className={`${relatorio.cor} rounded-xl p-3 text-white shadow-lg`}>
+                  {relatorio.icone}
+                </div>
+                <div className="flex-1">
+                  <h3 className="text-base font-semibold text-gray-900">{relatorio.titulo}</h3>
+                  <p className="text-sm text-gray-500 mt-1">{relatorio.descricao}</p>
                 </div>
               </div>
-            )
-          })}
+              <div className="mt-4 pt-4 border-t border-gray-100 flex items-center justify-between">
+                <span className="text-xs text-gray-400">Última atualização: 15/07/2026</span>
+                <button className="text-sm font-medium text-[#8B0000] hover:text-[#700000] transition flex items-center gap-1">
+                  <Download className="h-4 w-4" />
+                  Exportar
+                </button>
+              </div>
+            </div>
+          ))}
         </div>
 
-        <div className="mt-6 bg-blue-50 border border-blue-200 rounded-lg p-4">
-          <h4 className="font-semibold text-blue-800">📊 Dica</h4>
-          <p className="text-sm text-blue-700">
-            Os relatórios podem ser exportados em PDF, Excel ou CSV para análise externa.
-          </p>
+        {/* ===== GRÁFICOS ===== */}
+        <div className="mt-8 grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <div className="bg-white rounded-2xl border border-gray-100/80 p-6 shadow-sm">
+            <h3 className="text-lg font-semibold text-gray-900 mb-4">Contratações por Mês</h3>
+            <div className="h-48 flex items-end gap-4">
+              {['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun'].map((mes, i) => {
+                const altura = [60, 45, 80, 70, 55, 90][i]
+                return (
+                  <div key={i} className="flex-1 flex flex-col items-center gap-2">
+                    <div 
+                      className="w-full bg-[#8B0000]/20 rounded-t-lg hover:bg-[#8B0000]/40 transition-all duration-300 relative group"
+                      style={{ height: altura }}
+                    >
+                      <div className="absolute -top-8 left-1/2 -translate-x-1/2 bg-gray-800 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition">
+                        {altura} contratados
+                      </div>
+                    </div>
+                    <span className="text-xs text-gray-500">{mes}</span>
+                  </div>
+                )
+              })}
+            </div>
+          </div>
+
+          <div className="bg-white rounded-2xl border border-gray-100/80 p-6 shadow-sm">
+            <h3 className="text-lg font-semibold text-gray-900 mb-4">Status das Vagas</h3>
+            <div className="space-y-4">
+              <div>
+                <div className="flex items-center justify-between text-sm">
+                  <span className="text-gray-600">Ativas</span>
+                  <span className="font-semibold text-gray-900">12</span>
+                </div>
+                <div className="w-full h-2 bg-gray-100 rounded-full mt-1 overflow-hidden">
+                  <div className="h-full bg-green-500 rounded-full" style={{ width: '48%' }} />
+                </div>
+              </div>
+              <div>
+                <div className="flex items-center justify-between text-sm">
+                  <span className="text-gray-600">Em andamento</span>
+                  <span className="font-semibold text-gray-900">8</span>
+                </div>
+                <div className="w-full h-2 bg-gray-100 rounded-full mt-1 overflow-hidden">
+                  <div className="h-full bg-yellow-500 rounded-full" style={{ width: '32%' }} />
+                </div>
+              </div>
+              <div>
+                <div className="flex items-center justify-between text-sm">
+                  <span className="text-gray-600">Pausadas</span>
+                  <span className="font-semibold text-gray-900">3</span>
+                </div>
+                <div className="w-full h-2 bg-gray-100 rounded-full mt-1 overflow-hidden">
+                  <div className="h-full bg-orange-500 rounded-full" style={{ width: '12%' }} />
+                </div>
+              </div>
+              <div>
+                <div className="flex items-center justify-between text-sm">
+                  <span className="text-gray-600">Encerradas</span>
+                  <span className="font-semibold text-gray-900">2</span>
+                </div>
+                <div className="w-full h-2 bg-gray-100 rounded-full mt-1 overflow-hidden">
+                  <div className="h-full bg-gray-400 rounded-full" style={{ width: '8%' }} />
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
+
       </div>
     </div>
   )
