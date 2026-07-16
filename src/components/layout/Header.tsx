@@ -5,115 +5,13 @@ import Link from 'next/link'
 import { Menu, X } from 'lucide-react'
 
 const navLinks = [
-  { id: "home", label: "Início", href: "/#home" },
-  { id: "sobre", label: "Sobre", href: "/#sobre" },
-  { id: "servicos", label: "Serviços", href: "/#servicos" },
-  { id: "solucoes", label: "Soluções", href: "/#solucoes" },
-  { id: "tecnologia", label: "Tecnologia", href: "/#tecnologia" },
-  { id: "contato", label: "Contato", href: "/#contato" },
-]
-'use client'
-
-import Link from 'next/link'
-
-const whatsappNumber = "5537991177058"
-const whatsappDisplay = "+55 37 99117-7058"
-const whatsappMessage = "Olá! Gostaria de conhecer as soluções da ZENTHOS."
-const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(whatsappMessage)}`
-const emailContato = "contato@zenthos.com.br"
-
-const navLinks = [
   { id: "home", label: "Início", href: "/" },
   { id: "sobre", label: "Sobre", href: "/sobre" },
   { id: "servicos", label: "Serviços", href: "/servicos" },
   { id: "contato", label: "Contato", href: "/contato" },
 ]
 
-export function Footer() {
-  return (
-    <footer className="bg-[#2D343A] text-white py-12 border-t border-white/10">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid gap-10 md:grid-cols-2 lg:grid-cols-4">
-          
-          {/* ===== COLUNA 1: LOGO ===== */}
-          <div className="lg:col-span-1">
-            <Link href="/" className="flex items-center gap-3 group">
-              <img 
-                src="/logo.png" 
-                alt="ZENTHOS" 
-                className="h-12 w-auto object-contain brightness-0 invert" 
-              />
-              <div className="flex flex-col leading-none">
-                <div className="flex items-center gap-1">
-                  <span className="text-xl font-bold tracking-tight text-white">ZENTHOS</span>
-                  <span className="text-[8px] font-light text-[#E3C9A8] align-top mt-[-2px]">™</span>
-                </div>
-                <span className="text-[9px] font-light text-[#A1A8AE] tracking-[0.15em] uppercase whitespace-nowrap">
-                  Gestão, Estratégia & Transformação
-                </span>
-              </div>
-            </Link>
-            <p className="mt-4 text-sm text-white/60 leading-relaxed max-w-xs">
-              Transformando organizações através de estratégia, tecnologia e inteligência humana.
-            </p>
-            <p className="mt-6 text-xs text-white/40">
-              © {new Date().getFullYear()} ZENTHOS. Todos os direitos reservados.
-            </p>
-          </div>
-          
-          {/* ===== COLUNA 2: NAVEGAÇÃO ===== */}
-          <div>
-            <h4 className="font-semibold text-white text-sm uppercase tracking-wider mb-4">Navegação</h4>
-            <ul className="space-y-3 text-sm text-white/60">
-              {navLinks.map((link) => (
-                <li key={link.id}>
-                  <Link href={link.href} className="hover:text-[#E3C9A8] transition-colors duration-200">
-                    {link.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-          
-          {/* ===== COLUNA 3: CONTATO ===== */}
-          <div>
-            <h4 className="font-semibold text-white text-sm uppercase tracking-wider mb-4">Contato</h4>
-            <ul className="space-y-3 text-sm text-white/60">
-              <li>
-                <a href={whatsappUrl} target="_blank" rel="noopener noreferrer" className="hover:text-[#E3C9A8] transition-colors duration-200 flex items-center gap-2">
-                  <span>📱</span> {whatsappDisplay}
-                </a>
-              </li>
-              <li>
-                <a href={`mailto:${emailContato}`} className="hover:text-[#E3C9A8] transition-colors duration-200 flex items-center gap-2">
-                  <span>✉️</span> {emailContato}
-                </a>
-              </li>
-            </ul>
-          </div>
-          
-          {/* ===== COLUNA 4: ACESSO ===== */}
-          <div>
-            <h4 className="font-semibold text-white text-sm uppercase tracking-wider mb-4">Acesso</h4>
-            <ul className="space-y-3 text-sm text-white/60">
-              <li>
-                <Link href="/login" className="hover:text-[#E3C9A8] transition-colors duration-200 flex items-center gap-2">
-                  <span>🔒</span> Entrar
-                </Link>
-              </li>
-              <li>
-                <Link href="/cadastro" className="hover:text-[#E3C9A8] transition-colors duration-200 flex items-center gap-2">
-                  <span>🚀</span> Cadastrar
-                </Link>
-              </li>
-            </ul>
-          </div>
-
-        </div>
-      </div>
-    </footer>
-  )
-}export function Header() {
+export function Header() {
   const [scrolled, setScrolled] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
 
@@ -130,21 +28,18 @@ export function Footer() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-20">
           
-          {/* ===== LOGO ZENTHOS ===== */}
+          {/* ===== LOGO ===== */}
           <Link href="/" className="flex items-center gap-3 group">
-            {/* ÍCONE DA LOGO */}
             <div className="relative w-12 h-12 md:w-14 md:h-14 flex-shrink-0">
               <img 
-                src="/logo-zenthos.png" 
+                src="/logo.png" 
                 alt="ZENTHOS" 
                 className="w-full h-full object-contain"
               />
             </div>
-            
-            {/* TEXTO ZENTHOS + TM */}
             <div className="flex flex-col leading-none">
               <div className="flex items-center gap-1">
-                <span className="text-2xl md:text-3xl font-bold tracking-tight">
+                <span className="text-xl md:text-2xl font-bold tracking-tight">
                   <span className="text-[#8B4513]">ZEN</span><span className="text-[#708090]">THOS</span>
                 </span>
                 <span className="text-[8px] font-light text-[#8B0000] align-top mt-[-2px]">™</span>
@@ -158,31 +53,26 @@ export function Footer() {
           {/* ===== MENU DESKTOP ===== */}
           <nav className="hidden lg:flex items-center gap-8">
             {navLinks.map((link) => (
-              <a 
+              <Link 
                 key={link.id} 
                 href={link.href} 
                 className="text-sm font-medium text-[#708090] hover:text-[#8B0000] transition-colors duration-200 relative after:absolute after:bottom-[-4px] after:left-0 after:w-0 after:h-0.5 after:bg-[#8B0000] after:transition-all after:duration-300 hover:after:w-full"
               >
                 {link.label}
-              </a>
+              </Link>
             ))}
           </nav>
 
-          {/* ===== BOTÕES DESKTOP (PREMIUM) ===== */}
+          {/* ===== BOTÕES ===== */}
           <div className="hidden lg:flex items-center gap-3">
             <Link href="/login">
               <button className="text-sm font-medium text-[#708090] hover:text-[#8B0000] px-4 py-2 rounded-lg transition-all duration-200 hover:bg-[#F8F4E6]">
                 Entrar
               </button>
             </Link>
-            <Link href="/servicos">
-              <button className="text-sm font-medium text-[#8B0000] border border-[#8B0000]/30 hover:border-[#8B0000] px-5 py-2 rounded-lg transition-all duration-200 hover:bg-[#8B0000] hover:text-white hover:shadow-lg hover:-translate-y-0.5">
-                Serviços Premium
-              </button>
-            </Link>
             <Link href="/cadastro">
               <button className="text-sm font-medium text-white bg-[#8B0000] hover:bg-[#700000] px-6 py-2.5 rounded-lg transition-all duration-200 shadow-md shadow-[#8B0000]/20 hover:shadow-xl hover:-translate-y-0.5">
-                Solicitar Acesso
+                Cadastrar
               </button>
             </Link>
           </div>
@@ -202,14 +92,14 @@ export function Footer() {
         <div className="lg:hidden bg-white border-t border-[#E3C9A8]/30 absolute w-full shadow-xl">
           <div className="px-4 py-6 space-y-4">
             {navLinks.map((link) => (
-              <a 
+              <Link 
                 key={link.id} 
                 href={link.href} 
                 className="block text-base font-medium text-[#708090] hover:text-[#8B0000] py-2"
                 onClick={() => setMenuOpen(false)}
               >
                 {link.label}
-              </a>
+              </Link>
             ))}
             <div className="pt-4 border-t border-gray-100 space-y-3">
               <Link href="/login" onClick={() => setMenuOpen(false)}>
@@ -217,14 +107,9 @@ export function Footer() {
                   Entrar
                 </button>
               </Link>
-              <Link href="/servicos" onClick={() => setMenuOpen(false)}>
-                <button className="w-full text-center py-3 text-sm font-medium text-[#8B0000] border border-[#8B0000] rounded-lg">
-                  Serviços Premium
-                </button>
-              </Link>
               <Link href="/cadastro" onClick={() => setMenuOpen(false)}>
                 <button className="w-full text-center py-3 text-sm font-medium text-white bg-[#8B0000] rounded-lg">
-                  Solicitar Acesso
+                  Cadastrar
                 </button>
               </Link>
             </div>
