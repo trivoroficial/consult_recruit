@@ -18,6 +18,7 @@ export default function Login() {
     setLoading(true)
     setErro('')
     
+    // SIMULAÇÃO DE LOGIN
     setTimeout(() => {
       setLoading(false)
       
@@ -29,7 +30,7 @@ export default function Login() {
           role: 'admin',
           perfilCompleto: true 
         }))
-        router.push('/admin/dashboard')
+        window.location.href = '/admin/dashboard'
         return
       } 
       
@@ -41,7 +42,7 @@ export default function Login() {
           role: 'empresa',
           perfilCompleto: true 
         }))
-        router.push('/empresa/dashboard')
+        window.location.href = '/empresa/dashboard'
         return
       } 
       
@@ -53,7 +54,7 @@ export default function Login() {
           role: 'candidato',
           perfilCompleto: true 
         }))
-        router.push('/candidato/dashboard')
+        window.location.href = '/candidato/dashboard'
         return
       }
       
