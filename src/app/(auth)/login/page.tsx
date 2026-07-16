@@ -59,7 +59,7 @@ export default function Login() {
       <div className="w-full max-w-md">
         <div className="bg-white rounded-2xl shadow-xl p-8 border border-[#E8EAE0]">
           
-          {/* LOGO */}
+          {/* LOGO - MESMA DO HEADER */}
           <div className="text-center mb-8">
             <Link href="/" className="inline-flex items-center gap-3 group">
               <img 
@@ -158,7 +158,6 @@ export default function Login() {
             </p>
           </div>
 
-          {/* CREDENCIAIS DE TESTE */}
           <div className="mt-8 pt-6 border-t border-[#E8EAE0]">
             <p className="text-xs text-[#708090] text-center mb-3">🔑 Credenciais de teste</p>
             <div className="grid grid-cols-1 gap-1.5 text-xs text-[#708090]">
