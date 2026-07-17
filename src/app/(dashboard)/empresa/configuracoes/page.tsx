@@ -1,121 +1,58 @@
 'use client'
 
-import { SidebarEmpresa } from '@/components/layout/SidebarEmpresa'
-import { Building2, Mail, Phone, MapPin, User, Save, Globe } from 'lucide-react'
-import { useState } from 'react'
+import { SidebarEmpresa } from '@/components/dashboard/SidebarEmpresa'
+import { DashboardFooter } from '@/components/dashboard/DashboardFooter'
+import { Settings, Save, Building2, Mail, Phone } from 'lucide-react'
 
-export default function ConfiguracoesEmpresa() {
-  const [config, setConfig] = useState({
-    nome: 'Empresa XPTO',
-    email: 'contato@empresaxpto.com',
-    telefone: '(34) 99117-7058',
-    cidade: 'Uberlândia',
-    estado: 'MG',
-    site: 'www.empresaxpto.com.br',
-    segmento: 'Tecnologia',
-    porte: 'Médio'
-  })
-
+export default function EmpresaConfiguracoes() {
   return (
-    <div className="flex min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-[#F8F4E6] flex flex-col">
       <SidebarEmpresa />
-      <div className="flex-1 ml-64 p-8">
-        <div className="flex items-center justify-between mb-8">
-          <h1 className="text-3xl font-bold">
-            <span className="text-purple-600">Configurações</span> da Empresa
-          </h1>
-          <button className="btn-primary btn-sm flex items-center gap-2">
-            <Save className="h-4 w-4" />
-            Salvar
-          </button>
-        </div>
+      
+      <div className="flex-1 ml-64 flex flex-col min-h-screen">
+        <header className="bg-white border-b border-[#E8EAE0] px-8 py-4 flex items-center justify-between">
+          <div>
+            <h1 className="text-2xl font-bold text-[#2D343A]">Configurações</h1>
+            <p className="text-sm text-[#708090]">Configurações da sua empresa</p>
+          </div>
+        </header>
 
-        <div className="bg-white rounded-xl shadow-sm border p-6">
-          <div className="grid md:grid-cols-2 gap-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-700">Nome da Empresa</label>
-              <input
-                type="text"
-                className="input-default"
-                value={config.nome}
-                onChange={(e) => setConfig({...config, nome: e.target.value})}
-              />
+        <div className="flex-1 p-8">
+          <div className="bg-white p-6 rounded-xl shadow-sm border border-[#E8EAE0]">
+            <h2 className="text-lg font-semibold text-[#2D343A] mb-4 flex items-center gap-2">
+              <Building2 className="h-5 w-5 text-[#8B0000]" />
+              Dados da Empresa
+            </h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label className="block text-sm font-medium text-[#2D343A] mb-1">Razão Social</label>
+                <input type="text" className="w-full px-4 py-2 border border-[#E8EAE0] rounded-lg" placeholder="Sua empresa" />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-[#2D343A] mb-1">CNPJ</label>
+                <input type="text" className="w-full px-4 py-2 border border-[#E8EAE0] rounded-lg" placeholder="00.000.000/0001-00" />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-[#2D343A] mb-1 flex items-center gap-2">
+                  <Mail className="h-4 w-4 text-[#708090]" /> Email
+                </label>
+                <input type="email" className="w-full px-4 py-2 border border-[#E8EAE0] rounded-lg" placeholder="contato@empresa.com" />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-[#2D343A] mb-1 flex items-center gap-2">
+                  <Phone className="h-4 w-4 text-[#708090]" /> Telefone
+                </label>
+                <input type="text" className="w-full px-4 py-2 border border-[#E8EAE0] rounded-lg" placeholder="(00) 00000-0000" />
+              </div>
             </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700">Segmento</label>
-              <input
-                type="text"
-                className="input-default"
-                value={config.segmento}
-                onChange={(e) => setConfig({...config, segmento: e.target.value})}
-              />
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700">Email</label>
-              <input
-                type="email"
-                className="input-default"
-                value={config.email}
-                onChange={(e) => setConfig({...config, email: e.target.value})}
-              />
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700">Telefone</label>
-              <input
-                type="text"
-                className="input-default"
-                value={config.telefone}
-                onChange={(e) => setConfig({...config, telefone: e.target.value})}
-              />
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700">Cidade</label>
-              <input
-                type="text"
-                className="input-default"
-                value={config.cidade}
-                onChange={(e) => setConfig({...config, cidade: e.target.value})}
-              />
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700">Estado</label>
-              <input
-                type="text"
-                className="input-default"
-                value={config.estado}
-                onChange={(e) => setConfig({...config, estado: e.target.value})}
-              />
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700">Site</label>
-              <input
-                type="text"
-                className="input-default"
-                value={config.site}
-                onChange={(e) => setConfig({...config, site: e.target.value})}
-              />
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700">Porte</label>
-              <select
-                className="input-default"
-                value={config.porte}
-                onChange={(e) => setConfig({...config, porte: e.target.value})}
-              >
-                <option>Pequeno</option>
-                <option>Médio</option>
-                <option>Grande</option>
-              </select>
-            </div>
+            <button className="mt-6 w-full py-3 bg-[#8B0000] text-white rounded-lg hover:bg-[#700000] transition font-medium flex items-center justify-center gap-2">
+              <Save className="h-5 w-5" />
+              Salvar Configurações
+            </button>
           </div>
         </div>
+
+        <DashboardFooter />
       </div>
     </div>
   )
