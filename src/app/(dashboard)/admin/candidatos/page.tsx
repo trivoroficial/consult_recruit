@@ -1,10 +1,13 @@
 'use client'
 
+import { useRouter } from 'next/navigation'
 import { SidebarAdmin } from '@/components/dashboard/SidebarAdmin'
 import { DashboardFooter } from '@/components/dashboard/DashboardFooter'
 import { Users, Plus, Search, Edit, Trash2, Eye, Upload } from 'lucide-react'
 
 export default function AdminCandidatos() {
+  const router = useRouter()
+
   return (
     <div className="min-h-screen bg-[#F8F4E6] flex flex-col">
       <SidebarAdmin />
@@ -20,7 +23,10 @@ export default function AdminCandidatos() {
               <Upload className="h-4 w-4" />
               Importar
             </button>
-            <button className="px-4 py-2 bg-[#8B0000] text-white rounded-lg hover:bg-[#700000] transition font-medium flex items-center gap-2">
+            <button 
+              onClick={() => router.push('/admin/candidatos/novo')}
+              className="px-4 py-2 bg-[#8B0000] text-white rounded-lg hover:bg-[#700000] transition font-medium flex items-center gap-2"
+            >
               <Plus className="h-4 w-4" />
               Novo Candidato
             </button>
@@ -67,15 +73,6 @@ export default function AdminCandidatos() {
                   </tr>
                 </tbody>
               </table>
-            </div>
-
-            <div className="flex items-center justify-between mt-4 text-sm text-[#708090]">
-              <p>Mostrando 1 candidato</p>
-              <div className="flex gap-2">
-                <button className="px-3 py-1 border border-[#E8EAE0] rounded hover:bg-[#F8F4E6]">Anterior</button>
-                <button className="px-3 py-1 bg-[#8B0000] text-white rounded">1</button>
-                <button className="px-3 py-1 border border-[#E8EAE0] rounded hover:bg-[#F8F4E6]">Próximo</button>
-              </div>
             </div>
           </div>
         </div>
