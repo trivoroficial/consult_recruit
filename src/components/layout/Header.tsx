@@ -28,25 +28,14 @@ export function Header() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-20">
           
-          {/* ===== LOGO - 1.5cm de altura ===== */}
+          {/* ===== LOGO 2cm ===== */}
           <Link href="/" className="flex items-center gap-3 group">
-            <div className="relative h-[1.5cm] w-auto flex-shrink-0">
+            <div className="relative h-[2cm] w-auto flex-shrink-0">
               <img 
                 src="/logo.png" 
                 alt="ZENTHOS" 
                 className="h-full w-auto object-contain"
               />
-            </div>
-            <div className="flex flex-col leading-none">
-              <div className="flex items-center gap-1">
-                <span className="text-xl md:text-2xl font-bold tracking-tight">
-                  <span className="text-[#8B4513]">ZEN</span><span className="text-[#708090]">THOS</span>
-                </span>
-                <span className="text-[8px] font-light text-[#8B0000] align-top mt-[-2px]">™</span>
-              </div>
-              <span className="text-[9px] font-light text-[#708090] tracking-[0.15em] uppercase whitespace-nowrap">
-                Gestão, Estratégia & Transformação
-              </span>
             </div>
           </Link>
 
