@@ -7,7 +7,8 @@ import {
   ArrowRight, Users, TrendingUp, Target, Lightbulb, 
   CheckCircle, ChevronRight, Zap, BarChart3, Layers, Phone,
   DollarSign, Building2, Shield, Settings, Briefcase, ClipboardList, Rocket,
-  ChevronLeft, ChevronRight as ChevronRightIcon
+  ChevronLeft, ChevronRight as ChevronRightIcon, Briefcase as BriefcaseIcon,
+  MapPin, Clock, Star, Building, Users as UsersIcon
 } from 'lucide-react'
 
 const whatsappNumber = "5537991177058";
@@ -16,47 +17,47 @@ const whatsappMessage = "Olá! Gostaria de conhecer as soluções da ZENTHOS.";
 const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(whatsappMessage)}`;
 const emailContato = "contato@zenthos.com.br";
 
-// ===== VAGAS PARA O CARROSSEL =====
+// ===== VAGAS DESTAQUE (SEM SALÁRIO) =====
 const vagasDestaque = [
   {
     id: 1,
     titulo: 'Analista Administrativo',
     empresa: 'Empresa XPTO',
     local: 'Uberlândia/MG',
-    salario: 'R$ 3.500',
     tipo: 'Presencial',
     badge: 'Urgente',
-    badgeColor: 'bg-red-500'
+    badgeColor: 'bg-red-500',
+    descricao: 'Atuação em rotinas administrativas, controle documental e suporte operacional.'
   },
   {
     id: 2,
     titulo: 'Auxiliar de RH',
     empresa: 'Indústria ABC',
     local: 'Uberlândia/MG',
-    salario: 'R$ 2.800',
     tipo: 'Híbrido',
     badge: 'Destaque',
-    badgeColor: 'bg-yellow-500'
+    badgeColor: 'bg-yellow-500',
+    descricao: 'Apoio aos processos de recrutamento, seleção e gestão de pessoas.'
   },
   {
     id: 3,
     titulo: 'Assistente Financeiro',
     empresa: 'Grupo Financeiro',
     local: 'Uberlândia/MG',
-    salario: 'R$ 3.200',
     tipo: 'Presencial',
     badge: 'Novo',
-    badgeColor: 'bg-green-500'
+    badgeColor: 'bg-green-500',
+    descricao: 'Controle de fluxo de caixa, contas a pagar e receber, relatórios financeiros.'
   },
   {
     id: 4,
     titulo: 'Supervisor de Produção',
     empresa: 'Indústria XYZ',
     local: 'Uberlândia/MG',
-    salario: 'R$ 5.500',
     tipo: 'Presencial',
     badge: 'Premium',
-    badgeColor: 'bg-purple-500'
+    badgeColor: 'bg-purple-500',
+    descricao: 'Liderança de equipe, planejamento de produção e controle de qualidade.'
   },
 ]
 
@@ -102,7 +103,6 @@ export default function Home() {
   const { scrollYProgress } = useScroll({ target: heroRef, offset: ["start start", "end start"] });
   const overlayY = useTransform(scrollYProgress, [0, 1], [0, 65]);
 
-  // AUTO SLIDE
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentSlide((prev) => (prev + 1) % vagasDestaque.length);
@@ -185,81 +185,133 @@ export default function Home() {
         <div className="pointer-events-none absolute bottom-0 left-0 right-0 h-40 bg-gradient-to-t from-[#F8F4E6] to-transparent" />
       </section>
 
-      {/* ===== CARROSSEL DE VAGAS ===== */}
-      <section className="py-12 bg-white border-y border-[#E8EAE0]">
+      {/* ===== CARROSSEL PREMIUM ===== */}
+      <section className="py-16 bg-white border-y border-[#E8EAE0]">
         <div className="container mx-auto px-4">
-          <div className="flex items-center justify-between mb-6">
+          <div className="flex items-center justify-between mb-8">
             <div>
-              <h2 className="text-2xl font-bold text-[#2D343A]">Vagas em Destaque</h2>
-              <p className="text-sm text-[#708090]">Oportunidades que podem transformar sua carreira</p>
+              <div className="flex items-center gap-2">
+                <span className="text-xs font-semibold text-[#8B0000] uppercase tracking-wider">Oportunidades</span>
+                <span className="h-px w-12 bg-[#8B0000]"></span>
+              </div>
+              <h2 className="text-3xl font-bold text-[#2D343A] mt-1">
+                Vagas em <span className="text-[#8B0000]">Destaque</span>
+              </h2>
+              <p className="text-sm text-[#708090] mt-1">Oportunidades estratégicas para sua carreira</p>
             </div>
-            <Link href="/candidato/vagas" className="text-[#8B0000] hover:text-[#700000] font-medium text-sm flex items-center gap-1">
-              Ver todas <ChevronRight className="h-4 w-4" />
+            <Link href="/candidato/vagas" className="group flex items-center gap-2 text-sm font-medium text-[#8B0000] hover:text-[#700000] transition">
+              Ver todas as vagas
+              <ChevronRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
             </Link>
           </div>
 
           <div className="relative">
-            <div className="overflow-hidden rounded-xl">
+            {/* CARROSSEL */}
+            <div className="overflow-hidden rounded-2xl">
               <div 
-                className="flex transition-transform duration-500 ease-in-out"
+                className="flex transition-transform duration-700 ease-out"
                 style={{ transform: `translateX(-${currentSlide * 100}%)` }}
               >
-                {vagasDestaque.map((vaga) => (
+                {vagasDestaque.map((vaga, index) => (
                   <div key={vaga.id} className="w-full flex-shrink-0 px-1">
-                    <div className="bg-[#F8F4E6] rounded-xl p-6 border border-[#E8EAE0] hover:shadow-lg transition">
-                      <div className="flex flex-wrap items-start justify-between">
-                        <div>
-                          <div className="flex items-center gap-2">
-                            <h3 className="text-xl font-bold text-[#2D343A]">{vaga.titulo}</h3>
-                            <span className={`px-2 py-0.5 rounded-full text-xs font-medium text-white ${vaga.badgeColor}`}>
-                              {vaga.badge}
+                    <div className="relative bg-gradient-to-br from-white to-[#F8F4E6] rounded-2xl p-8 border border-[#E8EAE0] shadow-sm hover:shadow-xl transition-all duration-500 group">
+                      {/* Badge Premium */}
+                      <div className="absolute top-4 right-4">
+                        <span className={`px-3 py-1 rounded-full text-xs font-semibold text-white shadow-lg ${vaga.badgeColor}`}>
+                          {vaga.badge}
+                        </span>
+                      </div>
+
+                      {/* Conteúdo */}
+                      <div className="flex flex-col md:flex-row md:items-center gap-6">
+                        <div className="flex-1">
+                          <div className="flex items-center gap-3 mb-2">
+                            <div className="p-2 bg-[#8B0000]/10 rounded-lg">
+                              <BriefcaseIcon className="h-5 w-5 text-[#8B0000]" />
+                            </div>
+                            <h3 className="text-2xl font-bold text-[#2D343A] group-hover:text-[#8B0000] transition">
+                              {vaga.titulo}
+                            </h3>
+                          </div>
+                          
+                          <p className="text-lg font-semibold text-[#2D343A]">{vaga.empresa}</p>
+                          
+                          <div className="flex flex-wrap items-center gap-4 mt-3 text-sm text-[#708090]">
+                            <span className="flex items-center gap-1.5">
+                              <MapPin className="h-4 w-4" />
+                              {vaga.local}
+                            </span>
+                            <span className="flex items-center gap-1.5">
+                              <Clock className="h-4 w-4" />
+                              {vaga.tipo}
+                            </span>
+                            <span className="flex items-center gap-1.5">
+                              <UsersIcon className="h-4 w-4" />
+                              12 candidatos
                             </span>
                           </div>
-                          <p className="text-[#708090] mt-1">{vaga.empresa}</p>
+
+                          <p className="mt-3 text-sm text-[#708090] leading-relaxed max-w-2xl">
+                            {vaga.descricao}
+                          </p>
                         </div>
-                        <span className="text-lg font-bold text-[#8B0000]">{vaga.salario}</span>
+
+                        <div className="flex-shrink-0">
+                          <Link href="/candidato/vagas">
+                            <button className="group/btn relative px-8 py-3.5 bg-[#8B0000] text-white font-semibold rounded-lg overflow-hidden transition-all duration-300 hover:shadow-xl hover:-translate-y-0.5">
+                              <span className="relative z-10 flex items-center gap-2">
+                                Candidatar-se
+                                <ArrowRight className="h-4 w-4 transition-transform group-hover/btn:translate-x-1" />
+                              </span>
+                              <span className="absolute inset-0 bg-[#E3C9A8] transform translate-y-full group-hover/btn:translate-y-0 transition-transform duration-300"></span>
+                            </button>
+                          </Link>
+                        </div>
                       </div>
-                      <div className="flex flex-wrap gap-4 mt-4 text-sm text-[#708090]">
-                        <span>📍 {vaga.local}</span>
-                        <span>💼 {vaga.tipo}</span>
-                      </div>
-                      <Link href="/candidato/vagas">
-                        <button className="mt-4 px-6 py-2 bg-[#8B0000] text-white rounded-lg hover:bg-[#700000] transition font-medium text-sm">
-                          Candidatar-se
-                        </button>
-                      </Link>
+
+                      {/* Linha decorativa */}
+                      <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-[#8B0000] via-[#E3C9A8] to-[#8B0000] opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
                     </div>
                   </div>
                 ))}
               </div>
             </div>
 
-            {/* Botões de navegação */}
+            {/* Botões de navegação - Premium */}
             <button 
               onClick={prevSlide}
-              className="absolute left-2 top-1/2 -translate-y-1/2 p-2 bg-white rounded-full shadow-md hover:bg-[#F8F4E6] transition z-10 border border-[#E8EAE0]"
+              className="absolute -left-4 top-1/2 -translate-y-1/2 p-3 bg-white rounded-full shadow-lg hover:shadow-xl transition-all duration-300 hover:bg-[#F8F4E6] border border-[#E8EAE0] hover:border-[#8B0000] group"
             >
-              <ChevronLeft className="h-5 w-5 text-[#2D343A]" />
+              <ChevronLeft className="h-5 w-5 text-[#2D343A] group-hover:text-[#8B0000] transition" />
             </button>
             <button 
               onClick={nextSlide}
-              className="absolute right-2 top-1/2 -translate-y-1/2 p-2 bg-white rounded-full shadow-md hover:bg-[#F8F4E6] transition z-10 border border-[#E8EAE0]"
+              className="absolute -right-4 top-1/2 -translate-y-1/2 p-3 bg-white rounded-full shadow-lg hover:shadow-xl transition-all duration-300 hover:bg-[#F8F4E6] border border-[#E8EAE0] hover:border-[#8B0000] group"
             >
-              <ChevronRightIcon className="h-5 w-5 text-[#2D343A]" />
+              <ChevronRightIcon className="h-5 w-5 text-[#2D343A] group-hover:text-[#8B0000] transition" />
             </button>
 
-            {/* Indicadores */}
-            <div className="flex justify-center gap-2 mt-4">
+            {/* Indicadores Premium */}
+            <div className="flex justify-center gap-2 mt-6">
               {vagasDestaque.map((_, index) => (
                 <button
                   key={index}
                   onClick={() => setCurrentSlide(index)}
-                  className={`h-2 rounded-full transition-all ${
-                    currentSlide === index ? 'w-8 bg-[#8B0000]' : 'w-2 bg-[#E8EAE0] hover:bg-[#8B0000]/50'
+                  className={`h-1.5 rounded-full transition-all duration-500 ${
+                    currentSlide === index 
+                      ? 'w-10 bg-[#8B0000] shadow-md shadow-[#8B0000]/30' 
+                      : 'w-3 bg-[#E8EAE0] hover:bg-[#8B0000]/40'
                   }`}
                 />
               ))}
             </div>
+          </div>
+
+          {/* Contador de vagas */}
+          <div className="flex justify-center mt-4">
+            <span className="text-xs text-[#708090]">
+              {currentSlide + 1} de {vagasDestaque.length} vagas em destaque
+            </span>
           </div>
         </div>
       </section>
