@@ -7,7 +7,7 @@ import {
   QrCode, Download, Copy, Check, 
   Smartphone, FileText, CreditCard, 
   Building2, Users, Link2, Share2,
-  Wallet, File, Image, Printer,
+  Wallet, File, Image as ImageIcon, Printer,
   Clock, Upload, Scan,
   RefreshCw
 } from 'lucide-react'
@@ -21,7 +21,6 @@ export default function AdminQRCode() {
   const [scanMode, setScanMode] = useState<'gerar' | 'ler'>('gerar')
   const [scanResult, setScanResult] = useState('')
   const [scanning, setScanning] = useState(false)
-  const qrRef = useRef<HTMLDivElement>(null)
   const fileInputRef = useRef<HTMLInputElement>(null)
 
   const qrOptions = [
@@ -42,7 +41,6 @@ export default function AdminQRCode() {
     const canvas = document.createElement('canvas')
     const ctx = canvas.getContext('2d')
     
-    // VERIFICAÇÃO DE SEGURANÇA
     if (!ctx) {
       alert('Erro ao gerar QR Code. Tente novamente.')
       return
@@ -56,7 +54,7 @@ export default function AdminQRCode() {
     ctx.fillStyle = '#FFFFFF'
     ctx.fillRect(0, 0, size, size)
 
-    // Simular QR Code
+    // Desenhar QR Code simulado
     const qrSize = size - 60
     const cellSize = qrSize / 21
     const offset = 30
@@ -86,45 +84,37 @@ export default function AdminQRCode() {
       }
     }
 
-    // Logo no centro
-    const logoSize = 60
+    // Logo no centro - usando desenho manual em vez de Image()
+    const logoSize = 70
     const logoX = (size - logoSize) / 2
     const logoY = (size - logoSize) / 2
     
+    // Fundo branco para a logo
     ctx.fillStyle = '#FFFFFF'
     ctx.shadowColor = 'rgba(0,0,0,0.1)'
     ctx.shadowBlur = 20
     ctx.beginPath()
-    ctx.arc(size/2, size/2, 40, 0, Math.PI * 2)
+    ctx.arc(size/2, size/2, 45, 0, Math.PI * 2)
     ctx.fill()
     ctx.shadowBlur = 0
 
-    // Tentar carregar a logo
-    const logo = new Image()
-    logo.crossOrigin = 'anonymous'
-    logo.src = '/logo.png'
-    logo.onload = () => {
-      ctx.drawImage(logo, logoX + 5, logoY + 5, logoSize - 10, logoSize - 10)
-      setQrImage(canvas.toDataURL('image/png'))
-      setQrGenerated(true)
-    }
-    logo.onerror = () => {
-      // Fallback: letra Z no centro
-      ctx.fillStyle = '#8B0000'
-      ctx.font = 'bold 30px sans-serif'
-      ctx.textAlign = 'center'
-      ctx.textBaseline = 'middle'
-      ctx.fillText('Z', size/2, size/2)
-      setQrImage(canvas.toDataURL('image/png'))
-      setQrGenerated(true)
-    }
+    // Desenhar um "Z" estilizado no centro
+    ctx.fillStyle = '#8B0000'
+    ctx.font = 'bold 50px Arial, sans-serif'
+    ctx.textAlign = 'center'
+    ctx.textBaseline = 'middle'
+    ctx.fillText('Z', size/2, size/2 + 2)
 
-    // Se a logo já estiver carregada no cache
-    if (logo.complete && logo.naturalWidth > 0) {
-      ctx.drawImage(logo, logoX + 5, logoY + 5, logoSize - 10, logoSize - 10)
-      setQrImage(canvas.toDataURL('image/png'))
-      setQrGenerated(true)
-    }
+    // Desenhar um círculo ao redor do Z
+    ctx.strokeStyle = '#8B0000'
+    ctx.lineWidth = 3
+    ctx.beginPath()
+    ctx.arc(size/2, size/2, 35, 0, Math.PI * 2)
+    ctx.stroke()
+
+    // Salvar imagem
+    setQrImage(canvas.toDataURL('image/png'))
+    setQrGenerated(true)
   }
 
   // Baixar QR Code
@@ -175,20 +165,16 @@ export default function AdminQRCode() {
 
     const reader = new FileReader()
     reader.onload = (event) => {
-      const img = new Image()
-      img.onload = () => {
-        setScanning(true)
-        setTimeout(() => {
-          const mockResult = `https://zenthos.com.br/${Math.random().toString(36).substring(7)}`
-          setScanResult(mockResult)
-          setScanning(false)
-          setQrValue(mockResult)
-          setQrType('link')
-          setScanMode('gerar')
-          generateQR()
-        }, 1500)
-      }
-      img.src = event.target?.result as string
+      setScanning(true)
+      setTimeout(() => {
+        const mockResult = `https://zenthos.com.br/${Math.random().toString(36).substring(7)}`
+        setScanResult(mockResult)
+        setScanning(false)
+        setQrValue(mockResult)
+        setQrType('link')
+        setScanMode('gerar')
+        generateQR()
+      }, 1500)
     }
     reader.readAsDataURL(file)
   }
@@ -398,7 +384,7 @@ export default function AdminQRCode() {
 
                 {scanMode === 'gerar' ? (
                   qrGenerated && qrImage ? (
-                    <div ref={qrRef} className="flex flex-col items-center">
+                    <div className="flex flex-col items-center">
                       <div className="w-64 h-64 bg-white border-2 border-[#E8EAE0] rounded-xl flex items-center justify-center p-4">
                         <img 
                           src={qrImage} 
@@ -424,7 +410,7 @@ export default function AdminQRCode() {
                           onClick={() => handleDownload('jpg')}
                           className="px-4 py-2 border border-[#8B0000] text-[#8B0000] rounded-lg hover:bg-[#8B0000] hover:text-white transition flex items-center gap-2 text-sm"
                         >
-                          <Image className="h-4 w-4" />
+                          <ImageIcon className="h-4 w-4" />
                           JPG
                         </button>
                         <button
