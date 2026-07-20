@@ -7,7 +7,7 @@ import { DashboardFooter } from '@/components/dashboard/DashboardFooter'
 import { 
   Briefcase, Building2, MapPin, DollarSign, Users, 
   Save, ArrowLeft, CheckCircle, Calendar, Clock,
-  FileText, Award, Eye, EyeOff, Star
+  FileText, Award, Eye, EyeOff, Star, Lock, Unlock
 } from 'lucide-react'
 
 export default function NovaVaga() {
@@ -31,7 +31,9 @@ export default function NovaVaga() {
     quantidade: '1',
     prazo: '',
     responsavel: '',
-    // NOVO CAMPO - CARROSSEL
+    // NOVO CAMPO - CONFIDENCIAL
+    confidencial: false,
+    // CARROSSEL
     exibirCarrossel: false,
     badgeCarrossel: 'Destaque',
     corBadge: 'bg-purple-500'
@@ -42,6 +44,21 @@ export default function NovaVaga() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     setLoading(true)
+    
+    // Criar nova vaga com ID
+    const novaVaga = {
+      ...form,
+      id: Date.now(),
+      candidatos: 0,
+      status: 'Aberta',
+      empresaExibida: form.confidencial ? 'Confidencial' : form.empresa
+    }
+
+    // Pegar vagas existentes do localStorage
+    const existingVagas = JSON.parse(localStorage.getItem('zenthos_vagas') || '[]')
+    existingVagas.push(novaVaga)
+    localStorage.setItem('zenthos_vagas', JSON.stringify(existingVagas))
+
     setTimeout(() => {
       setLoading(false)
       setSuccess(true)
@@ -74,11 +91,12 @@ export default function NovaVaga() {
               </div>
               <h2 className="text-2xl font-bold text-[#2D343A]">Vaga criada com sucesso!</h2>
               <p className="text-[#708090] mt-2">
-                {form.exibirCarrossel ? 'A vaga foi adicionada ao carrossel da página inicial.' : 'A vaga foi publicada e está disponível para candidatos.'}
+                {form.confidencial ? 'A vaga foi criada como confidencial.' : 'A vaga foi publicada.'}
+                {form.exibirCarrossel && ' Ela aparecerá no carrossel da página inicial.'}
               </p>
             </div>
           ) : (
-            <form onSubmit={handleSubmit} className="bg-white rounded-2xl shadow-sm border border-[#E8EAE0} p-8">
+            <form onSubmit={handleSubmit} className="bg-white rounded-2xl shadow-sm border border-[#E8EAE0] p-8">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {/* INFORMAÇÕES BÁSICAS */}
                 <div className="md:col-span-2">
@@ -158,7 +176,39 @@ export default function NovaVaga() {
                   <label className="block text-sm font-medium text-[#2D343A] mb-1.5">
                     Benefícios
                   </label>
-                  <textarea rows={2} className="w-full px-4 py-3 border border-[#E8EAE0] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#8B0000] transition resize-none" value={form.beneficios} onChange={(e) => setForm({...form, beneficios: e.target.value})} placeholder="Vale transporte, Vale alimentação, Plano de saúde, Gympass..." />
+                  <textarea rows={2} className="w-full px-4 py-3 border border-[#E8EAE0] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#8B0000] transition resize-none" value={form.beneficios} onChange={(e) => setForm({...form, beneficios: e.target.value})} placeholder="Vale transporte, Vale alimentação, Plano de saúde..." />
+                </div>
+
+                {/* CONFIDENCIAL */}
+                <div className="md:col-span-2">
+                  <h3 className="text-lg font-semibold text-[#2D343A] flex items-center gap-2 border-b border-[#E8EAE0] pb-3 mt-4">
+                    <Lock className="h-5 w-5 text-[#8B0000]" />
+                    Confidencialidade
+                  </h3>
+                </div>
+
+                <div className="md:col-span-2">
+                  <div className="p-4 bg-[#F8F4E6] rounded-lg border border-[#E8EAE0]">
+                    <label className="flex items-center gap-3 cursor-pointer">
+                      <input
+                        type="checkbox"
+                        className="rounded border-[#E8EAE0] text-[#8B0000] focus:ring-[#8B0000] w-5 h-5"
+                        checked={form.confidencial}
+                        onChange={(e) => setForm({...form, confidencial: e.target.checked})}
+                      />
+                      <div>
+                        <p className="font-medium text-[#2D343A] flex items-center gap-2">
+                          {form.confidencial ? <Lock className="h-4 w-4 text-[#8B0000]" /> : <Unlock className="h-4 w-4 text-[#708090]" />}
+                          {form.confidencial ? 'Vaga Confidencial' : 'Vaga Pública'}
+                        </p>
+                        <p className="text-sm text-[#708090]">
+                          {form.confidencial 
+                            ? 'O nome da empresa NÃO será exibido para os candidatos. Aparecerá como "Confidencial".' 
+                            : 'O nome da empresa será exibido normalmente para os candidatos.'}
+                        </p>
+                      </div>
+                    </label>
+                  </div>
                 </div>
 
                 {/* CARROSSEL */}
@@ -181,7 +231,7 @@ export default function NovaVaga() {
                       <div>
                         <p className="font-medium text-[#2D343A] flex items-center gap-2">
                           {form.exibirCarrossel ? <Eye className="h-4 w-4 text-green-600" /> : <EyeOff className="h-4 w-4 text-[#708090]" />}
-                          {form.exibirCarrossel ? 'Vaga será exibida no carrossel da Home' : 'Vaga NÃO será exibida no carrossel'}
+                          {form.exibirCarrossel ? 'Exibir no Carrossel' : 'Não exibir no Carrossel'}
                         </p>
                         <p className="text-sm text-[#708090]">
                           {form.exibirCarrossel 
