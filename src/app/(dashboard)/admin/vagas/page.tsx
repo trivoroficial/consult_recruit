@@ -4,26 +4,32 @@ import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { SidebarAdmin } from '@/components/dashboard/SidebarAdmin'
 import { DashboardFooter } from '@/components/dashboard/DashboardFooter'
-import { Briefcase, Plus, Search, Edit, Trash2, Eye, X, Save, Star, StarOff } from 'lucide-react'
-
-const initialVagas = [
-  { id: 1, titulo: 'Analista Administrativo', empresa: 'XPTO', status: 'Aberta', candidatos: 12, exibirCarrossel: true, badge: 'Destaque', corBadge: 'bg-purple-500' },
-  { id: 2, titulo: 'Auxiliar de RH', empresa: 'ABC', status: 'Em análise', candidatos: 8, exibirCarrossel: false, badge: '', corBadge: '' },
-]
+import { Briefcase, Plus, Search, Edit, Trash2, Eye, X, Save, Star, StarOff, Lock, Unlock } from 'lucide-react'
 
 export default function AdminVagas() {
   const router = useRouter()
-  const [vagas, setVagas] = useState(initialVagas)
+  const [vagas, setVagas] = useState<any[]>([])
   const [search, setSearch] = useState('')
   const [editando, setEditando] = useState<number | null>(null)
   const [editForm, setEditForm] = useState({ 
     titulo: '', empresa: '', status: 'Aberta', candidatos: 0,
-    exibirCarrossel: false, badge: '', corBadge: ''
+    exibirCarrossel: false, badge: '', corBadge: '', confidencial: false
   })
 
+  // CARREGAR VAGAS DO LOCALSTORAGE
   useEffect(() => {
     const saved = localStorage.getItem('zenthos_vagas')
-    if (saved) setVagas(JSON.parse(saved))
+    if (saved && JSON.parse(saved).length > 0) {
+      setVagas(JSON.parse(saved))
+    } else {
+      // Dados iniciais se não houver nada
+      const initialVagas = [
+        { id: 1, titulo: 'Analista Administrativo', empresa: 'XPTO', status: 'Aberta', candidatos: 12, exibirCarrossel: true, badge: 'Destaque', corBadge: 'bg-purple-500', confidencial: false },
+        { id: 2, titulo: 'Auxiliar de RH', empresa: 'ABC', status: 'Em análise', candidatos: 8, exibirCarrossel: false, badge: '', corBadge: '', confidencial: false },
+      ]
+      setVagas(initialVagas)
+      localStorage.setItem('zenthos_vagas', JSON.stringify(initialVagas))
+    }
   }, [])
 
   const saveVagas = (data: typeof vagas) => {
@@ -38,10 +44,11 @@ export default function AdminVagas() {
         titulo: item.titulo, 
         empresa: item.empresa, 
         status: item.status, 
-        candidatos: item.candidatos,
+        candidatos: item.candidatos || 0,
         exibirCarrossel: item.exibirCarrossel || false,
         badge: item.badge || '',
-        corBadge: item.corBadge || ''
+        corBadge: item.corBadge || '',
+        confidencial: item.confidencial || false
       })
       setEditando(id) 
     }
@@ -49,14 +56,18 @@ export default function AdminVagas() {
 
   const handleSaveEdit = () => {
     if (editando === null) return
-    const updated = vagas.map(v => v.id === editando ? { ...v, ...editForm } : v)
+    const updated = vagas.map(v => v.id === editando ? { 
+      ...v, 
+      ...editForm,
+      empresaExibida: editForm.confidencial ? 'Confidencial' : editForm.empresa
+    } : v)
     saveVagas(updated)
     setEditando(null)
   }
 
   const handleCancelEdit = () => {
     setEditando(null)
-    setEditForm({ titulo: '', empresa: '', status: 'Aberta', candidatos: 0, exibirCarrossel: false, badge: '', corBadge: '' })
+    setEditForm({ titulo: '', empresa: '', status: 'Aberta', candidatos: 0, exibirCarrossel: false, badge: '', corBadge: '', confidencial: false })
   }
 
   const handleDelete = (id: number) => {
@@ -148,10 +159,14 @@ export default function AdminVagas() {
                               <option value="bg-blue-500">Azul</option>
                             </select>
                           </div>
-                          <div className="flex items-center gap-4 mt-3">
+                          <div className="flex flex-wrap items-center gap-4 mt-3">
                             <label className="flex items-center gap-2 cursor-pointer">
                               <input type="checkbox" className="rounded border-[#E8EAE0] text-[#8B0000]" checked={editForm.exibirCarrossel} onChange={(e) => setEditForm({...editForm, exibirCarrossel: e.target.checked})} />
-                              <span className="text-sm text-[#2D343A]">Exibir no Carrossel</span>
+                              <span className="text-sm text-[#2D343A]">Carrossel</span>
+                            </label>
+                            <label className="flex items-center gap-2 cursor-pointer">
+                              <input type="checkbox" className="rounded border-[#E8EAE0] text-[#8B0000]" checked={editForm.confidencial} onChange={(e) => setEditForm({...editForm, confidencial: e.target.checked})} />
+                              <span className="text-sm text-[#2D343A]">Confidencial</span>
                             </label>
                             <div className="flex gap-2">
                               <button onClick={handleSaveEdit} className="px-4 py-1.5 bg-green-600 text-white rounded-lg hover:bg-green-700 transition flex items-center gap-1"><Save className="h-4 w-4" /> Salvar</button>
@@ -162,14 +177,22 @@ export default function AdminVagas() {
                       ) : (
                         <>
                           <td className="py-3 px-4 font-medium text-[#2D343A]">{item.titulo}</td>
-                          <td className="py-3 px-4 text-[#708090]">{item.empresa}</td>
+                          <td className="py-3 px-4">
+                            {item.confidencial ? (
+                              <span className="flex items-center gap-1 text-[#708090]">
+                                <Lock className="h-3 w-3" /> Confidencial
+                              </span>
+                            ) : (
+                              <span className="text-[#708090]">{item.empresa}</span>
+                            )}
+                          </td>
                           <td className="py-3 px-4"><span className={`px-2 py-1 rounded-full text-xs font-medium ${
                             item.status === 'Aberta' ? 'bg-green-100 text-green-700' :
                             item.status === 'Em análise' ? 'bg-yellow-100 text-yellow-700' :
                             item.status === 'Pausada' ? 'bg-blue-100 text-blue-700' :
                             'bg-gray-100 text-gray-700'
                           }`}>{item.status}</span></td>
-                          <td className="py-3 px-4 text-[#708090]">{item.candidatos}</td>
+                          <td className="py-3 px-4 text-[#708090]">{item.candidatos || 0}</td>
                           <td className="py-3 px-4">
                             <button 
                               onClick={() => toggleCarrossel(item.id)}
@@ -198,6 +221,12 @@ export default function AdminVagas() {
                 </tbody>
               </table>
             </div>
+
+            {filtered.length === 0 && (
+              <div className="text-center py-8 text-[#708090]">
+                Nenhuma vaga encontrada. Clique em "Nova Vaga" para criar.
+              </div>
+            )}
           </div>
         </div>
 
