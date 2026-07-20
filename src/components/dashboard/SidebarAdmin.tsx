@@ -16,7 +16,7 @@ import {
   Calendar,
   UsersRound,
   Award,
-  Handshake
+  TrendingUp
 } from 'lucide-react'
 
 export function SidebarAdmin() {
@@ -37,7 +37,7 @@ export function SidebarAdmin() {
     // MÓDULO OPERACIONAL
     { icon: UsersRound, label: 'Operacional', href: '/admin/operacional/dashboard' },
     { icon: Award, label: 'Banco de Talentos', href: '/admin/operacional/banco-talentos' },
-    { icon: Handshake, label: 'Contratações', href: '/admin/operacional/contratacoes' },
+    { icon: TrendingUp, label: 'Contratações', href: '/admin/operacional/contratacoes' },
     // FIM MÓDULO OPERACIONAL
     { icon: BarChart3, label: 'Relatórios', href: '/admin/relatorios' },
     { icon: CreditCard, label: 'Financeiro', href: '/admin/financeiro' },
