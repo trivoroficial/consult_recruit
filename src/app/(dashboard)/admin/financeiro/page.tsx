@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { useRouter } from 'next/navigation'
 import { SidebarAdmin } from '@/components/dashboard/SidebarAdmin'
 import { DashboardFooter } from '@/components/dashboard/DashboardFooter'
 import { 
@@ -10,6 +11,7 @@ import {
 } from 'lucide-react'
 
 export default function AdminFinanceiro() {
+  const router = useRouter()
   const [activeTab, setActiveTab] = useState('dashboard')
 
   // DADOS DE EXEMPLO
@@ -58,7 +60,10 @@ export default function AdminFinanceiro() {
               <Download className="h-4 w-4" />
               Exportar
             </button>
-            <button className="px-4 py-2 bg-[#8B0000] text-white rounded-lg hover:bg-[#700000] transition font-medium flex items-center gap-2">
+            <button 
+              onClick={() => router.push('/admin/financeiro/nova-transacao')}
+              className="px-4 py-2 bg-[#8B0000] text-white rounded-lg hover:bg-[#700000] transition font-medium flex items-center gap-2"
+            >
               <Plus className="h-4 w-4" />
               Nova Transação
             </button>
@@ -246,7 +251,7 @@ export default function AdminFinanceiro() {
                       const status = statusConfig[item.status as keyof typeof statusConfig]
                       const Icon = status?.icon || CheckCircle
                       return (
-                        <tr key={item.id} className="border-b border-[#E8EAE0]">
+                        <tr key={item.id} className="border-b border-[#E8EAE0] hover:bg-[#F8F4E6] transition">
                           <td className="py-3 px-4 font-medium text-[#2D343A]">{item.cliente}</td>
                           <td className="py-3 px-4 text-[#708090]">{item.servico}</td>
                           <td className="py-3 px-4 font-medium text-[#2D343A]">R$ {item.valor}</td>
@@ -269,15 +274,6 @@ export default function AdminFinanceiro() {
                     })}
                   </tbody>
                 </table>
-              </div>
-
-              <div className="flex items-center justify-between mt-4 text-sm text-[#708090]">
-                <p>Mostrando {contasReceber.length} registros</p>
-                <div className="flex gap-2">
-                  <button className="px-3 py-1 border border-[#E8EAE0] rounded hover:bg-[#F8F4E6]">Anterior</button>
-                  <button className="px-3 py-1 bg-[#8B0000] text-white rounded">1</button>
-                  <button className="px-3 py-1 border border-[#E8EAE0] rounded hover:bg-[#F8F4E6]">Próximo</button>
-                </div>
               </div>
             </div>
           )}
@@ -317,7 +313,7 @@ export default function AdminFinanceiro() {
                       const status = statusConfig[item.status as keyof typeof statusConfig]
                       const Icon = status?.icon || CheckCircle
                       return (
-                        <tr key={item.id} className="border-b border-[#E8EAE0]">
+                        <tr key={item.id} className="border-b border-[#E8EAE0] hover:bg-[#F8F4E6] transition">
                           <td className="py-3 px-4 font-medium text-[#2D343A]">{item.fornecedor}</td>
                           <td className="py-3 px-4 text-[#708090]">{item.categoria}</td>
                           <td className="py-3 px-4 font-medium text-[#2D343A]">R$ {item.valor}</td>
@@ -377,7 +373,7 @@ export default function AdminFinanceiro() {
                   </thead>
                   <tbody>
                     {contratos.map((item) => (
-                      <tr key={item.id} className="border-b border-[#E8EAE0]">
+                      <tr key={item.id} className="border-b border-[#E8EAE0] hover:bg-[#F8F4E6] transition">
                         <td className="py-3 px-4 font-medium text-[#2D343A]">{item.cliente}</td>
                         <td className="py-3 px-4 text-[#708090]">{item.servico}</td>
                         <td className="py-3 px-4 font-medium text-[#2D343A]">R$ {item.valor}</td>
