@@ -7,7 +7,7 @@ import { DashboardFooter } from '@/components/dashboard/DashboardFooter'
 import { 
   Briefcase, Building2, MapPin, DollarSign, Users, 
   Save, ArrowLeft, CheckCircle, Calendar, Clock,
-  FileText, Award
+  FileText, Award, Eye, EyeOff, Star
 } from 'lucide-react'
 
 export default function NovaVaga() {
@@ -30,7 +30,11 @@ export default function NovaVaga() {
     competencias: '',
     quantidade: '1',
     prazo: '',
-    responsavel: ''
+    responsavel: '',
+    // NOVO CAMPO - CARROSSEL
+    exibirCarrossel: false,
+    badgeCarrossel: 'Destaque',
+    corBadge: 'bg-purple-500'
   })
 
   const empresas = ['Empresa XPTO', 'Indústria ABC', 'Grupo Financeiro', 'Tech Solutions']
@@ -69,11 +73,14 @@ export default function NovaVaga() {
                 <CheckCircle className="h-10 w-10 text-green-600" />
               </div>
               <h2 className="text-2xl font-bold text-[#2D343A]">Vaga criada com sucesso!</h2>
-              <p className="text-[#708090] mt-2">A vaga foi publicada e está disponível para candidatos.</p>
+              <p className="text-[#708090] mt-2">
+                {form.exibirCarrossel ? 'A vaga foi adicionada ao carrossel da página inicial.' : 'A vaga foi publicada e está disponível para candidatos.'}
+              </p>
             </div>
           ) : (
-            <form onSubmit={handleSubmit} className="bg-white rounded-2xl shadow-sm border border-[#E8EAE0] p-8">
+            <form onSubmit={handleSubmit} className="bg-white rounded-2xl shadow-sm border border-[#E8EAE0} p-8">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {/* INFORMAÇÕES BÁSICAS */}
                 <div className="md:col-span-2">
                   <h3 className="text-lg font-semibold text-[#2D343A] flex items-center gap-2 border-b border-[#E8EAE0] pb-3">
                     <Briefcase className="h-5 w-5 text-[#8B0000]" />
@@ -151,9 +158,74 @@ export default function NovaVaga() {
                   <label className="block text-sm font-medium text-[#2D343A] mb-1.5">
                     Benefícios
                   </label>
-                  <textarea rows={2} className="w-full px-4 py-3 border border-[#E8EAE0] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#8B0000] transition resize-none" value={form.beneficios} onChange={(e) => setForm({...form, beneficios: e.target.value})} placeholder="Vale transporte, Vale alimentação, Plano de saúde..." />
+                  <textarea rows={2} className="w-full px-4 py-3 border border-[#E8EAE0] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#8B0000] transition resize-none" value={form.beneficios} onChange={(e) => setForm({...form, beneficios: e.target.value})} placeholder="Vale transporte, Vale alimentação, Plano de saúde, Gympass..." />
                 </div>
 
+                {/* CARROSSEL */}
+                <div className="md:col-span-2">
+                  <h3 className="text-lg font-semibold text-[#2D343A] flex items-center gap-2 border-b border-[#E8EAE0] pb-3 mt-4">
+                    <Star className="h-5 w-5 text-[#8B0000]" />
+                    Destaque no Carrossel
+                  </h3>
+                </div>
+
+                <div className="md:col-span-2">
+                  <div className="p-4 bg-[#F8F4E6] rounded-lg border border-[#E8EAE0]">
+                    <label className="flex items-center gap-3 cursor-pointer">
+                      <input
+                        type="checkbox"
+                        className="rounded border-[#E8EAE0] text-[#8B0000] focus:ring-[#8B0000] w-5 h-5"
+                        checked={form.exibirCarrossel}
+                        onChange={(e) => setForm({...form, exibirCarrossel: e.target.checked})}
+                      />
+                      <div>
+                        <p className="font-medium text-[#2D343A] flex items-center gap-2">
+                          {form.exibirCarrossel ? <Eye className="h-4 w-4 text-green-600" /> : <EyeOff className="h-4 w-4 text-[#708090]" />}
+                          {form.exibirCarrossel ? 'Vaga será exibida no carrossel da Home' : 'Vaga NÃO será exibida no carrossel'}
+                        </p>
+                        <p className="text-sm text-[#708090]">
+                          {form.exibirCarrossel 
+                            ? 'A vaga aparecerá no destaque da página inicial.' 
+                            : 'A vaga ficará disponível apenas na listagem de vagas.'}
+                        </p>
+                      </div>
+                    </label>
+                  </div>
+                </div>
+
+                {form.exibirCarrossel && (
+                  <>
+                    <div>
+                      <label className="block text-sm font-medium text-[#2D343A] mb-1.5">
+                        Badge do Carrossel
+                      </label>
+                      <select className="w-full px-4 py-3 border border-[#E8EAE0] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#8B0000] transition" value={form.badgeCarrossel} onChange={(e) => setForm({...form, badgeCarrossel: e.target.value})}>
+                        <option value="Destaque">Destaque</option>
+                        <option value="Urgente">Urgente</option>
+                        <option value="Novo">Novo</option>
+                        <option value="Premium">Premium</option>
+                        <option value="Última Chance">Última Chance</option>
+                      </select>
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-medium text-[#2D343A] mb-1.5">
+                        Cor do Badge
+                      </label>
+                      <select className="w-full px-4 py-3 border border-[#E8EAE0] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#8B0000] transition" value={form.corBadge} onChange={(e) => setForm({...form, corBadge: e.target.value})}>
+                        <option value="bg-purple-500">Roxo</option>
+                        <option value="bg-red-500">Vermelho</option>
+                        <option value="bg-green-500">Verde</option>
+                        <option value="bg-yellow-500">Amarelo</option>
+                        <option value="bg-blue-500">Azul</option>
+                        <option value="bg-pink-500">Rosa</option>
+                        <option value="bg-orange-500">Laranja</option>
+                      </select>
+                    </div>
+                  </>
+                )}
+
+                {/* DESCRIÇÃO E REQUISITOS */}
                 <div className="md:col-span-2">
                   <h3 className="text-lg font-semibold text-[#2D343A] flex items-center gap-2 border-b border-[#E8EAE0] pb-3 mt-4">
                     <FileText className="h-5 w-5 text-[#8B0000]" />
