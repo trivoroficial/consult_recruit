@@ -1,12 +1,13 @@
 'use client'
 
 import { motion, useScroll, useTransform } from "framer-motion";
-import { useRef, useState, type FormEvent } from "react";
+import { useRef, useState, type FormEvent, useEffect } from "react";
 import Link from 'next/link'
 import { 
   ArrowRight, Users, TrendingUp, Target, Lightbulb, 
   CheckCircle, ChevronRight, Zap, BarChart3, Layers, Phone,
-  DollarSign, Building2, Shield, Settings, Briefcase, ClipboardList, Rocket
+  DollarSign, Building2, Shield, Settings, Briefcase, ClipboardList, Rocket,
+  ChevronLeft, ChevronRight as ChevronRightIcon
 } from 'lucide-react'
 
 const whatsappNumber = "5537991177058";
@@ -15,80 +16,77 @@ const whatsappMessage = "Olá! Gostaria de conhecer as soluções da ZENTHOS.";
 const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(whatsappMessage)}`;
 const emailContato = "contato@zenthos.com.br";
 
-// 8 SERVIÇOS DETALHADOS
+// ===== VAGAS PARA O CARROSSEL =====
+const vagasDestaque = [
+  {
+    id: 1,
+    titulo: 'Analista Administrativo',
+    empresa: 'Empresa XPTO',
+    local: 'Uberlândia/MG',
+    salario: 'R$ 3.500',
+    tipo: 'Presencial',
+    badge: 'Urgente',
+    badgeColor: 'bg-red-500'
+  },
+  {
+    id: 2,
+    titulo: 'Auxiliar de RH',
+    empresa: 'Indústria ABC',
+    local: 'Uberlândia/MG',
+    salario: 'R$ 2.800',
+    tipo: 'Híbrido',
+    badge: 'Destaque',
+    badgeColor: 'bg-yellow-500'
+  },
+  {
+    id: 3,
+    titulo: 'Assistente Financeiro',
+    empresa: 'Grupo Financeiro',
+    local: 'Uberlândia/MG',
+    salario: 'R$ 3.200',
+    tipo: 'Presencial',
+    badge: 'Novo',
+    badgeColor: 'bg-green-500'
+  },
+  {
+    id: 4,
+    titulo: 'Supervisor de Produção',
+    empresa: 'Indústria XYZ',
+    local: 'Uberlândia/MG',
+    salario: 'R$ 5.500',
+    tipo: 'Presencial',
+    badge: 'Premium',
+    badgeColor: 'bg-purple-500'
+  },
+]
+
+// ===== SERVIÇOS =====
 const servicos = [
   {
     icon: Users,
     title: "Gestão de Pessoas",
     description: "Soluções completas para gestão de pessoas, cultura e desenvolvimento organizacional.",
-    features: ["Recrutamento e Seleção", "Treinamentos", "Avaliação de desempenho", "Plano de cargos e salários", "Desenvolvimento de lideranças", "Clima organizacional"]
+    features: ["Recrutamento e Seleção", "Treinamentos", "Avaliação de desempenho", "Plano de cargos e salários"]
   },
   {
     icon: DollarSign,
     title: "Consultoria Financeira",
     description: "Organização financeira para aumentar a lucratividade e sustentabilidade do negócio.",
-    features: ["Fluxo de caixa", "Formação de preço", "Controle de custos", "Indicadores financeiros", "Planejamento financeiro", "Viabilidade econômica"]
+    features: ["Fluxo de caixa", "Formação de preço", "Controle de custos", "Indicadores financeiros"]
   },
   {
     icon: Shield,
     title: "Segurança dos Alimentos",
     description: "Adequação às normas sanitárias e implantação de Boas Práticas de Fabricação.",
-    features: ["Manual de Boas Práticas", "POPs", "Treinamentos", "Adequação à Vigilância Sanitária", "BPF", "Auditorias internas"]
+    features: ["Manual de Boas Práticas", "POPs", "Treinamentos", "Auditorias internas"]
   },
   {
     icon: Building2,
     title: "Gestão Empresarial",
     description: "Diagnóstico e planejamento estratégico para crescimento sustentável.",
-    features: ["Diagnóstico empresarial", "Planejamento estratégico", "Definição de metas", "Indicadores (KPIs)", "Melhoria de processos", "Organização administrativa"]
+    features: ["Diagnóstico empresarial", "Planejamento estratégico", "Definição de metas", "Indicadores (KPIs)"]
   },
-  {
-    icon: Settings,
-    title: "Consultoria em Processos",
-    description: "Mapeamento, padronização e otimização de processos para aumento da produtividade.",
-    features: ["Mapeamento de processos", "Padronização", "Elaboração de POPs", "Redução de desperdícios", "Aumento da produtividade"]
-  },
-  {
-    icon: Briefcase,
-    title: "Consultoria Comercial",
-    description: "Estruturação do setor comercial para aumento de vendas e satisfação do cliente.",
-    features: ["Estruturação do setor comercial", "Metas de vendas", "Atendimento ao cliente", "Indicadores comerciais", "Treinamento de vendedores"]
-  },
-  {
-    icon: ClipboardList,
-    title: "Consultoria em Qualidade",
-    description: "Padronização de processos e gestão por indicadores para excelência operacional.",
-    features: ["Padronização de processos", "Procedimentos Operacionais", "Documentação", "Auditorias internas", "Gestão por indicadores"]
-  },
-  {
-    icon: Rocket,
-    title: "Pequenos Negócios",
-    description: "Soluções personalizadas para pequenos negócios aumentarem produtividade e reduzirem custos.",
-    features: ["Diagnóstico empresarial", "Plano de ação", "Aumento da produtividade", "Redução de custos", "Inovação", "Gestão do negócio"]
-  }
-];
-
-// 6 CARDS DE SOLUÇÕES
-const solucoes = [
-  { icon: Users, title: "Recrutamento & Seleção", desc: "Encontramos os profissionais certos para sua empresa." },
-  { icon: Users, title: "Consultoria em Gestão de Pessoas", desc: "Desenvolvemos equipes, líderes e processos de RH." },
-  { icon: DollarSign, title: "Consultoria Financeira", desc: "Organizamos as finanças para aumentar a lucratividade." },
-  { icon: Building2, title: "Consultoria Empresarial", desc: "Planejamento, indicadores e melhoria da gestão." },
-  { icon: Settings, title: "Consultoria em Processos", desc: "Mapeamento, padronização e aumento da produtividade." },
-  { icon: Shield, title: "Segurança dos Alimentos", desc: "Adequação às normas sanitárias e implantação de BPF." },
-];
-
-const testimonials = [
-  {
-    quote: "A ZENTHOS transformou nossa gestão. Em 12 meses, aumentamos a produtividade em 35% e reduzimos custos operacionais em 20%.",
-    author: "Carlos Eduardo",
-    role: "CEO, Grupo XPTO"
-  },
-  {
-    quote: "O diagnóstico e a reestruturação feitos pela ZENTHOS foram fundamentais para nosso crescimento sustentável.",
-    author: "Mariana Oliveira",
-    role: "Diretora de RH, Indústria ABC"
-  }
-];
+]
 
 const fadeUp = {
   hidden: { opacity: 0, y: 28 },
@@ -98,10 +96,27 @@ const fadeUp = {
 export default function Home() {
   const [formState, setFormState] = useState({ nome: "", telefone: "", empresa: "", email: "", mensagem: "" });
   const [formStatus, setFormStatus] = useState<"idle" | "sending" | "success" | "error">("idle");
+  const [currentSlide, setCurrentSlide] = useState(0);
   const heroRef = useRef<HTMLElement | null>(null);
 
   const { scrollYProgress } = useScroll({ target: heroRef, offset: ["start start", "end start"] });
   const overlayY = useTransform(scrollYProgress, [0, 1], [0, 65]);
+
+  // AUTO SLIDE
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentSlide((prev) => (prev + 1) % vagasDestaque.length);
+    }, 5000);
+    return () => clearInterval(interval);
+  }, []);
+
+  const nextSlide = () => {
+    setCurrentSlide((prev) => (prev + 1) % vagasDestaque.length);
+  };
+
+  const prevSlide = () => {
+    setCurrentSlide((prev) => (prev - 1 + vagasDestaque.length) % vagasDestaque.length);
+  };
 
   const submitContact = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -112,6 +127,8 @@ export default function Home() {
       setTimeout(() => setFormStatus("idle"), 4000);
     }, 1500);
   };
+
+  const currentVaga = vagasDestaque[currentSlide];
 
   return (
     <main className="relative min-h-screen overflow-x-hidden">
@@ -168,9 +185,88 @@ export default function Home() {
         <div className="pointer-events-none absolute bottom-0 left-0 right-0 h-40 bg-gradient-to-t from-[#F8F4E6] to-transparent" />
       </section>
 
-      {/* ===== 8 SERVIÇOS ===== */}
+      {/* ===== CARROSSEL DE VAGAS ===== */}
+      <section className="py-12 bg-white border-y border-[#E8EAE0]">
+        <div className="container mx-auto px-4">
+          <div className="flex items-center justify-between mb-6">
+            <div>
+              <h2 className="text-2xl font-bold text-[#2D343A]">Vagas em Destaque</h2>
+              <p className="text-sm text-[#708090]">Oportunidades que podem transformar sua carreira</p>
+            </div>
+            <Link href="/candidato/vagas" className="text-[#8B0000] hover:text-[#700000] font-medium text-sm flex items-center gap-1">
+              Ver todas <ChevronRight className="h-4 w-4" />
+            </Link>
+          </div>
+
+          <div className="relative">
+            <div className="overflow-hidden rounded-xl">
+              <div 
+                className="flex transition-transform duration-500 ease-in-out"
+                style={{ transform: `translateX(-${currentSlide * 100}%)` }}
+              >
+                {vagasDestaque.map((vaga) => (
+                  <div key={vaga.id} className="w-full flex-shrink-0 px-1">
+                    <div className="bg-[#F8F4E6] rounded-xl p-6 border border-[#E8EAE0] hover:shadow-lg transition">
+                      <div className="flex flex-wrap items-start justify-between">
+                        <div>
+                          <div className="flex items-center gap-2">
+                            <h3 className="text-xl font-bold text-[#2D343A]">{vaga.titulo}</h3>
+                            <span className={`px-2 py-0.5 rounded-full text-xs font-medium text-white ${vaga.badgeColor}`}>
+                              {vaga.badge}
+                            </span>
+                          </div>
+                          <p className="text-[#708090] mt-1">{vaga.empresa}</p>
+                        </div>
+                        <span className="text-lg font-bold text-[#8B0000]">{vaga.salario}</span>
+                      </div>
+                      <div className="flex flex-wrap gap-4 mt-4 text-sm text-[#708090]">
+                        <span>📍 {vaga.local}</span>
+                        <span>💼 {vaga.tipo}</span>
+                      </div>
+                      <Link href="/candidato/vagas">
+                        <button className="mt-4 px-6 py-2 bg-[#8B0000] text-white rounded-lg hover:bg-[#700000] transition font-medium text-sm">
+                          Candidatar-se
+                        </button>
+                      </Link>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Botões de navegação */}
+            <button 
+              onClick={prevSlide}
+              className="absolute left-2 top-1/2 -translate-y-1/2 p-2 bg-white rounded-full shadow-md hover:bg-[#F8F4E6] transition z-10 border border-[#E8EAE0]"
+            >
+              <ChevronLeft className="h-5 w-5 text-[#2D343A]" />
+            </button>
+            <button 
+              onClick={nextSlide}
+              className="absolute right-2 top-1/2 -translate-y-1/2 p-2 bg-white rounded-full shadow-md hover:bg-[#F8F4E6] transition z-10 border border-[#E8EAE0]"
+            >
+              <ChevronRightIcon className="h-5 w-5 text-[#2D343A]" />
+            </button>
+
+            {/* Indicadores */}
+            <div className="flex justify-center gap-2 mt-4">
+              {vagasDestaque.map((_, index) => (
+                <button
+                  key={index}
+                  onClick={() => setCurrentSlide(index)}
+                  className={`h-2 rounded-full transition-all ${
+                    currentSlide === index ? 'w-8 bg-[#8B0000]' : 'w-2 bg-[#E8EAE0] hover:bg-[#8B0000]/50'
+                  }`}
+                />
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ===== SERVIÇOS ===== */}
       <section id="servicos" className="py-20 md:py-28 bg-white">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="container mx-auto px-4">
           <div className="text-center mb-14">
             <p className="text-xs tracking-[0.36em] text-[#8B0000] uppercase font-medium">O que fazemos</p>
             <h2 className="mt-4 font-serif text-4xl text-[#2D343A] md:text-5xl">Nossos <span className="text-[#8B0000]">Serviços</span></h2>
@@ -202,131 +298,20 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ===== SOBRE ===== */}
-      <section id="sobre" className="py-20 md:py-28 bg-[#F8F4E6]">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="grid gap-12 lg:grid-cols-2 items-center">
-            <div>
-              <p className="text-xs tracking-[0.36em] text-[#8B0000] uppercase font-medium">Sobre</p>
-              <h2 className="mt-4 font-serif text-4xl text-[#2D343A] md:text-5xl">Parceiros na <span className="text-[#8B0000]">transformação</span> do seu negócio</h2>
-              <div className="w-16 h-1 bg-[#8B0000] rounded-full mt-4"></div>
-              <p className="mt-6 text-[#708090] leading-relaxed">
-                A ZENTHOS é uma consultoria especializada em gestão empresarial, recursos humanos, transformação organizacional e reestruturação empresarial. Combinamos estratégia, tecnologia e inteligência artificial para impulsionar o crescimento sustentável das organizações.
-              </p>
-            </div>
-            <div className="bg-[#2D343A] rounded-3xl p-8 text-white">
-              <p className="text-2xl font-serif">"A transformação começa com a decisão de mudar. Nós guiamos essa jornada."</p>
-              <div className="mt-6 flex items-center gap-4">
-                <div className="w-12 h-12 bg-[#8B0000] rounded-full flex items-center justify-center text-xl font-bold">Z</div>
-                <div>
-                  <p className="font-semibold">ZENTHOS</p>
-                  <p className="text-sm text-[#A1A8AE]">Gestão, Estratégia & Transformação</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ===== 6 CARDS DE SOLUÇÕES ===== */}
-      <section id="solucoes" className="py-20 md:py-28 bg-white">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-14">
-            <p className="text-xs tracking-[0.36em] text-[#8B0000] uppercase font-medium">Soluções</p>
-            <h2 className="mt-4 font-serif text-4xl text-[#2D343A] md:text-5xl">Nossas <span className="text-[#8B0000]">Soluções</span></h2>
-            <div className="w-16 h-1 bg-[#8B0000] rounded-full mx-auto mt-4"></div>
-            <p className="mt-4 text-[#708090] max-w-2xl mx-auto">Entregamos valor através de soluções integradas e personalizadas</p>
-          </div>
-          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-            {solucoes.map((item, index) => {
-              const Icon = item.icon
-              return (
-                <motion.div key={index} className="group bg-white border border-[#F8F4E6] rounded-xl p-8 hover:shadow-xl hover:-translate-y-2 transition-all duration-300" initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0.3 }} variants={fadeUp}>
-                  <div className="w-16 h-16 bg-[#8B0000]/10 rounded-2xl flex items-center justify-center mb-6 text-[#8B0000]">
-                    <Icon className="h-8 w-8" />
-                  </div>
-                  <h3 className="text-xl font-bold text-[#2D343A] group-hover:text-[#8B0000] transition-colors">{item.title}</h3>
-                  <p className="mt-3 text-sm text-[#708090] leading-relaxed">{item.desc}</p>
-                  <div className="mt-6 flex items-center gap-2 text-[#8B0000] font-semibold text-sm opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                    Saiba mais <ChevronRight className="h-4 w-4" />
-                  </div>
-                </motion.div>
-              )
-            })}
-          </div>
-        </div>
-      </section>
-
-      {/* ===== TECNOLOGIA ===== */}
-      <section id="tecnologia" className="py-20 md:py-28 bg-[#F8F4E6]">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-14">
-            <p className="text-xs tracking-[0.36em] text-[#8B0000] uppercase font-medium">Tecnologia</p>
-            <h2 className="mt-4 font-serif text-4xl text-[#2D343A] md:text-5xl">Inteligência <span className="text-[#8B0000]">Aplicada</span></h2>
-            <div className="w-16 h-1 bg-[#8B0000] rounded-full mx-auto mt-4"></div>
-            <p className="mt-4 text-[#708090] max-w-2xl mx-auto">Combinamos tecnologia avançada com expertise humana para gerar resultados</p>
-          </div>
-          <div className="grid gap-6 md:grid-cols-3">
-            <motion.div className="bg-white border border-[#F8F4E6] rounded-xl p-6 text-center hover:shadow-lg hover:-translate-y-2 hover:border-[#8B0000]/30 transition-all duration-300" initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0.3 }} variants={fadeUp}>
-              <div className="w-16 h-16 bg-[#8B0000]/10 rounded-2xl flex items-center justify-center mx-auto mb-4 text-[#8B0000]"><Zap className="h-8 w-8" /></div>
-              <h3 className="text-lg font-bold text-[#2D343A]">Inteligência Artificial</h3>
-              <p className="mt-2 text-sm text-[#708090]">Automação de processos e análise preditiva para tomada de decisão</p>
-            </motion.div>
-            <motion.div className="bg-white border border-[#F8F4E6] rounded-xl p-6 text-center hover:shadow-lg hover:-translate-y-2 hover:border-[#8B0000]/30 transition-all duration-300" initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0.3 }} variants={fadeUp}>
-              <div className="w-16 h-16 bg-[#8B0000]/10 rounded-2xl flex items-center justify-center mx-auto mb-4 text-[#8B0000]"><BarChart3 className="h-8 w-8" /></div>
-              <h3 className="text-lg font-bold text-[#2D343A]">Data & Analytics</h3>
-              <p className="mt-2 text-sm text-[#708090]">Dashboards e indicadores para gestão baseada em dados</p>
-            </motion.div>
-            <motion.div className="bg-white border border-[#F8F4E6] rounded-xl p-6 text-center hover:shadow-lg hover:-translate-y-2 hover:border-[#8B0000]/30 transition-all duration-300" initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0.3 }} variants={fadeUp}>
-              <div className="w-16 h-16 bg-[#8B0000]/10 rounded-2xl flex items-center justify-center mx-auto mb-4 text-[#8B0000]"><Layers className="h-8 w-8" /></div>
-              <h3 className="text-lg font-bold text-[#2D343A]">Transformação Digital</h3>
-              <p className="mt-2 text-sm text-[#708090]">Implementação de tecnologias para otimizar operações</p>
-            </motion.div>
-          </div>
-        </div>
-      </section>
-
-      {/* ===== DEPOIMENTOS ===== */}
-      <section id="resultados" className="py-20 md:py-28 bg-white">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-14">
-            <p className="text-xs tracking-[0.36em] text-[#8B0000] uppercase font-medium">Resultados</p>
-            <h2 className="mt-4 font-serif text-4xl text-[#2D343A] md:text-5xl">O que <span className="text-[#8B0000]">dizem</span> nossos clientes</h2>
-            <div className="w-16 h-1 bg-[#8B0000] rounded-full mx-auto mt-4"></div>
-          </div>
-          <div className="grid gap-6 md:grid-cols-2">
-            {testimonials.map((item, index) => (
-              <motion.div key={index} className="bg-[#F8F4E6] border border-[#F8F4E6] rounded-2xl p-8 hover:shadow-lg transition-all duration-300" initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0.3 }} variants={fadeUp}>
-                <p className="text-4xl text-[#8B0000]">"</p>
-                <p className="text-[#2D343A] leading-relaxed">{item.quote}</p>
-                <div className="mt-4">
-                  <p className="font-semibold text-[#2D343A]">{item.author}</p>
-                  <p className="text-sm text-[#708090]">{item.role}</p>
-                </div>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-
       {/* ===== CTA ===== */}
       <section className="py-16 md:py-20 bg-[#2D343A]">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center">
+        <div className="container mx-auto px-4 text-center">
           <h2 className="font-serif text-3xl md:text-4xl text-white">Sua empresa pronta para a transformação?</h2>
           <p className="mt-4 text-[#A1A8AE] max-w-2xl mx-auto">Vamos conversar e construir juntos o próximo capítulo da sua história.</p>
           <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row">
             <Link href="/cadastro">
               <button className="relative px-8 py-3.5 text-sm font-medium tracking-wider text-white bg-[#8B0000] rounded-lg overflow-hidden transition-all duration-300 hover:shadow-xl hover:-translate-y-1 group">
-                <span className="relative z-10 flex items-center gap-2">
-                  Solicitar Diagnóstico <ArrowRight className="h-4 w-4" />
-                </span>
+                <span className="relative z-10 flex items-center gap-2">Solicitar Diagnóstico <ArrowRight className="h-4 w-4" /></span>
                 <span className="absolute inset-0 bg-[#E3C9A8] transform translate-y-full group-hover:translate-y-0 transition-transform duration-300"></span>
               </button>
             </Link>
             <a href={whatsappUrl} target="_blank" rel="noopener noreferrer" className="relative px-8 py-3.5 text-sm font-medium tracking-wider text-white border border-white/40 rounded-lg overflow-hidden transition-all duration-300 hover:shadow-xl hover:-translate-y-1 group">
-              <span className="relative z-10 flex items-center gap-2">
-                <Phone className="h-4 w-4" /> Falar com Especialista
-              </span>
+              <span className="relative z-10 flex items-center gap-2"><Phone className="h-4 w-4" /> Falar com Especialista</span>
               <span className="absolute inset-0 bg-white transform translate-y-full group-hover:translate-y-0 transition-transform duration-300"></span>
             </a>
           </div>
@@ -335,7 +320,7 @@ export default function Home() {
 
       {/* ===== CONTATO ===== */}
       <section id="contato" className="py-20 md:py-28 bg-[#F8F4E6]">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="container mx-auto px-4">
           <div className="text-center mb-14">
             <p className="text-xs tracking-[0.36em] text-[#8B0000] uppercase font-medium">Contato</p>
             <h2 className="mt-4 font-serif text-4xl text-[#2D343A] md:text-5xl">Vamos <span className="text-[#8B0000]">conversar</span></h2>
@@ -408,5 +393,5 @@ export default function Home() {
         html { scroll-behavior: smooth; }
       `}</style>
     </main>
-  );
+  )
 }
