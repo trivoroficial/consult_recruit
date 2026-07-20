@@ -7,7 +7,7 @@ import { DashboardFooter } from '@/components/dashboard/DashboardFooter'
 import { 
   Calendar, Clock, User, Briefcase, Building2,
   Save, ArrowLeft, CheckCircle, Video, Phone, MapPin,
-  Users, FileText
+  Users, FileText, Lock, Unlock, Send
 } from 'lucide-react'
 
 export default function NovaEntrevistaOperacional() {
@@ -15,6 +15,7 @@ export default function NovaEntrevistaOperacional() {
   const [loading, setLoading] = useState(false)
   const [success, setSuccess] = useState(false)
   const [form, setForm] = useState({
+    tipoEntrevistado: 'candidato', // 'candidato' ou 'participante'
     participante: '',
     processo: '',
     cargo: '',
@@ -26,6 +27,7 @@ export default function NovaEntrevistaOperacional() {
     link: '',
     tipo: 'entrevista_rh',
     status: 'pendente',
+    liberada: false,
     observacoes: ''
   })
 
@@ -51,7 +53,7 @@ export default function NovaEntrevistaOperacional() {
             </button>
             <div>
               <h1 className="text-2xl font-bold text-[#2D343A]">Nova Entrevista</h1>
-              <p className="text-sm text-[#708090]">Agende uma nova entrevista operacional</p>
+              <p className="text-sm text-[#708090]">Agende uma nova entrevista</p>
             </div>
           </div>
         </header>
@@ -63,14 +65,55 @@ export default function NovaEntrevistaOperacional() {
                 <CheckCircle className="h-10 w-10 text-green-600" />
               </div>
               <h2 className="text-2xl font-bold text-[#2D343A]">Entrevista agendada com sucesso!</h2>
-              <p className="text-[#708090] mt-2">A entrevista foi agendada e está disponível na lista.</p>
+              <p className="text-[#708090] mt-2">
+                {form.liberada ? 'A entrevista foi liberada para o candidato.' : 'A entrevista está agendada e aguardando liberação.'}
+              </p>
             </div>
           ) : (
-            <form onSubmit={handleSubmit} className="bg-white rounded-2xl shadow-sm border border-[#E8EAE0] p-8">
+            <form onSubmit={handleSubmit} className="bg-white rounded-2xl shadow-sm border border-[#E8EAE0} p-8">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {/* DADOS DA ENTREVISTA */}
+                {/* TIPO DE ENTREVISTADO */}
                 <div className="md:col-span-2">
                   <h3 className="text-lg font-semibold text-[#2D343A] flex items-center gap-2 border-b border-[#E8EAE0] pb-3">
+                    <Users className="h-5 w-5 text-[#8B0000]" />
+                    Tipo de Entrevistado
+                  </h3>
+                </div>
+
+                <div className="md:col-span-2">
+                  <div className="grid grid-cols-2 gap-3">
+                    <button
+                      type="button"
+                      onClick={() => setForm({...form, tipoEntrevistado: 'candidato'})}
+                      className={`py-3 px-4 rounded-lg border transition ${
+                        form.tipoEntrevistado === 'candidato'
+                          ? 'border-[#8B0000] bg-[#8B0000]/5 text-[#8B0000]'
+                          : 'border-[#E8EAE0] hover:bg-[#F8F4E6]'
+                      }`}
+                    >
+                      <User className="h-5 w-5 mx-auto mb-1" />
+                      <span className="text-sm font-medium">Candidato Digital</span>
+                      <p className="text-xs text-[#708090]">Com login na plataforma</p>
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setForm({...form, tipoEntrevistado: 'participante'})}
+                      className={`py-3 px-4 rounded-lg border transition ${
+                        form.tipoEntrevistado === 'participante'
+                          ? 'border-[#8B0000] bg-[#8B0000]/5 text-[#8B0000]'
+                          : 'border-[#E8EAE0] hover:bg-[#F8F4E6]'
+                      }`}
+                    >
+                      <Users className="h-5 w-5 mx-auto mb-1" />
+                      <span className="text-sm font-medium">Participante Operacional</span>
+                      <p className="text-xs text-[#708090]">Sem login, cadastrado pelo Admin</p>
+                    </button>
+                  </div>
+                </div>
+
+                {/* DADOS DA ENTREVISTA */}
+                <div className="md:col-span-2">
+                  <h3 className="text-lg font-semibold text-[#2D343A] flex items-center gap-2 border-b border-[#E8EAE0] pb-3 mt-4">
                     <Calendar className="h-5 w-5 text-[#8B0000]" />
                     Dados da Entrevista
                   </h3>
@@ -78,8 +121,7 @@ export default function NovaEntrevistaOperacional() {
 
                 <div>
                   <label className="block text-sm font-medium text-[#2D343A] mb-1.5">
-                    <User className="h-4 w-4 inline mr-1" />
-                    Participante <span className="text-[#8B0000]">*</span>
+                    {form.tipoEntrevistado === 'candidato' ? 'Candidato' : 'Participante'} <span className="text-[#8B0000]">*</span>
                   </label>
                   <select
                     required
@@ -111,6 +153,7 @@ export default function NovaEntrevistaOperacional() {
                     <option value="logistica">Auxiliar de Logística</option>
                     <option value="soldador">Soldador</option>
                     <option value="motorista">Motorista</option>
+                    <option value="analista">Analista Administrativo</option>
                   </select>
                 </div>
 
@@ -129,7 +172,6 @@ export default function NovaEntrevistaOperacional() {
                     <option value="producao">Operador de Produção - Indústria ABC</option>
                     <option value="logistica">Auxiliar de Logística - Grupo Logística</option>
                     <option value="soldador">Soldador - Metalúrgica XYZ</option>
-                    <option value="motorista">Motorista - Transportadora Express</option>
                   </select>
                 </div>
 
@@ -146,6 +188,25 @@ export default function NovaEntrevistaOperacional() {
                     onChange={(e) => setForm({...form, entrevistador: e.target.value})}
                     placeholder="Nome do entrevistador"
                   />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-[#2D343A] mb-1.5">
+                    <FileText className="h-4 w-4 inline mr-1" />
+                    Tipo de Entrevista
+                  </label>
+                  <select
+                    className="w-full px-4 py-3 border border-[#E8EAE0] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#8B0000] transition"
+                    value={form.tipo}
+                    onChange={(e) => setForm({...form, tipo: e.target.value})}
+                  >
+                    <option value="triagem">Triagem</option>
+                    <option value="entrevista_rh">Entrevista RH</option>
+                    <option value="entrevista_tecnica">Entrevista Técnica</option>
+                    <option value="entrevista_gestor">Entrevista Gestor</option>
+                    <option value="entrevista_final">Entrevista Final</option>
+                    <option value="operacional">Entrevista Operacional</option>
+                  </select>
                 </div>
 
                 <div>
@@ -227,39 +288,29 @@ export default function NovaEntrevistaOperacional() {
                   </div>
                 )}
 
-                <div>
-                  <label className="block text-sm font-medium text-[#2D343A] mb-1.5">
-                    <FileText className="h-4 w-4 inline mr-1" />
-                    Tipo de Entrevista
-                  </label>
-                  <select
-                    className="w-full px-4 py-3 border border-[#E8EAE0] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#8B0000] transition"
-                    value={form.tipo}
-                    onChange={(e) => setForm({...form, tipo: e.target.value})}
-                  >
-                    <option value="triagem">Triagem</option>
-                    <option value="entrevista_rh">Entrevista RH</option>
-                    <option value="entrevista_tecnica">Entrevista Técnica</option>
-                    <option value="entrevista_gestor">Entrevista Gestor</option>
-                    <option value="entrevista_final">Entrevista Final</option>
-                    <option value="operacional">Entrevista Operacional</option>
-                  </select>
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-[#2D343A] mb-1.5">
-                    <Clock className="h-4 w-4 inline mr-1" />
-                    Status
-                  </label>
-                  <select
-                    className="w-full px-4 py-3 border border-[#E8EAE0] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#8B0000] transition"
-                    value={form.status}
-                    onChange={(e) => setForm({...form, status: e.target.value})}
-                  >
-                    <option value="pendente">Pendente</option>
-                    <option value="concluida">Concluída</option>
-                    <option value="cancelada">Cancelada</option>
-                  </select>
+                {/* LIBERAR ENTREVISTA */}
+                <div className="md:col-span-2">
+                  <div className="p-4 bg-[#F8F4E6] rounded-lg border border-[#E8EAE0]">
+                    <label className="flex items-center gap-3 cursor-pointer">
+                      <input
+                        type="checkbox"
+                        className="rounded border-[#E8EAE0] text-[#8B0000] focus:ring-[#8B0000] w-5 h-5"
+                        checked={form.liberada}
+                        onChange={(e) => setForm({...form, liberada: e.target.checked})}
+                      />
+                      <div>
+                        <p className="font-medium text-[#2D343A] flex items-center gap-2">
+                          {form.liberada ? <Unlock className="h-4 w-4 text-green-600" /> : <Lock className="h-4 w-4 text-[#708090]" />}
+                          {form.liberada ? 'Entrevista liberada para o candidato' : 'Entrevista aguardando liberação'}
+                        </p>
+                        <p className="text-sm text-[#708090]">
+                          {form.liberada 
+                            ? 'O candidato receberá notificação e poderá acessar a entrevista.' 
+                            : 'A entrevista só será visível para o candidato após a liberação.'}
+                        </p>
+                      </div>
+                    </label>
+                  </div>
                 </div>
 
                 <div className="md:col-span-2">
@@ -286,6 +337,15 @@ export default function NovaEntrevistaOperacional() {
                   <Save className="h-5 w-5" />
                   {loading ? 'Agendando...' : 'Agendar Entrevista'}
                 </button>
+                {form.liberada && (
+                  <button
+                    type="button"
+                    className="px-8 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition font-medium flex items-center gap-2"
+                  >
+                    <Send className="h-5 w-5" />
+                    Enviar Notificação
+                  </button>
+                )}
                 <button
                   type="button"
                   onClick={() => router.push('/admin/operacional/entrevistas')}
