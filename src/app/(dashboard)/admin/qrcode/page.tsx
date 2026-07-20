@@ -51,7 +51,7 @@ export default function AdminQRCode() {
           dark: qrColor,
           light: '#FFFFFF'
         },
-        errorCorrectionLevel: 'H'
+        errorCorrectionLevel: 'H' as const // <- CORREÇÃO: 'as const'
       }
 
       await QRCode.toCanvas(canvas, qrValue, opts)
