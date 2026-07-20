@@ -21,7 +21,6 @@ export default function Login() {
     setTimeout(() => {
       setLoading(false)
       
-      // ADMIN
       if (email === 'admin@zenthos.com' && password === 'admin123') {
         const userData = JSON.stringify({ 
           name: 'Administrador', 
@@ -30,13 +29,11 @@ export default function Login() {
           perfilCompleto: true 
         })
         localStorage.setItem('zenthos_user', userData)
-        // SALVAR COOKIE PARA O MIDDLEWARE
         document.cookie = `zenthos_user=${encodeURIComponent(userData)}; path=/; max-age=86400`
         router.push('/admin/dashboard')
         return
       } 
       
-      // EMPRESA
       if (email === 'empresa@zenthos.com' && password === 'empresa123') {
         const userData = JSON.stringify({ 
           name: 'Empresa XPTO', 
@@ -50,7 +47,6 @@ export default function Login() {
         return
       } 
       
-      // CANDIDATO
       if (email === 'candidato@zenthos.com' && password === 'candidato123') {
         const userData = JSON.stringify({ 
           name: 'João Silva', 
@@ -73,33 +69,22 @@ export default function Login() {
       <div className="w-full max-w-md">
         <div className="bg-white rounded-2xl shadow-xl p-8 border border-[#E8EAE0]">
           
-          {/* LOGO */}
+          {/* ===== LOGO 2cm (SEM TEXTO) ===== */}
           <div className="text-center mb-8">
-            <Link href="/" className="inline-flex items-center gap-3 group">
-              <div className="relative h-[1.5cm] w-auto">
+            <Link href="/" className="inline-flex items-center justify-center group">
+              <div className="relative h-[2cm] w-auto">
                 <img 
                   src="/logo.png" 
                   alt="ZENTHOS" 
                   className="h-full w-auto object-contain"
                 />
               </div>
-              <div className="flex flex-col text-left">
-                <div className="flex items-center gap-1">
-                  <span className="text-xl font-bold tracking-tight">
-                    <span className="text-[#8B4513]">ZEN</span><span className="text-[#708090]">THOS</span>
-                  </span>
-                  <span className="text-[8px] font-light text-[#8B0000] align-top mt-[-2px]">™</span>
-                </div>
-                <span className="text-[9px] font-light text-[#708090] tracking-[0.15em] uppercase whitespace-nowrap">
-                  Gestão, Estratégia & Transformação
-                </span>
-              </div>
             </Link>
           </div>
 
           <div className="text-center mb-8">
             <h2 className="text-2xl font-bold text-[#2D343A]">Bem-vindo de volta</h2>
-            <p className="text-sm text-[#708090] mt-1">Acesse sua conta ZENTHOS</p>
+            <p className="text-sm text-[#708090] mt-1">Acesse sua conta</p>
           </div>
 
           {erro && (
