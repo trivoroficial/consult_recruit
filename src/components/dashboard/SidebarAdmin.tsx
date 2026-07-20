@@ -3,7 +3,17 @@
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
 import { 
-  Home, Building2, Users, Briefcase, BarChart3, CreditCard, Settings, LogOut
+  Home, 
+  Building2, 
+  Users, 
+  Briefcase, 
+  BarChart3, 
+  CreditCard, 
+  Settings, 
+  LogOut,
+  QrCode,
+  FileText,
+  Calendar
 } from 'lucide-react'
 
 export function SidebarAdmin() {
@@ -21,8 +31,11 @@ export function SidebarAdmin() {
     { icon: Building2, label: 'Empresas', href: '/admin/empresas' },
     { icon: Users, label: 'Candidatos', href: '/admin/candidatos' },
     { icon: Briefcase, label: 'Vagas', href: '/admin/vagas' },
+    { icon: FileText, label: 'Processos', href: '/admin/processos' },
     { icon: BarChart3, label: 'Relatórios', href: '/admin/relatorios' },
     { icon: CreditCard, label: 'Financeiro', href: '/admin/financeiro' },
+    { icon: QrCode, label: 'QR Code Center', href: '/admin/qrcode' },
+    { icon: Calendar, label: 'Agenda', href: '/admin/agenda' },
     { icon: Settings, label: 'Configurações', href: '/admin/configuracoes' },
   ]
 
@@ -53,7 +66,7 @@ export function SidebarAdmin() {
       {/* MENU */}
       <nav className="flex-1 p-4 space-y-1 overflow-y-auto">
         {menuItems.map((item) => {
-          const isActive = pathname === item.href
+          const isActive = pathname === item.href || pathname?.startsWith(item.href + '/')
           return (
             <Link
               key={item.href}
@@ -61,7 +74,7 @@ export function SidebarAdmin() {
               className={`flex items-center gap-3 px-4 py-2.5 rounded-lg transition ${
                 isActive
                   ? 'bg-[#8B0000]/10 text-[#8B0000] font-medium'
-                  : 'text-[#708090] hover:bg-[#F8F4E6]'
+                  : 'text-[#708090] hover:bg-[#F8F4E6] hover:text-[#8B0000]'
               }`}
             >
               <item.icon className="h-5 w-5" />
