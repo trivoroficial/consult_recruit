@@ -1,10 +1,13 @@
 'use client'
 
+import { useRouter } from 'next/navigation'
 import { SidebarAdmin } from '@/components/dashboard/SidebarAdmin'
 import { DashboardFooter } from '@/components/dashboard/DashboardFooter'
 import { Building2, Plus, Search, Edit, Trash2, Eye } from 'lucide-react'
 
 export default function AdminEmpresas() {
+  const router = useRouter()
+
   return (
     <div className="min-h-screen bg-[#F8F4E6] flex flex-col">
       <SidebarAdmin />
@@ -15,7 +18,10 @@ export default function AdminEmpresas() {
             <h1 className="text-2xl font-bold text-[#2D343A]">Empresas</h1>
             <p className="text-sm text-[#708090]">Gerencie todas as empresas cadastradas</p>
           </div>
-          <button className="px-4 py-2 bg-[#8B0000] text-white rounded-lg hover:bg-[#700000] transition font-medium flex items-center gap-2">
+          <button 
+            onClick={() => router.push('/admin/empresas/nova')}
+            className="px-4 py-2 bg-[#8B0000] text-white rounded-lg hover:bg-[#700000] transition font-medium flex items-center gap-2"
+          >
             <Plus className="h-4 w-4" />
             Nova Empresa
           </button>
@@ -59,30 +65,8 @@ export default function AdminEmpresas() {
                       </div>
                     </td>
                   </tr>
-                  <tr className="border-b border-[#E8EAE0]">
-                    <td className="py-3 px-4 font-medium text-[#2D343A]">Indústria ABC</td>
-                    <td className="py-3 px-4 text-[#708090]">98.765.432/0001-11</td>
-                    <td className="py-3 px-4 text-[#708090]">Uberlândia/MG</td>
-                    <td className="py-3 px-4"><span className="px-2 py-1 bg-yellow-100 text-yellow-700 rounded-full text-xs">Pendente</span></td>
-                    <td className="py-3 px-4">
-                      <div className="flex gap-2">
-                        <button className="p-1 hover:bg-[#F8F4E6] rounded"><Eye className="h-4 w-4 text-[#708090]" /></button>
-                        <button className="p-1 hover:bg-[#F8F4E6] rounded"><Edit className="h-4 w-4 text-[#708090]" /></button>
-                        <button className="p-1 hover:bg-[#F8F4E6] rounded"><Trash2 className="h-4 w-4 text-red-500" /></button>
-                      </div>
-                    </td>
-                  </tr>
                 </tbody>
               </table>
-            </div>
-
-            <div className="flex items-center justify-between mt-4 text-sm text-[#708090]">
-              <p>Mostrando 2 empresas</p>
-              <div className="flex gap-2">
-                <button className="px-3 py-1 border border-[#E8EAE0] rounded hover:bg-[#F8F4E6]">Anterior</button>
-                <button className="px-3 py-1 bg-[#8B0000] text-white rounded">1</button>
-                <button className="px-3 py-1 border border-[#E8EAE0] rounded hover:bg-[#F8F4E6]">Próximo</button>
-              </div>
             </div>
           </div>
         </div>
