@@ -11,6 +11,7 @@ import {
   Clock, Upload, Scan,
   RefreshCw
 } from 'lucide-react'
+import QRCode from 'qrcode'
 
 export default function AdminQRCode() {
   const [qrType, setQrType] = useState('pix')
@@ -21,6 +22,9 @@ export default function AdminQRCode() {
   const [scanMode, setScanMode] = useState<'gerar' | 'ler'>('gerar')
   const [scanResult, setScanResult] = useState('')
   const [scanning, setScanning] = useState(false)
+  const [qrColor, setQrColor] = useState('#2D343A')
+  const [qrSize, setQrSize] = useState(300)
+  const [includeLogo, setIncludeLogo] = useState(true)
   const fileInputRef = useRef<HTMLInputElement>(null)
 
   const qrOptions = [
@@ -33,94 +37,64 @@ export default function AdminQRCode() {
     { id: 'link', label: 'Link', icon: Link2, color: 'bg-cyan-100 text-cyan-600' },
   ]
 
-  // Gerar QR Code
-  const generateQR = () => {
+  // GERAR QR CODE REAL
+  const generateQR = async () => {
     if (!qrValue) return
-    
-    // Criar canvas
-    const canvas = document.createElement('canvas')
-    const ctx = canvas.getContext('2d')
-    
-    if (!ctx) {
-      alert('Erro ao gerar QR Code. Tente novamente.')
-      return
-    }
 
-    const size = 400
-    canvas.width = size
-    canvas.height = size
+    try {
+      const canvas = document.createElement('canvas')
+      
+      const opts = {
+        width: qrSize,
+        margin: 2,
+        color: {
+          dark: qrColor,
+          light: '#FFFFFF'
+        },
+        errorCorrectionLevel: 'H'
+      }
 
-    // Fundo branco
-    ctx.fillStyle = '#FFFFFF'
-    ctx.fillRect(0, 0, size, size)
+      await QRCode.toCanvas(canvas, qrValue, opts)
 
-    // Desenhar QR Code simulado
-    const qrSize = size - 60
-    const cellSize = qrSize / 21
-    const offset = 30
+      if (includeLogo) {
+        const ctx = canvas.getContext('2d')
+        if (ctx) {
+          const logoSize = qrSize * 0.2
+          const logoX = (qrSize - logoSize) / 2
+          const logoY = (qrSize - logoSize) / 2
 
-    for (let row = 0; row < 21; row++) {
-      for (let col = 0; col < 21; col++) {
-        const x = offset + col * cellSize
-        const y = offset + row * cellSize
-        
-        const isCorner = (row < 7 && col < 7) || (row < 7 && col > 13) || (row > 13 && col < 7)
-        const isCenter = isCorner && row > 1 && row < 5 && col > 1 && col < 5
-        
-        if (isCorner) {
-          ctx.fillStyle = isCenter ? '#FFFFFF' : '#2D343A'
-          ctx.fillRect(x, y, cellSize, cellSize)
-          continue
-        }
+          ctx.fillStyle = '#FFFFFF'
+          ctx.shadowColor = 'rgba(0,0,0,0.1)'
+          ctx.shadowBlur = 10
+          ctx.beginPath()
+          ctx.arc(qrSize/2, qrSize/2, logoSize/2 + 8, 0, Math.PI * 2)
+          ctx.fill()
+          ctx.shadowBlur = 0
 
-        const hash = (row * 31 + col * 17) % 3
-        const value = (qrValue.charCodeAt(row % qrValue.length || 0) || 0) + col
-        const isFilled = (value % 2 === 0) && hash !== 0
-        
-        if (isFilled) {
-          ctx.fillStyle = '#2D343A'
-          ctx.fillRect(x, y, cellSize, cellSize)
+          ctx.fillStyle = '#8B0000'
+          ctx.font = `bold ${logoSize * 0.6}px Arial, sans-serif`
+          ctx.textAlign = 'center'
+          ctx.textBaseline = 'middle'
+          ctx.fillText('Z', qrSize/2, qrSize/2 + 2)
+
+          ctx.strokeStyle = '#8B0000'
+          ctx.lineWidth = 2
+          ctx.beginPath()
+          ctx.arc(qrSize/2, qrSize/2, logoSize/2 - 4, 0, Math.PI * 2)
+          ctx.stroke()
         }
       }
+
+      setQrImage(canvas.toDataURL('image/png'))
+      setQrGenerated(true)
+    } catch (error) {
+      console.error('Erro ao gerar QR Code:', error)
+      alert('Erro ao gerar QR Code. Verifique o valor e tente novamente.')
     }
-
-    // Logo no centro - usando desenho manual em vez de Image()
-    const logoSize = 70
-    const logoX = (size - logoSize) / 2
-    const logoY = (size - logoSize) / 2
-    
-    // Fundo branco para a logo
-    ctx.fillStyle = '#FFFFFF'
-    ctx.shadowColor = 'rgba(0,0,0,0.1)'
-    ctx.shadowBlur = 20
-    ctx.beginPath()
-    ctx.arc(size/2, size/2, 45, 0, Math.PI * 2)
-    ctx.fill()
-    ctx.shadowBlur = 0
-
-    // Desenhar um "Z" estilizado no centro
-    ctx.fillStyle = '#8B0000'
-    ctx.font = 'bold 50px Arial, sans-serif'
-    ctx.textAlign = 'center'
-    ctx.textBaseline = 'middle'
-    ctx.fillText('Z', size/2, size/2 + 2)
-
-    // Desenhar um círculo ao redor do Z
-    ctx.strokeStyle = '#8B0000'
-    ctx.lineWidth = 3
-    ctx.beginPath()
-    ctx.arc(size/2, size/2, 35, 0, Math.PI * 2)
-    ctx.stroke()
-
-    // Salvar imagem
-    setQrImage(canvas.toDataURL('image/png'))
-    setQrGenerated(true)
   }
 
-  // Baixar QR Code
   const handleDownload = (format: 'png' | 'jpg') => {
     if (!qrImage) return
-    
     const link = document.createElement('a')
     link.download = `qrcode_zenthos.${format === 'png' ? 'png' : 'jpg'}`
     link.href = qrImage
@@ -129,14 +103,12 @@ export default function AdminQRCode() {
     document.body.removeChild(link)
   }
 
-  // Copiar valor
   const handleCopy = () => {
     navigator.clipboard.writeText(qrValue)
     setCopied(true)
     setTimeout(() => setCopied(false), 2000)
   }
 
-  // Imprimir QR Code
   const handlePrint = () => {
     if (!qrImage) return
     const printWindow = window.open('', '_blank')
@@ -158,13 +130,12 @@ export default function AdminQRCode() {
     }
   }
 
-  // Scanear QR Code via upload de imagem
   const handleScanImage = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
     if (!file) return
 
     const reader = new FileReader()
-    reader.onload = (event) => {
+    reader.onload = () => {
       setScanning(true)
       setTimeout(() => {
         const mockResult = `https://zenthos.com.br/${Math.random().toString(36).substring(7)}`
@@ -187,7 +158,7 @@ export default function AdminQRCode() {
         <header className="bg-white border-b border-[#E8EAE0] px-8 py-4 flex items-center justify-between">
           <div>
             <h1 className="text-2xl font-bold text-[#2D343A]">QR Code Center</h1>
-            <p className="text-sm text-[#708090]">Gere ou leia QR Codes</p>
+            <p className="text-sm text-[#708090]">Gere QR Codes válidos para leitura em celulares</p>
           </div>
           <div className="flex gap-2">
             <button 
@@ -294,7 +265,11 @@ export default function AdminQRCode() {
                         <label className="block text-sm font-medium text-[#2D343A] mb-1.5">
                           Tamanho
                         </label>
-                        <select className="w-full px-4 py-3 border border-[#E8EAE0] rounded-lg">
+                        <select 
+                          className="w-full px-4 py-3 border border-[#E8EAE0] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#8B0000] transition"
+                          value={qrSize}
+                          onChange={(e) => setQrSize(parseInt(e.target.value))}
+                        >
                           <option value="200">200px</option>
                           <option value="300" selected>300px</option>
                           <option value="400">400px</option>
@@ -305,21 +280,36 @@ export default function AdminQRCode() {
                         <label className="block text-sm font-medium text-[#2D343A] mb-1.5">
                           Cor
                         </label>
-                        <select className="w-full px-4 py-3 border border-[#E8EAE0] rounded-lg">
-                          <option value="black">Preto</option>
-                          <option value="burgundy">Vermelho</option>
-                          <option value="gold">Dourado</option>
-                          <option value="blue">Azul</option>
-                          <option value="green">Verde</option>
+                        <select 
+                          className="w-full px-4 py-3 border border-[#E8EAE0] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#8B0000] transition"
+                          value={qrColor}
+                          onChange={(e) => setQrColor(e.target.value)}
+                        >
+                          <option value="#2D343A">Preto</option>
+                          <option value="#8B0000">Vermelho (ZENTHOS)</option>
+                          <option value="#C9A84C">Dourado</option>
+                          <option value="#2563EB">Azul</option>
+                          <option value="#16A34A">Verde</option>
                         </select>
                       </div>
                     </div>
 
                     <div className="mt-4 flex items-center gap-2">
-                      <input type="checkbox" id="logo" className="rounded border-[#E8EAE0] text-[#8B0000]" defaultChecked />
+                      <input 
+                        type="checkbox" 
+                        id="logo" 
+                        className="rounded border-[#E8EAE0] text-[#8B0000] focus:ring-[#8B0000]" 
+                        checked={includeLogo}
+                        onChange={(e) => setIncludeLogo(e.target.checked)}
+                      />
                       <label htmlFor="logo" className="text-sm text-[#2D343A]">
                         Incluir logo ZENTHOS no centro
                       </label>
+                    </div>
+
+                    <div className="mt-4 p-3 bg-yellow-50 border border-yellow-200 rounded-lg text-sm text-yellow-800">
+                      <p className="font-medium">📱 Dica:</p>
+                      <p>Para WhatsApp, digite apenas o número com DDD (ex: 5534991177058)</p>
                     </div>
                   </>
                 ) : (
@@ -395,7 +385,8 @@ export default function AdminQRCode() {
 
                       <div className="mt-4 text-center">
                         <p className="text-sm font-medium text-[#2D343A]">QR Code gerado!</p>
-                        <p className="text-xs text-[#708090] mt-1">{qrValue}</p>
+                        <p className="text-xs text-[#708090] mt-1 break-all max-w-[200px]">{qrValue}</p>
+                        <p className="text-xs text-green-600 mt-1">✅ Válido para leitura em celulares</p>
                       </div>
 
                       <div className="flex flex-wrap gap-2 mt-4 justify-center">
