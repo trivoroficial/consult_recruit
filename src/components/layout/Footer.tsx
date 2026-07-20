@@ -21,27 +21,19 @@ export function Footer() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid gap-10 md:grid-cols-2 lg:grid-cols-4">
           
-          {/* ===== COLUNA 1: LOGO ===== */}
+          {/* ===== COLUNA 1: ZEN + THOS ===== */}
           <div className="lg:col-span-1">
-            <Link href="/" className="flex items-center gap-3 group">
-              {/* LOGO - 1.5cm de altura */}
-              <div className="relative h-[1.5cm] w-auto">
-                <img 
-                  src="/logo.png" 
-                  alt="ZENTHOS" 
-                  className="h-full w-auto object-contain brightness-0 invert" 
-                />
-              </div>
-              <div className="flex flex-col leading-none">
-                <div className="flex items-center gap-1">
-                  <span className="text-xl font-bold tracking-tight text-white">ZENTHOS</span>
-                  <span className="text-[8px] font-light text-[#E3C9A8] align-top mt-[-2px]">™</span>
-                </div>
-                <span className="text-[9px] font-light text-[#A1A8AE] tracking-[0.15em] uppercase whitespace-nowrap">
-                  Gestão, Estratégia & Transformação
+            <div className="flex flex-col">
+              <div className="flex items-center gap-1">
+                <span className="text-2xl font-bold tracking-tight">
+                  <span className="text-[#8B4513]">ZEN</span><span className="text-[#A1A8AE]">THOS</span>
                 </span>
+                <span className="text-[8px] font-light text-[#E3C9A8] align-top mt-[-2px]">™</span>
               </div>
-            </Link>
+              <span className="text-[9px] font-light text-[#A1A8AE] tracking-[0.15em] uppercase whitespace-nowrap">
+                Gestão, Estratégia & Transformação
+              </span>
+            </div>
             <p className="mt-4 text-sm text-white/60 leading-relaxed max-w-xs">
               Transformando organizações através de estratégia, tecnologia e inteligência humana.
             </p>
