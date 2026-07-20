@@ -68,7 +68,6 @@ export default function NovoProcessoOperacional() {
           ) : (
             <form onSubmit={handleSubmit} className="bg-white rounded-2xl shadow-sm border border-[#E8EAE0] p-8">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {/* INFORMAÇÕES BÁSICAS */}
                 <div className="md:col-span-2">
                   <h3 className="text-lg font-semibold text-[#2D343A] flex items-center gap-2 border-b border-[#E8EAE0] pb-3">
                     <Briefcase className="h-5 w-5 text-[#8B0000]" />
@@ -80,14 +79,7 @@ export default function NovoProcessoOperacional() {
                   <label className="block text-sm font-medium text-[#2D343A] mb-1.5">
                     Nome do Processo <span className="text-[#8B0000]">*</span>
                   </label>
-                  <input
-                    type="text"
-                    required
-                    className="w-full px-4 py-3 border border-[#E8EAE0] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#8B0000] transition"
-                    value={form.nome}
-                    onChange={(e) => setForm({...form, nome: e.target.value})}
-                    placeholder="Ex: Operador de Produção - Indústria ABC"
-                  />
+                  <input type="text" required className="w-full px-4 py-3 border border-[#E8EAE0] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#8B0000] transition" value={form.nome} onChange={(e) => setForm({...form, nome: e.target.value})} placeholder="Ex: Operador de Produção - Indústria ABC" />
                 </div>
 
                 <div>
@@ -95,27 +87,14 @@ export default function NovoProcessoOperacional() {
                     <Building2 className="h-4 w-4 inline mr-1" />
                     Empresa <span className="text-[#8B0000]">*</span>
                   </label>
-                  <input
-                    type="text"
-                    required
-                    className="w-full px-4 py-3 border border-[#E8EAE0] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#8B0000] transition"
-                    value={form.empresa}
-                    onChange={(e) => setForm({...form, empresa: e.target.value})}
-                    placeholder="Nome da empresa"
-                  />
+                  <input type="text" required className="w-full px-4 py-3 border border-[#E8EAE0] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#8B0000] transition" value={form.empresa} onChange={(e) => setForm({...form, empresa: e.target.value})} placeholder="Nome da empresa" />
                 </div>
 
                 <div>
                   <label className="block text-sm font-medium text-[#2D343A] mb-1.5">
                     Unidade
                   </label>
-                  <input
-                    type="text"
-                    className="w-full px-4 py-3 border border-[#E8EAE0] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#8B0000] transition"
-                    value={form.unidade}
-                    onChange={(e) => setForm({...form, unidade: e.target.value})}
-                    placeholder="Unidade 1"
-                  />
+                  <input type="text" className="w-full px-4 py-3 border border-[#E8EAE0] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#8B0000] transition" value={form.unidade} onChange={(e) => setForm({...form, unidade: e.target.value})} placeholder="Unidade 1" />
                 </div>
 
                 <div>
@@ -123,14 +102,7 @@ export default function NovoProcessoOperacional() {
                     <MapPin className="h-4 w-4 inline mr-1" />
                     Cidade <span className="text-[#8B0000]">*</span>
                   </label>
-                  <input
-                    type="text"
-                    required
-                    className="w-full px-4 py-3 border border-[#E8EAE0] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#8B0000] transition"
-                    value={form.cidade}
-                    onChange={(e) => setForm({...form, cidade: e.target.value})}
-                    placeholder="Uberlândia/MG"
-                  />
+                  <input type="text" required className="w-full px-4 py-3 border border-[#E8EAE0] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#8B0000] transition" value={form.cidade} onChange={(e) => setForm({...form, cidade: e.target.value})} placeholder="Uberlândia/MG" />
                 </div>
 
                 <div>
@@ -138,30 +110,16 @@ export default function NovoProcessoOperacional() {
                     <User className="h-4 w-4 inline mr-1" />
                     Responsável <span className="text-[#8B0000]">*</span>
                   </label>
-                  <input
-                    type="text"
-                    required
-                    className="w-full px-4 py-3 border border-[#E8EAE0] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#8B0000] transition"
-                    value={form.responsavel}
-                    onChange={(e) => setForm({...form, responsavel: e.target.value})}
-                    placeholder="Nome do responsável"
-                  />
+                  <input type="text" required className="w-full px-4 py-3 border border-[#E8EAE0] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#8B0000] transition" value={form.responsavel} onChange={(e) => setForm({...form, responsavel: e.target.value})} placeholder="Nome do responsável" />
                 </div>
 
                 <div>
                   <label className="block text-sm font-medium text-[#2D343A] mb-1.5">
                     Consultor
                   </label>
-                  <input
-                    type="text"
-                    className="w-full px-4 py-3 border border-[#E8EAE0] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#8B0000] transition"
-                    value={form.consultor}
-                    onChange={(e) => setForm({...form, consultor: e.target.value})}
-                    placeholder="Nome do consultor"
-                  />
+                  <input type="text" className="w-full px-4 py-3 border border-[#E8EAE0] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#8B0000] transition" value={form.consultor} onChange={(e) => setForm({...form, consultor: e.target.value})} placeholder="Nome do consultor" />
                 </div>
 
-                {/* DETALHES DA VAGA */}
                 <div className="md:col-span-2">
                   <h3 className="text-lg font-semibold text-[#2D343A] flex items-center gap-2 border-b border-[#E8EAE0] pb-3 mt-4">
                     <Users className="h-5 w-5 text-[#8B0000]" />
@@ -173,14 +131,7 @@ export default function NovoProcessoOperacional() {
                   <label className="block text-sm font-medium text-[#2D343A] mb-1.5">
                     Cargo <span className="text-[#8B0000]">*</span>
                   </label>
-                  <input
-                    type="text"
-                    required
-                    className="w-full px-4 py-3 border border-[#E8EAE0] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#8B0000] transition"
-                    value={form.cargo}
-                    onChange={(e) => setForm({...form, cargo: e.target.value})}
-                    placeholder="Operador de Produção"
-                  />
+                  <input type="text" required className="w-full px-4 py-3 border border-[#E8EAE0] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#8B0000] transition" value={form.cargo} onChange={(e) => setForm({...form, cargo: e.target.value})} placeholder="Operador de Produção" />
                 </div>
 
                 <div>
@@ -188,11 +139,7 @@ export default function NovoProcessoOperacional() {
                     <DollarSign className="h-4 w-4 inline mr-1" />
                     Tipo de Contratação
                   </label>
-                  <select
-                    className="w-full px-4 py-3 border border-[#E8EAE0] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#8B0000] transition"
-                    value={form.tipoContratacao}
-                    onChange={(e) => setForm({...form, tipoContratacao: e.target.value})}
-                  >
+                  <select className="w-full px-4 py-3 border border-[#E8EAE0] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#8B0000] transition" value={form.tipoContratacao} onChange={(e) => setForm({...form, tipoContratacao: e.target.value})}>
                     <option value="clt">CLT</option>
                     <option value="pj">PJ</option>
                     <option value="temporario">Temporário</option>
@@ -205,15 +152,7 @@ export default function NovoProcessoOperacional() {
                     <Users className="h-4 w-4 inline mr-1" />
                     Quantidade de Vagas <span className="text-[#8B0000]">*</span>
                   </label>
-                  <input
-                    type="number"
-                    required
-                    min="1"
-                    className="w-full px-4 py-3 border border-[#E8EAE0] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#8B0000] transition"
-                    value={form.vagas}
-                    onChange={(e) => setForm({...form, vagas: e.target.value})}
-                    placeholder="10"
-                  />
+                  <input type="number" required min="1" className="w-full px-4 py-3 border border-[#E8EAE0] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#8B0000] transition" value={form.vagas} onChange={(e) => setForm({...form, vagas: e.target.value})} placeholder="10" />
                 </div>
 
                 <div>
@@ -221,13 +160,7 @@ export default function NovoProcessoOperacional() {
                     <Calendar className="h-4 w-4 inline mr-1" />
                     Data de Início <span className="text-[#8B0000]">*</span>
                   </label>
-                  <input
-                    type="date"
-                    required
-                    className="w-full px-4 py-3 border border-[#E8EAE0] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#8B0000] transition"
-                    value={form.data}
-                    onChange={(e) => setForm({...form, data: e.target.value})}
-                  />
+                  <input type="date" required className="w-full px-4 py-3 border border-[#E8EAE0] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#8B0000] transition" value={form.data} onChange={(e) => setForm({...form, data: e.target.value})} />
                 </div>
 
                 <div>
@@ -235,11 +168,7 @@ export default function NovoProcessoOperacional() {
                     <Clock className="h-4 w-4 inline mr-1" />
                     Status
                   </label>
-                  <select
-                    className="w-full px-4 py-3 border border-[#E8EAE0] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#8B0000] transition"
-                    value={form.status}
-                    onChange={(e) => setForm({...form, status: e.target.value})}
-                  >
+                  <select className="w-full px-4 py-3 border border-[#E8EAE0] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#8B0000] transition" value={form.status} onChange={(e) => setForm({...form, status: e.target.value})}>
                     <option value="ativo">Ativo</option>
                     <option value="pausado">Pausado</option>
                     <option value="concluido">Concluído</option>
@@ -251,30 +180,16 @@ export default function NovoProcessoOperacional() {
                     <FileText className="h-4 w-4 inline mr-1" />
                     Observações
                   </label>
-                  <textarea
-                    rows={3}
-                    className="w-full px-4 py-3 border border-[#E8EAE0] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#8B0000] transition resize-none"
-                    value={form.observacoes}
-                    onChange={(e) => setForm({...form, observacoes: e.target.value})}
-                    placeholder="Observações adicionais sobre o processo..."
-                  />
+                  <textarea rows={3} className="w-full px-4 py-3 border border-[#E8EAE0] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#8B0000] transition resize-none" value={form.observacoes} onChange={(e) => setForm({...form, observacoes: e.target.value})} placeholder="Observações adicionais sobre o processo..." />
                 </div>
               </div>
 
               <div className="flex items-center gap-4 mt-8 pt-6 border-t border-[#E8EAE0]">
-                <button
-                  type="submit"
-                  disabled={loading}
-                  className="px-8 py-3 bg-[#8B0000] text-white rounded-lg hover:bg-[#700000] transition font-medium flex items-center gap-2 disabled:opacity-50"
-                >
+                <button type="submit" disabled={loading} className="px-8 py-3 bg-[#8B0000] text-white rounded-lg hover:bg-[#700000] transition font-medium flex items-center gap-2 disabled:opacity-50">
                   <Save className="h-5 w-5" />
                   {loading ? 'Criando...' : 'Criar Processo'}
                 </button>
-                <button
-                  type="button"
-                  onClick={() => router.push('/admin/operacional/processos')}
-                  className="px-8 py-3 border border-[#E8EAE0] rounded-lg hover:bg-[#F8F4E6] transition text-[#708090]"
-                >
+                <button type="button" onClick={() => router.push('/admin/operacional/processos')} className="px-8 py-3 border border-[#E8EAE0] rounded-lg hover:bg-[#F8F4E6] transition text-[#708090]">
                   Cancelar
                 </button>
               </div>
