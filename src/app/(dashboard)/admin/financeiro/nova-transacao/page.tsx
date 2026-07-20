@@ -4,7 +4,11 @@ import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { SidebarAdmin } from '@/components/dashboard/SidebarAdmin'
 import { DashboardFooter } from '@/components/dashboard/DashboardFooter'
-import { DollarSign, ArrowLeft, Save, CheckCircle, TrendingUp, TrendingDown } from 'lucide-react'
+import { 
+  DollarSign, ArrowLeft, Save, CheckCircle, 
+  TrendingUp, TrendingDown, Calendar, FileText,
+  Building2, User
+} from 'lucide-react'
 
 export default function NovaTransacao() {
   const router = useRouter()
@@ -72,6 +76,7 @@ export default function NovaTransacao() {
                     </button>
                   </div>
                 </div>
+
                 <div>
                   <label className="block text-sm font-medium text-[#2D343A] mb-1.5">
                     Categoria <span className="text-[#8B0000]">*</span>
@@ -88,30 +93,37 @@ export default function NovaTransacao() {
                     <option value="outros">Outros</option>
                   </select>
                 </div>
+
                 <div className="md:col-span-2">
                   <label className="block text-sm font-medium text-[#2D343A] mb-1.5">
                     Descrição <span className="text-[#8B0000]">*</span>
                   </label>
                   <input type="text" required className="w-full px-4 py-3 border border-[#E8EAE0] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#8B0000] transition" value={form.descricao} onChange={(e) => setForm({...form, descricao: e.target.value})} placeholder="Descrição da transação" />
                 </div>
+
                 <div>
                   <label className="block text-sm font-medium text-[#2D343A] mb-1.5">
+                    <Building2 className="h-4 w-4 inline mr-1" />
                     Cliente / Fornecedor
                   </label>
                   <input type="text" className="w-full px-4 py-3 border border-[#E8EAE0] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#8B0000] transition" value={form.cliente} onChange={(e) => setForm({...form, cliente: e.target.value})} placeholder="Nome do cliente ou fornecedor" />
                 </div>
+
                 <div>
                   <label className="block text-sm font-medium text-[#2D343A] mb-1.5">
                     Valor <span className="text-[#8B0000]">*</span>
                   </label>
                   <input type="text" required className="w-full px-4 py-3 border border-[#E8EAE0] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#8B0000] transition" value={form.valor} onChange={(e) => setForm({...form, valor: e.target.value})} placeholder="R$ 0,00" />
                 </div>
+
                 <div>
                   <label className="block text-sm font-medium text-[#2D343A] mb-1.5">
+                    <Calendar className="h-4 w-4 inline mr-1" />
                     Data <span className="text-[#8B0000]">*</span>
                   </label>
                   <input type="date" required className="w-full px-4 py-3 border border-[#E8EAE0] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#8B0000] transition" value={form.data} onChange={(e) => setForm({...form, data: e.target.value})} />
                 </div>
+
                 <div>
                   <label className="block text-sm font-medium text-[#2D343A] mb-1.5">
                     Status
