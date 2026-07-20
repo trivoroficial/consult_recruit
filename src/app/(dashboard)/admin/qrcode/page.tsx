@@ -7,7 +7,8 @@ import {
   QrCode, Download, Copy, Check, 
   Smartphone, FileText, CreditCard, 
   Building2, Users, Link2, Share2,
-  Wallet, File, Image, Printer
+  Wallet, File, Image, Printer,
+  Clock
 } from 'lucide-react'
 
 export default function AdminQRCode() {
@@ -39,7 +40,6 @@ export default function AdminQRCode() {
   }
 
   const handleDownload = (format: 'png' | 'jpg') => {
-    // SIMULAÇÃO DE DOWNLOAD
     alert(`Baixando QR Code em formato ${format.toUpperCase()}`)
   }
 
@@ -173,7 +173,6 @@ export default function AdminQRCode() {
                 {qrGenerated ? (
                   <div ref={qrRef} className="flex flex-col items-center">
                     <div className="w-64 h-64 bg-white border-2 border-[#E8EAE0] rounded-xl flex items-center justify-center relative">
-                      {/* SIMULAÇÃO DE QR CODE COM LOGO */}
                       <div className="relative">
                         <div className="w-56 h-56 bg-[#2D343A] rounded-lg p-2">
                           <div className="w-full h-full bg-white rounded-md grid grid-cols-6 grid-rows-6 gap-1 p-2">
@@ -182,7 +181,6 @@ export default function AdminQRCode() {
                             ))}
                           </div>
                         </div>
-                        {/* LOGO NO CENTRO */}
                         <div className="absolute inset-0 flex items-center justify-center">
                           <div className="w-14 h-14 bg-white rounded-full shadow-lg flex items-center justify-center border-2 border-[#E8EAE0]">
                             <img src="/logo.png" alt="ZENTHOS" className="w-10 h-10 object-contain" />
