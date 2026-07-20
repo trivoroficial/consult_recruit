@@ -13,7 +13,10 @@ import {
   LogOut,
   QrCode,
   FileText,
-  Calendar
+  Calendar,
+  UsersRound,
+  Award,
+  Handshake
 } from 'lucide-react'
 
 export function SidebarAdmin() {
@@ -31,6 +34,11 @@ export function SidebarAdmin() {
     { icon: Building2, label: 'Empresas', href: '/admin/empresas' },
     { icon: Users, label: 'Candidatos', href: '/admin/candidatos' },
     { icon: Briefcase, label: 'Vagas', href: '/admin/vagas' },
+    // MÓDULO OPERACIONAL
+    { icon: UsersRound, label: 'Operacional', href: '/admin/operacional/dashboard' },
+    { icon: Award, label: 'Banco de Talentos', href: '/admin/operacional/banco-talentos' },
+    { icon: Handshake, label: 'Contratações', href: '/admin/operacional/contratacoes' },
+    // FIM MÓDULO OPERACIONAL
     { icon: BarChart3, label: 'Relatórios', href: '/admin/relatorios' },
     { icon: CreditCard, label: 'Financeiro', href: '/admin/financeiro' },
     { icon: QrCode, label: 'QR Code Center', href: '/admin/qrcode' },
@@ -75,7 +83,10 @@ export function SidebarAdmin() {
       </nav>
 
       <div className="p-4 border-t border-[#E8EAE0]">
-        <button onClick={handleLogout} className="flex items-center gap-3 px-4 py-2.5 text-red-600 hover:bg-red-50 rounded-lg transition w-full">
+        <button
+          onClick={handleLogout}
+          className="flex items-center gap-3 px-4 py-2.5 text-red-600 hover:bg-red-50 rounded-lg transition w-full"
+        >
           <LogOut className="h-5 w-5" />
           <span className="text-sm font-medium">Sair</span>
         </button>
