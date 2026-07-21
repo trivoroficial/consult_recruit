@@ -6,35 +6,36 @@ import { SidebarAdmin } from '@/components/dashboard/SidebarAdmin'
 import { DashboardFooter } from '@/components/dashboard/DashboardFooter'
 import { Building2, Plus, Search, Edit, Trash2, Eye, X, Save } from 'lucide-react'
 
-// DADOS INICIAIS
-const initialEmpresas = [
-  { id: 1, nome: 'Empresa XPTO', cnpj: '12.345.678/0001-99', cidade: 'Uberlândia/MG', status: 'Ativo' },
-  { id: 2, nome: 'Indústria ABC', cnpj: '98.765.432/0001-11', cidade: 'Uberlândia/MG', status: 'Ativo' },
-]
-
 export default function AdminEmpresas() {
   const router = useRouter()
-  const [empresas, setEmpresas] = useState(initialEmpresas)
+  const [empresas, setEmpresas] = useState<any[]>([])
   const [search, setSearch] = useState('')
   const [editando, setEditando] = useState<number | null>(null)
   const [editForm, setEditForm] = useState({ nome: '', cnpj: '', cidade: '', status: 'Ativo' })
-  const [deletando, setDeletando] = useState<number | null>(null)
+  const [loading, setLoading] = useState(true)
 
-  // Carregar dados do localStorage
+  // CARREGAR EMPRESAS DO LOCALSTORAGE
   useEffect(() => {
     const saved = localStorage.getItem('zenthos_empresas')
     if (saved) {
       setEmpresas(JSON.parse(saved))
+    } else {
+      // Dados iniciais se não houver nada
+      const initialEmpresas = [
+        { id: 1, nome: 'Empresa XPTO', cnpj: '12.345.678/0001-99', cidade: 'Uberlândia/MG', status: 'Ativo' },
+        { id: 2, nome: 'Indústria ABC', cnpj: '98.765.432/0001-11', cidade: 'Uberlândia/MG', status: 'Ativo' },
+      ]
+      setEmpresas(initialEmpresas)
+      localStorage.setItem('zenthos_empresas', JSON.stringify(initialEmpresas))
     }
+    setLoading(false)
   }, [])
 
-  // Salvar no localStorage
   const saveEmpresas = (data: typeof empresas) => {
     setEmpresas(data)
     localStorage.setItem('zenthos_empresas', JSON.stringify(data))
   }
 
-  // Abrir edição
   const handleEdit = (id: number) => {
     const empresa = empresas.find(e => e.id === id)
     if (empresa) {
@@ -43,7 +44,6 @@ export default function AdminEmpresas() {
     }
   }
 
-  // Salvar edição
   const handleSaveEdit = () => {
     if (editando === null) return
     const updated = empresas.map(e => 
@@ -54,27 +54,34 @@ export default function AdminEmpresas() {
     setEditForm({ nome: '', cnpj: '', cidade: '', status: 'Ativo' })
   }
 
-  // Cancelar edição
   const handleCancelEdit = () => {
     setEditando(null)
     setEditForm({ nome: '', cnpj: '', cidade: '', status: 'Ativo' })
   }
 
-  // Deletar empresa
   const handleDelete = (id: number) => {
     if (confirm('Tem certeza que deseja excluir esta empresa?')) {
       const updated = empresas.filter(e => e.id !== id)
       saveEmpresas(updated)
-      setDeletando(null)
     }
   }
 
-  // Filtrar empresas
-  const filteredEmpresas = empresas.filter(e =>
+  const filtered = empresas.filter(e =>
     e.nome.toLowerCase().includes(search.toLowerCase()) ||
     e.cnpj.includes(search) ||
     e.cidade.toLowerCase().includes(search.toLowerCase())
   )
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-[#F8F4E6] flex flex-col">
+        <SidebarAdmin />
+        <div className="flex-1 ml-64 flex items-center justify-center">
+          <div className="text-[#8B0000] text-xl">Carregando...</div>
+        </div>
+      </div>
+    )
+  }
 
   return (
     <div className="min-h-screen bg-[#F8F4E6] flex flex-col">
@@ -84,7 +91,7 @@ export default function AdminEmpresas() {
         <header className="bg-white border-b border-[#E8EAE0] px-8 py-4 flex items-center justify-between">
           <div>
             <h1 className="text-2xl font-bold text-[#2D343A]">Empresas</h1>
-            <p className="text-sm text-[#708090]">Gerencie todas as empresas cadastradas</p>
+            <p className="text-sm text-[#708090]">{empresas.length} empresas cadastradas</p>
           </div>
           <button 
             onClick={() => router.push('/admin/empresas/nova')}
@@ -108,7 +115,6 @@ export default function AdminEmpresas() {
                   onChange={(e) => setSearch(e.target.value)}
                 />
               </div>
-              <span className="text-sm text-[#708090]">{filteredEmpresas.length} empresas</span>
             </div>
 
             <div className="overflow-x-auto">
@@ -123,10 +129,9 @@ export default function AdminEmpresas() {
                   </tr>
                 </thead>
                 <tbody>
-                  {filteredEmpresas.map((item) => (
+                  {filtered.map((item) => (
                     <tr key={item.id} className="border-b border-[#E8EAE0] hover:bg-[#F8F4E6] transition">
                       {editando === item.id ? (
-                        // MODO EDIÇÃO
                         <td className="py-3 px-4" colSpan={5}>
                           <div className="grid grid-cols-1 md:grid-cols-4 gap-3">
                             <input 
@@ -219,7 +224,7 @@ export default function AdminEmpresas() {
               </table>
             </div>
 
-            {filteredEmpresas.length === 0 && (
+            {filtered.length === 0 && (
               <div className="text-center py-8 text-[#708090]">
                 Nenhuma empresa encontrada.
               </div>
