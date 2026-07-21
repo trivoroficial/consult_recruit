@@ -6,21 +6,27 @@ import { SidebarAdmin } from '@/components/dashboard/SidebarAdmin'
 import { DashboardFooter } from '@/components/dashboard/DashboardFooter'
 import { Users, Plus, Search, Edit, Trash2, Eye, X, Save, Upload } from 'lucide-react'
 
-const initialCandidatos = [
-  { id: 1, nome: 'João Silva', cidade: 'Uberlândia/MG', status: 'Disponível', score: 94 },
-  { id: 2, nome: 'Maria Santos', cidade: 'Uberlândia/MG', status: 'Em processo', score: 87 },
-]
-
 export default function AdminCandidatos() {
   const router = useRouter()
-  const [candidatos, setCandidatos] = useState(initialCandidatos)
+  const [candidatos, setCandidatos] = useState<any[]>([])
   const [search, setSearch] = useState('')
   const [editando, setEditando] = useState<number | null>(null)
   const [editForm, setEditForm] = useState({ nome: '', cidade: '', status: 'Disponível', score: 0 })
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     const saved = localStorage.getItem('zenthos_candidatos')
-    if (saved) setCandidatos(JSON.parse(saved))
+    if (saved) {
+      setCandidatos(JSON.parse(saved))
+    } else {
+      const initial = [
+        { id: 1, nome: 'João Silva', cidade: 'Uberlândia/MG', status: 'Disponível', score: 94 },
+        { id: 2, nome: 'Maria Santos', cidade: 'Uberlândia/MG', status: 'Em processo', score: 87 },
+      ]
+      setCandidatos(initial)
+      localStorage.setItem('zenthos_candidatos', JSON.stringify(initial))
+    }
+    setLoading(false)
   }, [])
 
   const saveCandidatos = (data: typeof candidatos) => {
@@ -56,6 +62,17 @@ export default function AdminCandidatos() {
     c.cidade.toLowerCase().includes(search.toLowerCase())
   )
 
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-[#F8F4E6] flex flex-col">
+        <SidebarAdmin />
+        <div className="flex-1 ml-64 flex items-center justify-center">
+          <div className="text-[#8B0000] text-xl">Carregando...</div>
+        </div>
+      </div>
+    )
+  }
+
   return (
     <div className="min-h-screen bg-[#F8F4E6] flex flex-col">
       <SidebarAdmin />
@@ -64,7 +81,7 @@ export default function AdminCandidatos() {
         <header className="bg-white border-b border-[#E8EAE0] px-8 py-4 flex items-center justify-between">
           <div>
             <h1 className="text-2xl font-bold text-[#2D343A]">Candidatos</h1>
-            <p className="text-sm text-[#708090]">Gerencie o banco de talentos</p>
+            <p className="text-sm text-[#708090]">{candidatos.length} candidatos cadastrados</p>
           </div>
           <div className="flex gap-3">
             <button className="px-4 py-2 border border-[#8B0000] text-[#8B0000] rounded-lg hover:bg-[#8B0000] hover:text-white transition font-medium flex items-center gap-2">
@@ -153,6 +170,12 @@ export default function AdminCandidatos() {
                 </tbody>
               </table>
             </div>
+
+            {filtered.length === 0 && (
+              <div className="text-center py-8 text-[#708090]">
+                Nenhum candidato encontrado.
+              </div>
+            )}
           </div>
         </div>
 
@@ -160,4 +183,4 @@ export default function AdminCandidatos() {
       </div>
     </div>
   )
-}
+} 
