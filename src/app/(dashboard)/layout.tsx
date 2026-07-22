@@ -1,8 +1,10 @@
-// src/app/(dashboard)/layout.tsx
 'use client'
 
 import { ReactNode } from 'react'
 import { usePathname } from 'next/navigation'
+import { SidebarAdmin } from '@/components/layout/SidebarAdmin'
+import { SidebarEmpresa } from '@/components/layout/SidebarEmpresa'
+import { SidebarCandidato } from '@/components/layout/SidebarCandidato'
 
 export default function DashboardLayout({
   children,
@@ -11,20 +13,30 @@ export default function DashboardLayout({
 }) {
   const pathname = usePathname()
   
-  // Verifica se é admin, empresa ou candidato
+  // Verifica qual tipo de dashboard está sendo acessado pela URL
   const isAdmin = pathname?.startsWith('/admin')
   const isEmpresa = pathname?.startsWith('/empresa')
   const isCandidato = pathname?.startsWith('/candidato')
 
-  // Determina qual sidebar usar
-  const getSidebar = () => {
-    // Os sidebars serão importados dinamicamente nos componentes filhos
-    return children
+  // Função para renderizar a Sidebar correta dinamicamente
+  const renderSidebar = () => {
+    if (isAdmin) return <SidebarAdmin />
+    if (isEmpresa) return <SidebarEmpresa />
+    if (isCandidato) return <SidebarCandidato />
+    
+    // Retorna nada se for uma rota de dashboard não identificada
+    return null 
   }
 
   return (
-    <div className="min-h-screen bg-[#F8F4E6]">
-      {children}
+    <div className="flex min-h-screen bg-[#F8F4E6]">
+      {/* Renderiza a Sidebar lateral apenas se for uma rota de dashboard válida */}
+      {renderSidebar()}
+      
+      {/* Área principal de conteúdo do dashboard (onde as páginas serão renderizadas) */}
+      <main className="flex-1 p-6 overflow-y-auto">
+        {children}
+      </main>
     </div>
   )
 }
