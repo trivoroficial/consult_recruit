@@ -24,18 +24,14 @@ export async function middleware(request: NextRequest) {
   const isProtected = protectedRoutes.some(route => pathname.startsWith(route))
   
   if (isProtected) {
-    // ============================================
     // 1. VERIFICAR COOKIE (MÉTODO ATUAL)
-    // ============================================
     const userCookie = request.cookies.get('zenthos_user')?.value
     
     if (!userCookie) {
       return NextResponse.redirect(new URL('/login', request.url))
     }
 
-    // ============================================
-    // 2. VERIFICAR SUPABASE (MÉTODO NOVO)
-    // ============================================
+    // 2. VERIFICAR SUPABASE
     let supabaseResponse = NextResponse.next({
       request,
     })
@@ -61,19 +57,14 @@ export async function middleware(request: NextRequest) {
       }
     )
 
-    // Verificar se o usuário está autenticado no Supabase
     const { data: { user } } = await supabase.auth.getUser()
 
-    // Se não estiver autenticado no Supabase, redirecionar para login
     if (!user) {
       return NextResponse.redirect(new URL('/login', request.url))
     }
 
-    // ============================================
-    // 3. VERIFICAR PERMISSÕES (ROLE)
-    // ============================================
+    // 3. VERIFICAR PERMISSÕES
     try {
-      // Buscar role do usuário no banco
       const { data: userData } = await supabase
         .from('usuarios')
         .select('role')
@@ -82,7 +73,6 @@ export async function middleware(request: NextRequest) {
 
       const role = userData?.role || 'candidato'
 
-      // Verificar se o usuário tem permissão para acessar a rota
       if (pathname.startsWith('/admin') && role !== 'admin') {
         return NextResponse.redirect(new URL('/login', request.url))
       }
@@ -96,7 +86,6 @@ export async function middleware(request: NextRequest) {
       }
 
     } catch (error) {
-      console.error('Erro ao verificar permissões:', error)
       return NextResponse.redirect(new URL('/login', request.url))
     }
 
