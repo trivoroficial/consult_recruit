@@ -1,31 +1,25 @@
+// src/app/(dashboard)/layout.tsx
 'use client'
 
-import { useEffect, useState } from 'react'
-import { useRouter } from 'next/navigation'
+import { ReactNode } from 'react'
+import { usePathname } from 'next/navigation'
 
 export default function DashboardLayout({
   children,
 }: {
-  children: React.ReactNode
+  children: ReactNode
 }) {
-  const router = useRouter()
-  const [loading, setLoading] = useState(true)
+  const pathname = usePathname()
+  
+  // Verifica se é admin, empresa ou candidato
+  const isAdmin = pathname?.startsWith('/admin')
+  const isEmpresa = pathname?.startsWith('/empresa')
+  const isCandidato = pathname?.startsWith('/candidato')
 
-  useEffect(() => {
-    const userData = localStorage.getItem('zenthos_user')
-    if (!userData) {
-      router.push('/login')
-      return
-    }
-    setLoading(false)
-  }, [router])
-
-  if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-[#F8F4E6]">
-        <div className="text-[#8B0000] text-xl">Carregando...</div>
-      </div>
-    )
+  // Determina qual sidebar usar
+  const getSidebar = () => {
+    // Os sidebars serão importados dinamicamente nos componentes filhos
+    return children
   }
 
   return (
