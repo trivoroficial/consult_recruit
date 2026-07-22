@@ -1,6 +1,4 @@
 // src/components/home/EmpresasParceiras.tsx
-import { Building2 } from 'lucide-react'
-
 export function EmpresasParceiras() {
   const empresas = [
     { nome: 'XPTO', logo: 'XPTO' },
