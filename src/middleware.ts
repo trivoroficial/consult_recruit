@@ -44,7 +44,7 @@ export async function middleware(request: NextRequest) {
           getAll() {
             return request.cookies.getAll()
           },
-          setAll(cookiesToSet) {
+          setAll(cookiesToSet: { name: string; value: string; options?: any }[]) {
             cookiesToSet.forEach(({ name, value, options }) => request.cookies.set(name, value))
             supabaseResponse = NextResponse.next({
               request,
@@ -86,6 +86,7 @@ export async function middleware(request: NextRequest) {
       }
 
     } catch (error) {
+      console.error('Erro ao verificar permissões:', error)
       return NextResponse.redirect(new URL('/login', request.url))
     }
 
