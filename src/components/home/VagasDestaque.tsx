@@ -1,9 +1,8 @@
-// src/components/home/VagasDestaque.tsx
 'use client'
 
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
-import { Building2, MapPin, Briefcase, Clock, Star } from 'lucide-react'
+import { Building2, MapPin, Briefcase, Clock } from 'lucide-react'
 
 export function VagasDestaque() {
   const [vagas, setVagas] = useState<any[]>([])
@@ -53,14 +52,20 @@ export function VagasDestaque() {
             <h2 className="text-3xl font-bold text-[#2D343A]">Vagas em Destaque</h2>
             <p className="text-[#708090] mt-1">Oportunidades que podem transformar sua carreira</p>
           </div>
-          <Link href="/vagas" className="text-[#8B0000] hover:underline font-medium flex items-center gap-1">
+          {/* ALTERADO: De /vagas para /cadastro */}
+          <Link href="/cadastro" className="text-[#8B0000] hover:underline font-medium flex items-center gap-1">
             Ver todas <span className="text-xl">→</span>
           </Link>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {vagas.map((vaga) => (
-            <Link key={vaga.id} href={`/vagas/${vaga.id}`} className="group bg-white border border-[#E8EAE0] rounded-xl p-6 hover:shadow-lg transition-all duration-300 hover:-translate-y-1 block">
+            /* ALTERADO: De /vagas/${vaga.id} para /cadastro */
+            <Link 
+              key={vaga.id} 
+              href="/cadastro" 
+              className="group bg-white border border-[#E8EAE0] rounded-xl p-6 hover:shadow-lg transition-all duration-300 hover:-translate-y-1 block"
+            >
               {vaga.badge && (
                 <span className={`inline-block px-2 py-0.5 rounded-full text-xs text-white ${vaga.corBadge || 'bg-purple-500'} mb-3`}>
                   {vaga.badge}
@@ -87,11 +92,23 @@ export function VagasDestaque() {
               </div>
               <div className="flex items-center justify-between mt-4 pt-4 border-t border-[#E8EAE0]">
                 <span className="text-xs text-[#708090]">📍 {vaga.local || 'Remoto'}</span>
-                <span className="text-[#8B0000] text-sm font-medium group-hover:underline">Ver vaga →</span>
+                {/* Texto do botão alterado para refletir a ação */}
+                <span className="text-[#8B0000] text-sm font-medium group-hover:underline">Candidatar-se →</span>
               </div>
             </Link>
           ))}
         </div>
+
+        {/* NOVO: Link útil para quem já tem conta */}
+        <div className="text-center mt-8">
+          <p className="text-sm text-[#708090]">
+            Já possui uma conta?{' '}
+            <Link href="/login" className="text-[#8B0000] font-semibold hover:underline">
+              Faça login para acessar suas candidaturas
+            </Link>
+          </p>
+        </div>
+
       </div>
     </section>
   )
