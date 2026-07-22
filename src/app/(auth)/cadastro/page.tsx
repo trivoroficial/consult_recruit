@@ -1,152 +1,183 @@
+// src/app/(auth)/cadastro/page.tsx
 'use client'
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
-import { Eye, EyeOff, ArrowRight } from 'lucide-react'
+import { Eye, EyeOff, UserPlus, CheckCircle } from 'lucide-react'
+import { supabase } from '@/lib/supabase/client'
 
 export default function Cadastro() {
   const router = useRouter()
-  const [showPassword, setShowPassword] = useState(false)
   const [loading, setLoading] = useState(false)
-  const [erro, setErro] = useState('')
+  const [success, setSuccess] = useState(false)
+  const [error, setError] = useState('')
+  const [showPassword, setShowPassword] = useState(false)
   const [form, setForm] = useState({
     nome: '',
     email: '',
-    password: ''
+    password: '',
+    role: 'candidato'
   })
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setLoading(true)
-    setErro('')
-    
-    setTimeout(() => {
-      setLoading(false)
-      
-      if (!form.nome || !form.email || !form.password) {
-        setErro('Preencha todos os campos')
-        return
-      }
+    setError('')
 
-      const userData = JSON.stringify({ 
-        name: form.nome, 
-        email: form.email, 
-        role: 'candidato',
-        perfilCompleto: false,
-        isNew: true
+    try {
+      // 1. Criar usuário no Supabase Auth
+      const { data, error } = await supabase.auth.signUp({
+        email: form.email,
+        password: form.password,
+        options: {
+          data: {
+            name: form.nome,
+            role: form.role
+          }
+        }
       })
 
-      localStorage.setItem('zenthos_user', userData)
-      document.cookie = `zenthos_user=${encodeURIComponent(userData)}; path=/; max-age=86400`
-      router.push('/candidato/completar-perfil')
-    }, 1500)
+      if (error) throw error
+
+      if (data.user) {
+        // 2. Salvar no localStorage para compatibilidade
+        localStorage.setItem('zenthos_user', JSON.stringify({
+          email: form.email,
+          name: form.nome,
+          role: form.role,
+          id: data.user.id
+        }))
+
+        // 3. Redirecionar baseado no role
+        setSuccess(true)
+        setTimeout(() => {
+          if (form.role === 'candidato') {
+            router.push('/candidato/completar-perfil')
+          } else if (form.role === 'empresa') {
+            router.push('/empresa/dashboard')
+          } else {
+            router.push('/admin/dashboard')
+          }
+        }, 2000)
+      }
+    } catch (err: any) {
+      setError(err.message || 'Erro ao criar conta. Tente novamente.')
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  if (success) {
+    return (
+      <div className="w-full max-w-md">
+        <div className="bg-white rounded-2xl shadow-xl p-8 border border-[#E8EAE0] text-center">
+          <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+            <CheckCircle className="h-10 w-10 text-green-600" />
+          </div>
+          <h2 className="text-2xl font-bold text-[#2D343A]">Conta criada com sucesso!</h2>
+          <p className="text-[#708090] mt-2">
+            Bem-vindo(a) à ZENTHOS! Você será redirecionado(a) em instantes.
+          </p>
+          <div className="mt-4 animate-pulse text-[#8B0000]">Aguarde...</div>
+        </div>
+      </div>
+    )
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-[#F8F4E6] px-4 py-8">
-      <div className="w-full max-w-md">
-        <div className="bg-white rounded-2xl shadow-xl p-8 border border-[#E8EAE0]">
-          
-          {/* ===== LOGO 2cm (SEM TEXTO) ===== */}
-          <div className="text-center mb-8">
-            <Link href="/" className="inline-flex items-center justify-center group">
-              <div className="relative h-[2cm] w-auto">
-                <img 
-                  src="/logo.png" 
-                  alt="ZENTHOS" 
-                  className="h-full w-auto object-contain"
-                />
-              </div>
-            </Link>
+    <div className="w-full max-w-md">
+      <div className="bg-white rounded-2xl shadow-xl p-8 border border-[#E8EAE0]">
+        {/* LOGO */}
+        <div className="text-center mb-8">
+          <img src="/logo.png" alt="ZENTHOS" className="h-[1.5cm] w-auto mx-auto object-contain" />
+          <h2 className="text-2xl font-bold text-[#2D343A] mt-4">Crie sua conta</h2>
+          <p className="text-sm text-[#708090] mt-1">Comece sua jornada na ZENTHOS</p>
+        </div>
+
+        {error && (
+          <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg mb-4 text-sm">
+            {error}
+          </div>
+        )}
+
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div>
+            <label className="block text-sm font-medium text-[#2D343A] mb-1.5">Nome completo</label>
+            <input
+              type="text"
+              required
+              className="w-full px-4 py-3 border border-[#E8EAE0] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#8B0000] transition"
+              placeholder="Seu nome completo"
+              value={form.nome}
+              onChange={(e) => setForm({...form, nome: e.target.value})}
+            />
           </div>
 
-          <div className="text-center mb-8">
-            <h2 className="text-2xl font-bold text-[#2D343A]">Crie sua conta</h2>
-            <p className="text-sm text-[#708090] mt-1">Comece sua jornada</p>
+          <div>
+            <label className="block text-sm font-medium text-[#2D343A] mb-1.5">Email</label>
+            <input
+              type="email"
+              required
+              className="w-full px-4 py-3 border border-[#E8EAE0] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#8B0000] transition"
+              placeholder="seu@email.com"
+              value={form.email}
+              onChange={(e) => setForm({...form, email: e.target.value})}
+            />
           </div>
 
-          {erro && (
-            <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg">
-              <p className="text-sm text-red-600">{erro}</p>
-            </div>
-          )}
-
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div>
-              <label className="block text-sm font-medium text-[#2D343A] mb-1.5">
-                Nome completo
-              </label>
+          <div>
+            <label className="block text-sm font-medium text-[#2D343A] mb-1.5">Senha</label>
+            <div className="relative">
               <input
-                type="text"
+                type={showPassword ? 'text' : 'password'}
                 required
-                className="w-full px-4 py-3 border border-[#E8EAE0] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#8B0000] focus:border-transparent transition-all duration-200 bg-[#F8F4E6]/50"
-                value={form.nome}
-                onChange={(e) => setForm({...form, nome: e.target.value})}
-                placeholder="Seu nome completo"
+                minLength={6}
+                className="w-full px-4 py-3 border border-[#E8EAE0] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#8B0000] transition pr-12"
+                placeholder="•••••••• (mínimo 6 caracteres)"
+                value={form.password}
+                onChange={(e) => setForm({...form, password: e.target.value})}
               />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-[#708090] hover:text-[#2D343A]"
+              >
+                {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
+              </button>
             </div>
+          </div>
 
-            <div>
-              <label className="block text-sm font-medium text-[#2D343A] mb-1.5">
-                Email
-              </label>
-              <input
-                type="email"
-                required
-                className="w-full px-4 py-3 border border-[#E8EAE0] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#8B0000] focus:border-transparent transition-all duration-200 bg-[#F8F4E6]/50"
-                value={form.email}
-                onChange={(e) => setForm({...form, email: e.target.value})}
-                placeholder="seu@email.com"
-              />
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-[#2D343A] mb-1.5">
-                Senha
-              </label>
-              <div className="relative">
-                <input
-                  type={showPassword ? 'text' : 'password'}
-                  required
-                  className="w-full px-4 py-3 border border-[#E8EAE0] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#8B0000] focus:border-transparent transition-all duration-200 bg-[#F8F4E6]/50 pr-12"
-                  value={form.password}
-                  onChange={(e) => setForm({...form, password: e.target.value})}
-                  placeholder="••••••••"
-                />
-                <button
-                  type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-[#708090] hover:text-[#2D343A] transition-colors"
-                >
-                  {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
-                </button>
-              </div>
-            </div>
-
-            <button
-              type="submit"
-              disabled={loading}
-              className="w-full py-3.5 bg-[#8B0000] hover:bg-[#700000] text-white font-semibold rounded-lg transition-all duration-300 shadow-md shadow-[#8B0000]/20 hover:shadow-lg hover:-translate-y-0.5 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+          <div>
+            <label className="block text-sm font-medium text-[#2D343A] mb-1.5">Tipo de conta</label>
+            <select
+              className="w-full px-4 py-3 border border-[#E8EAE0] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#8B0000] transition"
+              value={form.role}
+              onChange={(e) => setForm({...form, role: e.target.value})}
             >
-              {loading ? 'Criando conta...' : 'Criar conta'}
-            </button>
-          </form>
-
-          <div className="mt-6 text-center">
-            <p className="text-sm text-[#708090]">
-              Já tem uma conta?{' '}
-              <Link href="/login" className="text-[#8B0000] hover:text-[#700000] font-medium transition-colors">
-                Faça login
-              </Link>
-            </p>
+              <option value="candidato">👤 Candidato</option>
+              <option value="empresa">🏢 Empresa</option>
+            </select>
           </div>
 
-          <div className="mt-8 pt-6 border-t border-[#E8EAE0]">
-            <p className="text-xs text-[#708090] text-center">
-              ✅ Após o cadastro, você será redirecionado para completar seu perfil.
-            </p>
-          </div>
+          <button
+            type="submit"
+            disabled={loading}
+            className="w-full py-3.5 bg-[#8B0000] hover:bg-[#700000] text-white font-semibold rounded-lg transition-all duration-300 shadow-md shadow-[#8B0000]/20 hover:shadow-lg hover:-translate-y-0.5 flex items-center justify-center gap-2 disabled:opacity-50"
+          >
+            {loading ? 'Criando conta...' : (
+              <>
+                <UserPlus className="h-5 w-5" />
+                Criar conta
+              </>
+            )}
+          </button>
+        </form>
+
+        <div className="mt-6 pt-6 border-t border-[#E8EAE0] text-center">
+          <Link href="/login" className="text-[#8B0000] hover:underline text-sm font-medium">
+            Já tem uma conta? Faça login
+          </Link>
         </div>
       </div>
     </div>
