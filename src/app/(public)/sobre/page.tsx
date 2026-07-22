@@ -3,19 +3,7 @@
 import { motion } from 'framer-motion'
 import Link from 'next/link'
 import { 
-  ArrowRight, 
-  Users, 
-  Target, 
-  Eye, 
-  Star, 
-  Shield, 
-  Zap, 
-  Globe, 
-  TrendingUp,
-  Award,
-  Building2,
-  CheckCircle,
-  Crown
+  ArrowRight, Users, Target, Eye, Star 
 } from 'lucide-react'
 
 const fadeUp = {
@@ -23,14 +11,12 @@ const fadeUp = {
   visible: { opacity: 1, y: 0 },
 }
 
-export default function Sobre() {
+export default function SobrePage() {
   return (
     <div className="min-h-screen bg-[#F8F4E6]">
       
-      {/* ===== HERO ===== */}
       <section className="relative py-20 md:py-28 bg-[#2D343A] overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-r from-[#8B0000]/20 to-transparent"></div>
-        <div className="absolute top-0 right-0 w-1/3 h-full bg-[#8B0000]/5 rounded-full blur-3xl"></div>
         <div className="container mx-auto px-4 relative z-10">
           <div className="max-w-3xl">
             <motion.div 
@@ -64,7 +50,6 @@ export default function Sobre() {
         </div>
       </section>
 
-      {/* ===== MISSÃO, VISÃO, VALORES ===== */}
       <section className="py-20 md:py-28 bg-white">
         <div className="container mx-auto px-4">
           <div className="text-center mb-14">
@@ -73,9 +58,6 @@ export default function Sobre() {
               Nossa <span className="text-[#8B0000]">Essência</span>
             </h2>
             <div className="w-16 h-1 bg-[#8B0000] rounded-full mx-auto mt-4"></div>
-            <p className="mt-4 text-[#708090] max-w-2xl mx-auto">
-              Construímos o futuro das organizações através de estratégia, inovação e transformação humana
-            </p>
           </div>
 
           <div className="grid gap-8 md:grid-cols-3">
@@ -92,8 +74,7 @@ export default function Sobre() {
               <h3 className="text-2xl font-bold text-[#2D343A]">Missão</h3>
               <div className="w-12 h-0.5 bg-[#8B0000] mx-auto my-4"></div>
               <p className="text-[#708090] leading-relaxed">
-                Ativar o máximo potencial das organizações por meio de estratégia baseada em dados, 
-                tecnologia aplicada e desenvolvimento humano integrado.
+                Ativar o máximo potencial das organizações por meio de estratégia baseada em dados.
               </p>
             </motion.div>
 
@@ -110,8 +91,7 @@ export default function Sobre() {
               <h3 className="text-2xl font-bold">Visão</h3>
               <div className="w-12 h-0.5 bg-[#E3C9A8] mx-auto my-4"></div>
               <p className="text-white/80 leading-relaxed">
-                Ser a consultoria mais eficiente e inspiradora do Brasil, referência em 
-                transformação organizacional, resultados e valor sustentável.
+                Ser a consultoria mais eficiente e inspiradora do Brasil, referência em transformação.
               </p>
             </motion.div>
 
@@ -128,15 +108,13 @@ export default function Sobre() {
               <h3 className="text-2xl font-bold text-[#2D343A]">Valores</h3>
               <div className="w-12 h-0.5 bg-[#8B0000] mx-auto my-4"></div>
               <p className="text-[#708090] leading-relaxed">
-                Rigor técnico, transparência, inovação, sustentabilidade, 
-                parceria genuína e resultados tangíveis para nossos clientes.
+                Rigor técnico, transparência, inovação e resultados tangíveis para nossos clientes.
               </p>
             </motion.div>
           </div>
         </div>
       </section>
 
-      {/* ===== NÚMEROS ===== */}
       <section className="py-20 md:py-28 bg-[#2D343A]">
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
@@ -160,79 +138,6 @@ export default function Sobre() {
         </div>
       </section>
 
-      {/* ===== DIFERENCIAIS ===== */}
-      <section className="py-20 md:py-28 bg-white">
-        <div className="container mx-auto px-4">
-          <div className="text-center mb-14">
-            <p className="text-xs tracking-[0.36em] text-[#8B0000] uppercase font-medium">Diferenciais</p>
-            <h2 className="mt-4 font-serif text-4xl text-[#2D343A] md:text-5xl">
-              Por que <span className="text-[#8B0000]">ZENTHOS</span>
-            </h2>
-            <div className="w-16 h-1 bg-[#8B0000] rounded-full mx-auto mt-4"></div>
-          </div>
-
-          <div className="grid gap-6 md:grid-cols-3">
-            <motion.div 
-              className="bg-[#F8F4E6] border border-[#E8EAE0] rounded-2xl p-8 hover:shadow-xl hover:-translate-y-2 transition-all duration-300"
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true, amount: 0.3 }}
-              variants={fadeUp}
-            >
-              <div className="flex items-center gap-4 mb-4">
-                <div className="w-12 h-12 bg-[#8B0000]/10 rounded-xl flex items-center justify-center text-[#8B0000]">
-                  <Globe className="h-6 w-6" />
-                </div>
-                <h3 className="text-lg font-bold text-[#2D343A]">Visão Global</h3>
-              </div>
-              <p className="text-[#708090] text-sm leading-relaxed">
-                Padrões internacionais e melhores práticas aplicadas à realidade brasileira, 
-                com metodologias testadas globalmente.
-              </p>
-            </motion.div>
-
-            <motion.div 
-              className="bg-[#F8F4E6] border border-[#E8EAE0] rounded-2xl p-8 hover:shadow-xl hover:-translate-y-2 transition-all duration-300"
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true, amount: 0.3 }}
-              variants={fadeUp}
-            >
-              <div className="flex items-center gap-4 mb-4">
-                <div className="w-12 h-12 bg-[#8B0000]/10 rounded-xl flex items-center justify-center text-[#8B0000]">
-                  <Zap className="h-6 w-6" />
-                </div>
-                <h3 className="text-lg font-bold text-[#2D343A]">Tecnologia Aplicada</h3>
-              </div>
-              <p className="text-[#708090] text-sm leading-relaxed">
-                IA e análise de dados para decisões estratégicas, com plataforma SaaS 
-                integrada para gestão de talentos e processos.
-              </p>
-            </motion.div>
-
-            <motion.div 
-              className="bg-[#F8F4E6] border border-[#E8EAE0] rounded-2xl p-8 hover:shadow-xl hover:-translate-y-2 transition-all duration-300"
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true, amount: 0.3 }}
-              variants={fadeUp}
-            >
-              <div className="flex items-center gap-4 mb-4">
-                <div className="w-12 h-12 bg-[#8B0000]/10 rounded-xl flex items-center justify-center text-[#8B0000]">
-                  <Users className="h-6 w-6" />
-                </div>
-                <h3 className="text-lg font-bold text-[#2D343A]">Excelência Humana</h3>
-              </div>
-              <p className="text-[#708090] text-sm leading-relaxed">
-                Profissionais especializados em desenvolvimento humano, cultura organizacional 
-                e transformação de lideranças.
-              </p>
-            </motion.div>
-          </div>
-        </div>
-      </section>
-
-      {/* ===== CTA ===== */}
       <section className="py-16 md:py-20 bg-[#8B0000]">
         <div className="container mx-auto px-4 text-center">
           <h2 className="font-serif text-3xl md:text-4xl text-white">
