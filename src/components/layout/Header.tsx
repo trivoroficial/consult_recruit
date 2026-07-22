@@ -10,7 +10,7 @@ export function Header() {
   const pathname = usePathname()
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
 
-  // NÃO MOSTRAR O HEADER EM PÁGINAS DE DASHBOARD
+  // NÃO MOSTRAR O HEADER EM PÁGINAS DE DASHBOARD E AUTH
   const isDashboard = pathname?.startsWith('/admin') || 
                       pathname?.startsWith('/empresa') || 
                       pathname?.startsWith('/candidato') ||
@@ -23,8 +23,7 @@ export function Header() {
 
   const navItems = [
     { label: 'Início', href: '/' },
-    { label: 'Vagas', href: '/vagas' },
-    { label: 'Empresas', href: '/empresas' },
+    { label: 'Serviços', href: '/servicos' },
     { label: 'Sobre', href: '/sobre' },
     { label: 'Contato', href: '/contato' },
   ]
