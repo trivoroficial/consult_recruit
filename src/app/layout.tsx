@@ -1,20 +1,21 @@
-// src/app/(paginas)/layout.tsx
-import { ReactNode } from 'react'
 import { Header } from '@/components/layout/Header'
-import { Footer } from '@/components/layout/Footer'
+import { Footer } '@/components/layout/Footer'
+import './globals.css'
 
-export default function PaginasLayout({
+export default function RootLayout({
   children,
 }: {
-  children: ReactNode
+  children: React.ReactNode
 }) {
   return (
-    <div className="flex flex-col min-h-screen">
-      <Header />
-      <main className="flex-1">
-        {children}
-      </main>
-      <Footer />
-    </div>
+    <html lang="pt-BR">
+      <body className="flex flex-col min-h-screen">
+        <Header />
+        <main className="flex-1">
+          {children}
+        </main>
+        <Footer />
+      </body>
+    </html>
   )
 }
