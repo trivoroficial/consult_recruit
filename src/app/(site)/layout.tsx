@@ -1,9 +1,9 @@
-// src/app/(public)/layout.tsx
+// src/app/(site)/layout.tsx
 import { ReactNode } from 'react'
 import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
 
-export default function PublicLayout({
+export default function SiteLayout({
   children,
 }: {
   children: ReactNode
