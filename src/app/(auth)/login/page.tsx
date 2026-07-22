@@ -1,172 +1,153 @@
+// src/app/(auth)/login/page.tsx
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
-import { Eye, EyeOff, ArrowRight } from 'lucide-react'
+import { Eye, EyeOff, LogIn } from 'lucide-react'
+import { supabase } from '@/lib/supabase/client'
 
 export default function Login() {
   const router = useRouter()
-  const [showPassword, setShowPassword] = useState(false)
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [showPassword, setShowPassword] = useState(false)
   const [loading, setLoading] = useState(false)
-  const [erro, setErro] = useState('')
+  const [error, setError] = useState('')
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  useEffect(() => {
+    const checkUser = async () => {
+      const { data: { user } } = await supabase.auth.getUser()
+      if (user) {
+        // Buscar role do usuário
+        const { data: userData } = await supabase
+          .from('usuarios')
+          .select('role')
+          .eq('id', user.id)
+          .single()
+
+        const role = userData?.role || 'admin'
+        
+        if (role === 'admin') router.push('/admin/dashboard')
+        else if (role === 'empresa') router.push('/empresa/dashboard')
+        else if (role === 'candidato') router.push('/candidato/dashboard')
+        else router.push('/admin/dashboard')
+      }
+    }
+    checkUser()
+  }, [router])
+
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault()
     setLoading(true)
-    setErro('')
-    
-    setTimeout(() => {
-      setLoading(false)
-      
-      if (email === 'admin@zenthos.com' && password === 'admin123') {
-        const userData = JSON.stringify({ 
-          name: 'Administrador', 
-          email, 
-          role: 'admin',
-          perfilCompleto: true 
-        })
-        localStorage.setItem('zenthos_user', userData)
-        document.cookie = `zenthos_user=${encodeURIComponent(userData)}; path=/; max-age=86400`
-        router.push('/admin/dashboard')
-        return
-      } 
-      
-      if (email === 'empresa@zenthos.com' && password === 'empresa123') {
-        const userData = JSON.stringify({ 
-          name: 'Empresa XPTO', 
-          email, 
-          role: 'empresa',
-          perfilCompleto: true 
-        })
-        localStorage.setItem('zenthos_user', userData)
-        document.cookie = `zenthos_user=${encodeURIComponent(userData)}; path=/; max-age=86400`
-        router.push('/empresa/dashboard')
-        return
-      } 
-      
-      if (email === 'candidato@zenthos.com' && password === 'candidato123') {
-        const userData = JSON.stringify({ 
-          name: 'João Silva', 
-          email, 
-          role: 'candidato',
-          perfilCompleto: true 
-        })
-        localStorage.setItem('zenthos_user', userData)
-        document.cookie = `zenthos_user=${encodeURIComponent(userData)}; path=/; max-age=86400`
-        router.push('/candidato/dashboard')
-        return
+    setError('')
+
+    try {
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      })
+
+      if (error) throw error
+
+      if (data.user) {
+        // Buscar role do usuário
+        const { data: userData } = await supabase
+          .from('usuarios')
+          .select('role')
+          .eq('id', data.user.id)
+          .single()
+
+        const role = userData?.role || 'admin'
+        
+        // Salvar no localStorage para compatibilidade
+        localStorage.setItem('zenthos_user', JSON.stringify({
+          email: data.user.email,
+          name: data.user.email?.split('@')[0] || 'Usuário',
+          role: role,
+          id: data.user.id
+        }))
+
+        if (role === 'admin') router.push('/admin/dashboard')
+        else if (role === 'empresa') router.push('/empresa/dashboard')
+        else if (role === 'candidato') router.push('/candidato/dashboard')
+        else router.push('/admin/dashboard')
       }
-      
-      setErro('Email ou senha inválidos')
-    }, 1500)
+    } catch (err: any) {
+      setError(err.message || 'Erro ao fazer login. Verifique suas credenciais.')
+    } finally {
+      setLoading(false)
+    }
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-[#F8F4E6] px-4">
-      <div className="w-full max-w-md">
-        <div className="bg-white rounded-2xl shadow-xl p-8 border border-[#E8EAE0]">
-          
-          {/* ===== LOGO 2cm (SEM TEXTO) ===== */}
-          <div className="text-center mb-8">
-            <Link href="/" className="inline-flex items-center justify-center group">
-              <div className="relative h-[2cm] w-auto">
-                <img 
-                  src="/logo.png" 
-                  alt="ZENTHOS" 
-                  className="h-full w-auto object-contain"
-                />
-              </div>
-            </Link>
+    <div className="w-full max-w-md">
+      <div className="bg-white rounded-2xl shadow-xl p-8 border border-[#E8EAE0]">
+        {/* LOGO */}
+        <div className="text-center mb-8">
+          <img src="/logo.png" alt="ZENTHOS" className="h-[1.5cm] w-auto mx-auto object-contain" />
+          <h2 className="text-2xl font-bold text-[#2D343A] mt-4">Acesse sua conta</h2>
+          <p className="text-sm text-[#708090] mt-1">Entre com suas credenciais</p>
+        </div>
+
+        {error && (
+          <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg mb-4 text-sm">
+            {error}
+          </div>
+        )}
+
+        <form onSubmit={handleLogin} className="space-y-4">
+          <div>
+            <label className="block text-sm font-medium text-[#2D343A] mb-1.5">Email</label>
+            <input
+              type="email"
+              required
+              className="w-full px-4 py-3 border border-[#E8EAE0] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#8B0000] transition"
+              placeholder="seu@email.com"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
           </div>
 
-          <div className="text-center mb-8">
-            <h2 className="text-2xl font-bold text-[#2D343A]">Bem-vindo de volta</h2>
-            <p className="text-sm text-[#708090] mt-1">Acesse sua conta</p>
-          </div>
-
-          {erro && (
-            <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg">
-              <p className="text-sm text-red-600">{erro}</p>
-            </div>
-          )}
-
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div>
-              <label className="block text-sm font-medium text-[#2D343A] mb-1.5">
-                Email
-              </label>
+          <div>
+            <label className="block text-sm font-medium text-[#2D343A] mb-1.5">Senha</label>
+            <div className="relative">
               <input
-                type="email"
+                type={showPassword ? 'text' : 'password'}
                 required
-                className="w-full px-4 py-3 border border-[#E8EAE0] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#8B0000] focus:border-transparent transition-all duration-200 bg-[#F8F4E6]/50"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="seu@email.com"
+                className="w-full px-4 py-3 border border-[#E8EAE0] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#8B0000] transition pr-12"
+                placeholder="••••••••"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
               />
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-[#2D343A] mb-1.5">
-                Senha
-              </label>
-              <div className="relative">
-                <input
-                  type={showPassword ? 'text' : 'password'}
-                  required
-                  className="w-full px-4 py-3 border border-[#E8EAE0] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#8B0000] focus:border-transparent transition-all duration-200 bg-[#F8F4E6]/50 pr-12"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  placeholder="••••••••"
-                />
-                <button
-                  type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-[#708090] hover:text-[#2D343A] transition-colors"
-                >
-                  {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
-                </button>
-              </div>
-            </div>
-
-            <div className="flex items-center justify-between text-sm">
-              <label className="flex items-center gap-2 text-[#708090] cursor-pointer">
-                <input type="checkbox" className="rounded border-[#E8EAE0] text-[#8B0000] focus:ring-[#8B0000]" />
-                Lembrar-me
-              </label>
-              <Link href="/recuperar-senha" className="text-[#8B0000] hover:text-[#700000] transition-colors font-medium">
-                Esqueceu a senha?
-              </Link>
-            </div>
-
-            <button
-              type="submit"
-              disabled={loading}
-              className="w-full py-3.5 bg-[#8B0000] hover:bg-[#700000] text-white font-semibold rounded-lg transition-all duration-300 shadow-md shadow-[#8B0000]/20 hover:shadow-lg hover:-translate-y-0.5 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              {loading ? 'Entrando...' : 'Entrar'}
-            </button>
-          </form>
-
-          <div className="mt-6 text-center">
-            <p className="text-sm text-[#708090]">
-              Não tem uma conta?{' '}
-              <Link href="/cadastro" className="text-[#8B0000] hover:text-[#700000] font-medium transition-colors">
-                Cadastre-se
-              </Link>
-            </p>
-          </div>
-
-          <div className="mt-8 pt-6 border-t border-[#E8EAE0]">
-            <p className="text-xs text-[#708090] text-center mb-3">🔑 Credenciais de teste</p>
-            <div className="grid grid-cols-1 gap-1.5 text-xs text-[#708090]">
-              <p><span className="font-medium text-[#2D343A]">Admin:</span> admin@zenthos.com / admin123</p>
-              <p><span className="font-medium text-[#2D343A]">Empresa:</span> empresa@zenthos.com / empresa123</p>
-              <p><span className="font-medium text-[#2D343A]">Candidato:</span> candidato@zenthos.com / candidato123</p>
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-[#708090] hover:text-[#2D343A]"
+              >
+                {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
+              </button>
             </div>
           </div>
+
+          <button
+            type="submit"
+            disabled={loading}
+            className="w-full py-3.5 bg-[#8B0000] hover:bg-[#700000] text-white font-semibold rounded-lg transition-all duration-300 shadow-md shadow-[#8B0000]/20 hover:shadow-lg hover:-translate-y-0.5 flex items-center justify-center gap-2 disabled:opacity-50"
+          >
+            {loading ? 'Entrando...' : (
+              <>
+                <LogIn className="h-5 w-5" />
+                Entrar
+              </>
+            )}
+          </button>
+        </form>
+
+        <div className="mt-6 pt-6 border-t border-[#E8EAE0] text-center">
+          <Link href="/cadastro" className="text-[#8B0000] hover:underline text-sm font-medium">
+            Não tem uma conta? Cadastre-se
+          </Link>
         </div>
       </div>
     </div>
