@@ -9,6 +9,17 @@ export function Header() {
   const pathname = usePathname()
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
 
+  // SÓ NÃO MOSTRAR EM DASHBOARDS E AUTH
+  const isHidden = pathname?.startsWith('/admin') || 
+                   pathname?.startsWith('/empresa') || 
+                   pathname?.startsWith('/candidato') ||
+                   pathname?.startsWith('/login') ||
+                   pathname?.startsWith('/cadastro')
+
+  if (isHidden) {
+    return null
+  }
+
   const navItems = [
     { label: 'Início', href: '/' },
     { label: 'Serviços', href: '/servicos' },
