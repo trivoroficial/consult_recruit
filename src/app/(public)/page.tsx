@@ -17,7 +17,7 @@ const whatsappMessage = "Olá! Gostaria de conhecer as soluções da ZENTHOS.";
 const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(whatsappMessage)}`;
 const emailContato = "contato@zenthos.com.br";
 
-// ===== VAGAS DESTAQUE (SEM SALÁRIO) =====
+// ===== VAGAS DESTAQUE =====
 const vagasDestaque = [
   {
     id: 1,
@@ -94,7 +94,7 @@ const fadeUp = {
   visible: { opacity: 1, y: 0 },
 };
 
-export default function Home() {
+export default function HomePage() {
   const [formState, setFormState] = useState({ nome: "", telefone: "", empresa: "", email: "", mensagem: "" });
   const [formStatus, setFormStatus] = useState<"idle" | "sending" | "success" | "error">("idle");
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -128,10 +128,8 @@ export default function Home() {
     }, 1500);
   };
 
-  const currentVaga = vagasDestaque[currentSlide];
-
   return (
-    <main className="relative min-h-screen overflow-x-hidden">
+    <div className="relative min-h-screen overflow-x-hidden">
       
       {/* ===== HERO ===== */}
       <section ref={heroRef} id="home" className="relative flex min-h-[90vh] items-center overflow-hidden pt-20 bg-[#F8F4E6]">
@@ -206,23 +204,20 @@ export default function Home() {
           </div>
 
           <div className="relative">
-            {/* CARROSSEL */}
             <div className="overflow-hidden rounded-2xl">
               <div 
                 className="flex transition-transform duration-700 ease-out"
                 style={{ transform: `translateX(-${currentSlide * 100}%)` }}
               >
-                {vagasDestaque.map((vaga, index) => (
+                {vagasDestaque.map((vaga) => (
                   <div key={vaga.id} className="w-full flex-shrink-0 px-1">
                     <div className="relative bg-gradient-to-br from-white to-[#F8F4E6] rounded-2xl p-8 border border-[#E8EAE0] shadow-sm hover:shadow-xl transition-all duration-500 group">
-                      {/* Badge Premium */}
                       <div className="absolute top-4 right-4">
                         <span className={`px-3 py-1 rounded-full text-xs font-semibold text-white shadow-lg ${vaga.badgeColor}`}>
                           {vaga.badge}
                         </span>
                       </div>
 
-                      {/* Conteúdo */}
                       <div className="flex flex-col md:flex-row md:items-center gap-6">
                         <div className="flex-1">
                           <div className="flex items-center gap-3 mb-2">
@@ -269,7 +264,6 @@ export default function Home() {
                         </div>
                       </div>
 
-                      {/* Linha decorativa */}
                       <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-[#8B0000] via-[#E3C9A8] to-[#8B0000] opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
                     </div>
                   </div>
@@ -277,7 +271,6 @@ export default function Home() {
               </div>
             </div>
 
-            {/* Botões de navegação - Premium */}
             <button 
               onClick={prevSlide}
               className="absolute -left-4 top-1/2 -translate-y-1/2 p-3 bg-white rounded-full shadow-lg hover:shadow-xl transition-all duration-300 hover:bg-[#F8F4E6] border border-[#E8EAE0] hover:border-[#8B0000] group"
@@ -291,7 +284,6 @@ export default function Home() {
               <ChevronRightIcon className="h-5 w-5 text-[#2D343A] group-hover:text-[#8B0000] transition" />
             </button>
 
-            {/* Indicadores Premium */}
             <div className="flex justify-center gap-2 mt-6">
               {vagasDestaque.map((_, index) => (
                 <button
@@ -307,7 +299,6 @@ export default function Home() {
             </div>
           </div>
 
-          {/* Contador de vagas */}
           <div className="flex justify-center mt-4">
             <span className="text-xs text-[#708090]">
               {currentSlide + 1} de {vagasDestaque.length} vagas em destaque
@@ -444,6 +435,6 @@ export default function Home() {
         .font-serif { font-family: 'Playfair Display', Georgia, serif; }
         html { scroll-behavior: smooth; }
       `}</style>
-    </main>
+    </div>
   )
 }
