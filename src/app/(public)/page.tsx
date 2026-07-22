@@ -1,3 +1,4 @@
+// src/app/(public)/page.tsx
 'use client'
 
 import { motion, useScroll, useTransform } from "framer-motion";
@@ -183,7 +184,7 @@ export default function HomePage() {
         <div className="pointer-events-none absolute bottom-0 left-0 right-0 h-40 bg-gradient-to-t from-[#F8F4E6] to-transparent" />
       </section>
 
-      {/* ===== CARROSSEL PREMIUM ===== */}
+      {/* ===== CARROSSEL ===== */}
       <section className="py-16 bg-white border-y border-[#E8EAE0]">
         <div className="container mx-auto px-4">
           <div className="flex items-center justify-between mb-8">
