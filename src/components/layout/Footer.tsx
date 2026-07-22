@@ -1,8 +1,22 @@
 'use client'
 
+import { usePathname } from 'next/navigation'
 import Link from 'next/link'
 
 export function Footer() {
+  const pathname = usePathname()
+
+  // SÓ NÃO MOSTRAR EM DASHBOARDS E AUTH
+  const isHidden = pathname?.startsWith('/admin') || 
+                   pathname?.startsWith('/empresa') || 
+                   pathname?.startsWith('/candidato') ||
+                   pathname?.startsWith('/login') ||
+                   pathname?.startsWith('/cadastro')
+
+  if (isHidden) {
+    return null
+  }
+
   return (
     <footer className="bg-[#1A1A2E] text-white/70 border-t border-white/5">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
