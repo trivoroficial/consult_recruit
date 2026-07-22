@@ -1,110 +1,104 @@
+// src/components/layout/Header.tsx
 'use client'
 
-import { useState, useEffect } from 'react'
 import Link from 'next/link'
+import { usePathname } from 'next/navigation'
 import { Menu, X } from 'lucide-react'
-
-const navLinks = [
-  { id: "home", label: "Início", href: "/" },
-  { id: "sobre", label: "Sobre", href: "/sobre" },
-  { id: "servicos", label: "Serviços", href: "/servicos" },
-  { id: "contato", label: "Contato", href: "/contato" },
-]
+import { useState } from 'react'
 
 export function Header() {
-  const [scrolled, setScrolled] = useState(false)
-  const [menuOpen, setMenuOpen] = useState(false)
+  const pathname = usePathname()
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
 
-  useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 20)
-    window.addEventListener('scroll', handleScroll)
-    return () => window.removeEventListener('scroll', handleScroll)
-  }, [])
+  // NÃO MOSTRAR O HEADER EM PÁGINAS DE DASHBOARD
+  const isDashboard = pathname?.startsWith('/admin') || 
+                      pathname?.startsWith('/empresa') || 
+                      pathname?.startsWith('/candidato') ||
+                      pathname?.startsWith('/login') ||
+                      pathname?.startsWith('/cadastro')
+
+  if (isDashboard) {
+    return null
+  }
+
+  const navItems = [
+    { label: 'Início', href: '/' },
+    { label: 'Vagas', href: '/vagas' },
+    { label: 'Empresas', href: '/empresas' },
+    { label: 'Sobre', href: '/sobre' },
+    { label: 'Contato', href: '/contato' },
+  ]
 
   return (
-    <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-      scrolled ? 'bg-white/95 backdrop-blur-md shadow-lg border-b border-[#E3C9A8]/20' : 'bg-white'
-    }`}>
+    <header className="bg-white border-b border-[#E8EAE0] sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-20">
-          
-          {/* ===== LOGO 2cm ===== */}
-          <Link href="/" className="flex items-center gap-3 group">
-            <div className="relative h-[2cm] w-auto flex-shrink-0">
-              <img 
-                src="/logo.png" 
-                alt="ZENTHOS" 
-                className="h-full w-auto object-contain"
-              />
-            </div>
+          {/* LOGO */}
+          <Link href="/" className="flex items-center">
+            <img src="/logo.png" alt="ZENTHOS" className="h-[1.5cm] w-auto object-contain" />
           </Link>
 
-          {/* ===== MENU DESKTOP ===== */}
-          <nav className="hidden lg:flex items-center gap-8">
-            {navLinks.map((link) => (
-              <Link 
-                key={link.id} 
-                href={link.href} 
-                className="text-sm font-medium text-[#708090] hover:text-[#8B0000] transition-colors duration-200 relative after:absolute after:bottom-[-4px] after:left-0 after:w-0 after:h-0.5 after:bg-[#8B0000] after:transition-all after:duration-300 hover:after:w-full"
+          {/* NAV DESKTOP */}
+          <nav className="hidden md:flex items-center gap-8">
+            {navItems.map((item) => (
+              <Link
+                key={item.href}
+                href={item.href}
+                className={`text-sm font-medium transition ${
+                  pathname === item.href
+                    ? 'text-[#8B0000]'
+                    : 'text-[#708090] hover:text-[#8B0000]'
+                }`}
               >
-                {link.label}
+                {item.label}
               </Link>
             ))}
+            <Link
+              href="/login"
+              className="px-5 py-2.5 bg-[#8B0000] text-white rounded-lg hover:bg-[#700000] transition text-sm font-medium"
+            >
+              Entrar
+            </Link>
           </nav>
 
-          {/* ===== BOTÕES ===== */}
-          <div className="hidden lg:flex items-center gap-3">
-            <Link href="/login">
-              <button className="text-sm font-medium text-[#708090] hover:text-[#8B0000] px-4 py-2 rounded-lg transition-all duration-200 hover:bg-[#F8F4E6]">
-                Entrar
-              </button>
-            </Link>
-            <Link href="/cadastro">
-              <button className="text-sm font-medium text-white bg-[#8B0000] hover:bg-[#700000] px-6 py-2.5 rounded-lg transition-all duration-200 shadow-md shadow-[#8B0000]/20 hover:shadow-xl hover:-translate-y-0.5">
-                Cadastrar
-              </button>
-            </Link>
-          </div>
-
-          {/* BOTÃO MENU MOBILE */}
-          <button 
-            className="lg:hidden p-2 text-[#8B0000]"
-            onClick={() => setMenuOpen(!menuOpen)}
+          {/* BOTÃO MOBILE */}
+          <button
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            className="md:hidden p-2 hover:bg-[#F8F4E6] rounded-lg transition"
           >
-            {menuOpen ? <X size={28} /> : <Menu size={28} />}
+            {mobileMenuOpen ? <X className="h-6 w-6 text-[#2D343A]" /> : <Menu className="h-6 w-6 text-[#2D343A]" />}
           </button>
         </div>
-      </div>
 
-      {/* ===== MENU MOBILE ===== */}
-      {menuOpen && (
-        <div className="lg:hidden bg-white border-t border-[#E3C9A8]/30 absolute w-full shadow-xl">
-          <div className="px-4 py-6 space-y-4">
-            {navLinks.map((link) => (
-              <Link 
-                key={link.id} 
-                href={link.href} 
-                className="block text-base font-medium text-[#708090] hover:text-[#8B0000] py-2"
-                onClick={() => setMenuOpen(false)}
+        {/* NAV MOBILE */}
+        {mobileMenuOpen && (
+          <div className="md:hidden py-4 border-t border-[#E8EAE0]">
+            <div className="flex flex-col gap-3">
+              {navItems.map((item) => (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  onClick={() => setMobileMenuOpen(false)}
+                  className={`text-sm font-medium transition px-2 py-2 rounded-lg ${
+                    pathname === item.href
+                      ? 'text-[#8B0000] bg-[#8B0000]/5'
+                      : 'text-[#708090] hover:text-[#8B0000] hover:bg-[#F8F4E6]'
+                  }`}
+                >
+                  {item.label}
+                </Link>
+              ))}
+              <Link
+                href="/login"
+                onClick={() => setMobileMenuOpen(false)}
+                className="px-5 py-2.5 bg-[#8B0000] text-white rounded-lg hover:bg-[#700000] transition text-sm font-medium text-center"
               >
-                {link.label}
-              </Link>
-            ))}
-            <div className="pt-4 border-t border-gray-100 space-y-3">
-              <Link href="/login" onClick={() => setMenuOpen(false)}>
-                <button className="w-full text-center py-3 text-sm font-medium text-[#708090] border border-[#708090] rounded-lg">
-                  Entrar
-                </button>
-              </Link>
-              <Link href="/cadastro" onClick={() => setMenuOpen(false)}>
-                <button className="w-full text-center py-3 text-sm font-medium text-white bg-[#8B0000] rounded-lg">
-                  Cadastrar
-                </button>
+                Entrar
               </Link>
             </div>
           </div>
-        </div>
-      )}
+        )}
+      </div>
     </header>
   )
 }
