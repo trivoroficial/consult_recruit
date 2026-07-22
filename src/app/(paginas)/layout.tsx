@@ -1,9 +1,9 @@
-// src/app/(site)/layout.tsx
+// src/app/(paginas)/layout.tsx
 import { ReactNode } from 'react'
 import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
 
-export default function SiteLayout({
+export default function PaginasLayout({
   children,
 }: {
   children: ReactNode
