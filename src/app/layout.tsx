@@ -1,25 +1,20 @@
-// src/app/layout.tsx
-import type { Metadata } from 'next'
-import { Inter } from 'next/font/google'
-import './globals.css'
+// src/app/(paginas)/layout.tsx
+import { ReactNode } from 'react'
+import { Header } from '@/components/layout/Header'
+import { Footer } from '@/components/layout/Footer'
 
-const inter = Inter({ subsets: ['latin'] })
-
-export const metadata: Metadata = {
-  title: 'ZENTHOS - Recrutamento e Seleção',
-  description: 'Plataforma de recrutamento e seleção',
-}
-
-export default function RootLayout({
+export default function PaginasLayout({
   children,
 }: {
-  children: React.ReactNode
+  children: ReactNode
 }) {
   return (
-    <html lang="pt-BR">
-      <body className={inter.className}>
+    <div className="flex flex-col min-h-screen">
+      <Header />
+      <main className="flex-1">
         {children}
-      </body>
-    </html>
+      </main>
+      <Footer />
+    </div>
   )
 }
