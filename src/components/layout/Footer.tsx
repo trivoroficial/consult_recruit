@@ -7,7 +7,7 @@ import Link from 'next/link'
 export function Footer() {
   const pathname = usePathname()
 
-  // NÃO MOSTRAR O FOOTER EM PÁGINAS DE DASHBOARD
+  // NÃO MOSTRAR O FOOTER EM PÁGINAS DE DASHBOARD E AUTH
   const isDashboard = pathname?.startsWith('/admin') || 
                       pathname?.startsWith('/empresa') || 
                       pathname?.startsWith('/candidato') ||
@@ -36,8 +36,7 @@ export function Footer() {
             <h4 className="text-white font-semibold mb-4">Navegação</h4>
             <ul className="space-y-2 text-sm">
               <li><Link href="/" className="hover:text-white transition">Início</Link></li>
-              <li><Link href="/vagas" className="hover:text-white transition">Vagas</Link></li>
-              <li><Link href="/empresas" className="hover:text-white transition">Empresas</Link></li>
+              <li><Link href="/servicos" className="hover:text-white transition">Serviços</Link></li>
               <li><Link href="/sobre" className="hover:text-white transition">Sobre</Link></li>
               <li><Link href="/contato" className="hover:text-white transition">Contato</Link></li>
             </ul>
@@ -48,7 +47,6 @@ export function Footer() {
             <h4 className="text-white font-semibold mb-4">Para Candidatos</h4>
             <ul className="space-y-2 text-sm">
               <li><Link href="/cadastro" className="hover:text-white transition">Cadastre-se</Link></li>
-              <li><Link href="/vagas" className="hover:text-white transition">Buscar Vagas</Link></li>
               <li><Link href="/login" className="hover:text-white transition">Acessar Conta</Link></li>
               <li><Link href="/candidato/perfil" className="hover:text-white transition">Meu Perfil</Link></li>
             </ul>
@@ -61,7 +59,6 @@ export function Footer() {
               <li><Link href="/empresa/cadastro" className="hover:text-white transition">Cadastre sua empresa</Link></li>
               <li><Link href="/login" className="hover:text-white transition">Acessar Conta</Link></li>
               <li><Link href="/contato" className="hover:text-white transition">Fale Conosco</Link></li>
-              <li><Link href="/empresa/vagas" className="hover:text-white transition">Publicar Vagas</Link></li>
             </ul>
           </div>
         </div>
