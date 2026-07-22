@@ -10,14 +10,14 @@ export function Header() {
   const pathname = usePathname()
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
 
-  // NÃO MOSTRAR O HEADER EM PÁGINAS DE DASHBOARD E AUTH
-  const isDashboard = pathname?.startsWith('/admin') || 
-                      pathname?.startsWith('/empresa') || 
-                      pathname?.startsWith('/candidato') ||
-                      pathname?.startsWith('/login') ||
-                      pathname?.startsWith('/cadastro')
+  // SÓ NÃO MOSTRAR EM DASHBOARDS E AUTH
+  const isHidden = pathname?.startsWith('/admin') || 
+                   pathname?.startsWith('/empresa') || 
+                   pathname?.startsWith('/candidato') ||
+                   pathname?.startsWith('/login') ||
+                   pathname?.startsWith('/cadastro')
 
-  if (isDashboard) {
+  if (isHidden) {
     return null
   }
 
@@ -32,12 +32,10 @@ export function Header() {
     <header className="bg-white border-b border-[#E8EAE0] sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-20">
-          {/* LOGO */}
           <Link href="/" className="flex items-center">
             <img src="/logo.png" alt="ZENTHOS" className="h-[1.5cm] w-auto object-contain" />
           </Link>
 
-          {/* NAV DESKTOP */}
           <nav className="hidden md:flex items-center gap-8">
             {navItems.map((item) => (
               <Link
@@ -60,16 +58,14 @@ export function Header() {
             </Link>
           </nav>
 
-          {/* BOTÃO MOBILE */}
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             className="md:hidden p-2 hover:bg-[#F8F4E6] rounded-lg transition"
           >
-            {mobileMenuOpen ? <X className="h-6 w-6 text-[#2D343A]" /> : <Menu className="h-6 w-6 text-[#2D343A]" />}
+            {mobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
           </button>
         </div>
 
-        {/* NAV MOBILE */}
         {mobileMenuOpen && (
           <div className="md:hidden py-4 border-t border-[#E8EAE0]">
             <div className="flex flex-col gap-3">
