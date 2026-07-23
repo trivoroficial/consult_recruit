@@ -8,9 +8,9 @@ import { supabase } from '@/lib/supabase/client'
 
 // Função auxiliar para salvar um Cookie que o Middleware consegue ler
 const setCookie = (name: string, value: string, days: number = 7) => {
-  const expires = new Date(Date.now() + days * 864e5).toUTCString();
-  document.cookie = name + '=' + encodeURIComponent(value) + '; expires=' + expires + '; path=/';
-};
+  const expires = new Date(Date.now() + days * 864e5).toUTCString()
+  document.cookie = name + '=' + encodeURIComponent(value) + '; expires=' + expires + '; path=/'
+}
 
 export default function Login() {
   const router = useRouter()
@@ -191,4 +191,14 @@ export default function Login() {
         </div>
 
         <div className="mt-4 p-3 bg-[#F8F4E6] rounded-lg text-center text-xs">
-          <p className="font-medium text-[#2D343A]">
+          <p className="font-medium text-[#2D343A]">🔑 Credenciais de Teste:</p>
+          <p className="mt-1">
+            <span className="text-[#8B0000] font-mono">teste.novo@zenthos.com</span>
+            {' / '}
+            <span className="font-mono">admin@123</span>
+          </p>
+        </div>
+      </div>
+    </div>
+  )
+}
