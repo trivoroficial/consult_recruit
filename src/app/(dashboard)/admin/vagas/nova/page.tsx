@@ -8,37 +8,7 @@ import {
   Briefcase, MapPin, DollarSign, Users, Save, ArrowLeft, 
   CheckCircle, Calendar, Clock, FileText, Award, Eye, EyeOff, Star, Lock, Unlock
 } from 'lucide-react'
-
-// 🚀 SERVER ACTION: Esta função roda no SERVIDOR e salva no Supabase
-async function salvarVagaNoBanco(dadosVaga: any) {
-  'use server'
-  
-  // Importa o cliente do servidor que configuramos
-  const { createClient } = await import('@/lib/supabase/server')
-  const supabase = createClient()
-
-  // Prepara os dados finais para o banco
-  const dadosParaSalvar = {
-    ...dadosVaga,
-    quantidade: parseInt(dadosVaga.quantidade) || 1,
-    candidatos: 0,
-    status: 'Aberta',
-    empresaExibida: dadosVaga.confidencial ? 'Confidencial' : dadosVaga.empresa,
-    created_at: new Date().toISOString()
-  }
-
-  // AQUI É ONDE A MÁGICA ACONTECE: SALVA NO BANCO DE DADOS REAL
-  const { error } = await supabase
-    .from('vagas') // Nome da sua tabela no Supabase
-    .insert([dadosParaSalvar])
-
-  if (error) {
-    console.error('Erro ao salvar no Supabase:', error)
-    return { success: false, message: error.message }
-  }
-
-  return { success: true, message: 'Vaga criada com sucesso!' }
-}
+import { salvarVagaNoBanco } from '@/actions/criarVaga'
 
 export default function NovaVaga() {
   const router = useRouter()
@@ -76,7 +46,7 @@ export default function NovaVaga() {
     setLoading(true)
     setError('')
     
-    // Chama a Server Action que salva no Supabase (adeus localStorage!)
+    // Chama a Server Action que está em um arquivo separado
     const resultado = await salvarVagaNoBanco(form)
 
     setLoading(false)
