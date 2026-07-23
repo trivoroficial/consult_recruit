@@ -5,15 +5,47 @@ import { useRouter } from 'next/navigation'
 import { SidebarAdmin } from '@/components/dashboard/SidebarAdmin'
 import { DashboardFooter } from '@/components/dashboard/DashboardFooter'
 import { 
-  Briefcase, Building2, MapPin, DollarSign, Users, 
-  Save, ArrowLeft, CheckCircle, Calendar, Clock,
-  FileText, Award, Eye, EyeOff, Star, Lock, Unlock
+  Briefcase, MapPin, DollarSign, Users, Save, ArrowLeft, 
+  CheckCircle, Calendar, Clock, FileText, Award, Eye, EyeOff, Star, Lock, Unlock
 } from 'lucide-react'
+
+// 🚀 SERVER ACTION: Esta função roda no SERVIDOR e salva no Supabase
+async function salvarVagaNoBanco(dadosVaga: any) {
+  'use server'
+  
+  // Importa o cliente do servidor que configuramos
+  const { createClient } = await import('@/lib/supabase/server')
+  const supabase = createClient()
+
+  // Prepara os dados finais para o banco
+  const dadosParaSalvar = {
+    ...dadosVaga,
+    quantidade: parseInt(dadosVaga.quantidade) || 1,
+    candidatos: 0,
+    status: 'Aberta',
+    empresaExibida: dadosVaga.confidencial ? 'Confidencial' : dadosVaga.empresa,
+    created_at: new Date().toISOString()
+  }
+
+  // AQUI É ONDE A MÁGICA ACONTECE: SALVA NO BANCO DE DADOS REAL
+  const { error } = await supabase
+    .from('vagas') // Nome da sua tabela no Supabase
+    .insert([dadosParaSalvar])
+
+  if (error) {
+    console.error('Erro ao salvar no Supabase:', error)
+    return { success: false, message: error.message }
+  }
+
+  return { success: true, message: 'Vaga criada com sucesso!' }
+}
 
 export default function NovaVaga() {
   const router = useRouter()
   const [loading, setLoading] = useState(false)
   const [success, setSuccess] = useState(false)
+  const [error, setError] = useState('')
+  
   const [form, setForm] = useState({
     titulo: '',
     empresa: '',
@@ -31,9 +63,7 @@ export default function NovaVaga() {
     quantidade: '1',
     prazo: '',
     responsavel: '',
-    // NOVO CAMPO - CONFIDENCIAL
     confidencial: false,
-    // CARROSSEL
     exibirCarrossel: false,
     badgeCarrossel: 'Destaque',
     corBadge: 'bg-purple-500'
@@ -41,29 +71,22 @@ export default function NovaVaga() {
 
   const empresas = ['Empresa XPTO', 'Indústria ABC', 'Grupo Financeiro', 'Tech Solutions']
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setLoading(true)
+    setError('')
     
-    // Criar nova vaga com ID
-    const novaVaga = {
-      ...form,
-      id: Date.now(),
-      candidatos: 0,
-      status: 'Aberta',
-      empresaExibida: form.confidencial ? 'Confidencial' : form.empresa
-    }
+    // Chama a Server Action que salva no Supabase (adeus localStorage!)
+    const resultado = await salvarVagaNoBanco(form)
 
-    // Pegar vagas existentes do localStorage
-    const existingVagas = JSON.parse(localStorage.getItem('zenthos_vagas') || '[]')
-    existingVagas.push(novaVaga)
-    localStorage.setItem('zenthos_vagas', JSON.stringify(existingVagas))
+    setLoading(false)
 
-    setTimeout(() => {
-      setLoading(false)
+    if (resultado.success) {
       setSuccess(true)
       setTimeout(() => router.push('/admin/vagas'), 2000)
-    }, 1500)
+    } else {
+      setError(resultado.message || 'Erro ao salvar a vaga no banco de dados.')
+    }
   }
 
   return (
@@ -89,7 +112,7 @@ export default function NovaVaga() {
               <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
                 <CheckCircle className="h-10 w-10 text-green-600" />
               </div>
-              <h2 className="text-2xl font-bold text-[#2D343A]">Vaga criada com sucesso!</h2>
+              <h2 className="text-2xl font-bold text-[#2D343A]">Vaga criada e salva no banco!</h2>
               <p className="text-[#708090] mt-2">
                 {form.confidencial ? 'A vaga foi criada como confidencial.' : 'A vaga foi publicada.'}
                 {form.exibirCarrossel && ' Ela aparecerá no carrossel da página inicial.'}
@@ -97,6 +120,13 @@ export default function NovaVaga() {
             </div>
           ) : (
             <form onSubmit={handleSubmit} className="bg-white rounded-2xl shadow-sm border border-[#E8EAE0] p-8">
+              
+              {error && (
+                <div className="mb-6 p-4 bg-red-50 border border-red-200 text-red-700 rounded-lg text-sm">
+                  Erro: {error}
+                </div>
+              )}
+
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {/* INFORMAÇÕES BÁSICAS */}
                 <div className="md:col-span-2">
@@ -369,7 +399,7 @@ export default function NovaVaga() {
               <div className="flex items-center gap-4 mt-8 pt-6 border-t border-[#E8EAE0]">
                 <button type="submit" disabled={loading} className="px-8 py-3 bg-[#8B0000] text-white rounded-lg hover:bg-[#700000] transition font-medium flex items-center gap-2 disabled:opacity-50">
                   <Save className="h-5 w-5" />
-                  {loading ? 'Criando...' : 'Criar Vaga'}
+                  {loading ? 'Salvando no Banco...' : 'Criar Vaga'}
                 </button>
                 <button type="button" onClick={() => router.push('/admin/vagas')} className="px-8 py-3 border border-[#E8EAE0] rounded-lg hover:bg-[#F8F4E6] transition text-[#708090]">
                   Cancelar
