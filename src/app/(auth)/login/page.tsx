@@ -8,12 +8,12 @@ import { supabase } from '@/lib/supabase/client'
 
 export default function Login() {
   const router = useRouter()
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
+  const [email, setEmail] = useState('admin@zenthos.com')
+  const [password, setPassword] = useState('admin!123')
   const [showPassword, setShowPassword] = useState(false)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
-  const [aceitouLGPD, setAceitouLGPD] = useState(false)
+  const [aceitouLGPD, setAceitouLGPD] = useState(true)
   const [mostrarLGPD, setMostrarLGPD] = useState(false)
 
   useEffect(() => {
@@ -38,15 +38,18 @@ export default function Login() {
     setError('')
 
     try {
+      console.log('Tentando login com:', email)
+      
       const { data, error } = await supabase.auth.signInWithPassword({
         email,
         password,
       })
 
+      console.log('Resposta do Supabase:', { data, error })
+
       if (error) throw error
 
       if (data.user) {
-        // SALVAR NO LOCALSTORAGE
         localStorage.setItem('zenthos_user', JSON.stringify({
           email: data.user.email,
           name: data.user.email?.split('@')[0] || 'Usuário',
@@ -57,6 +60,7 @@ export default function Login() {
         router.push('/admin/dashboard')
       }
     } catch (err: any) {
+      console.error('Erro no login:', err)
       setError(err.message || 'Erro ao fazer login. Verifique suas credenciais.')
     } finally {
       setLoading(false)
@@ -92,12 +96,7 @@ export default function Login() {
           </div>
 
           <div>
-            <div className="flex items-center justify-between mb-1.5">
-              <label className="block text-sm font-medium text-[#2D343A]">Senha</label>
-              <Link href="/recuperar-senha" className="text-xs text-[#8B0000] hover:underline">
-                Esqueceu a senha?
-              </Link>
-            </div>
+            <label className="block text-sm font-medium text-[#2D343A] mb-1.5">Senha</label>
             <div className="relative">
               <input
                 type={showPassword ? 'text' : 'password'}
@@ -159,9 +158,14 @@ export default function Login() {
           <button
             type="submit"
             disabled={loading || !aceitouLGPD}
-            className="w-full py-3.5 bg-[#8B0000] hover:bg-[#700000] text-white font-semibold rounded-lg transition-all duration-300 shadow-md shadow-[#8B0000]/20 hover:shadow-lg hover:-translate-y-0.5 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-full py-3.5 bg-[#8B0000] hover:bg-[#700000] text-white font-semibold rounded-lg transition-all duration-300 shadow-md shadow-[#8B0000]/20 hover:shadow-lg hover:-translate-y-0.5 flex items-center justify-center gap-2 disabled:opacity-50"
           >
-            {loading ? 'Entrando...' : (
+            {loading ? (
+              <span className="flex items-center gap-2">
+                <span className="animate-spin h-4 w-4 border-2 border-white border-t-transparent rounded-full" />
+                Entrando...
+              </span>
+            ) : (
               <>
                 <LogIn className="h-5 w-5" />
                 Entrar
@@ -176,10 +180,13 @@ export default function Login() {
           </Link>
         </div>
 
-        <div className="mt-4 text-center text-xs text-[#708090]">
-          <p>Credenciais de teste:</p>
-          <p className="mt-0.5 text-[#8B0000] font-mono">admin@zenthos.com</p>
-          <p className="font-mono">Admin@123456</p>
+        <div className="mt-4 p-3 bg-[#F8F4E6] rounded-lg text-center text-xs">
+          <p className="font-medium text-[#2D343A]">🔑 Credenciais:</p>
+          <p className="mt-1">
+            <span className="text-[#8B0000] font-mono">admin@zenthos.com</span>
+            {' / '}
+            <span className="font-mono">admin!123</span>
+          </p>
         </div>
       </div>
     </div>
