@@ -9,11 +9,18 @@ import {
   Star, StarOff, Lock, Unlock, Filter
 } from 'lucide-react'
 
+// Importando as ações do servidor
+import { 
+  buscarTodasVagas, 
+  atualizarVaga, 
+  excluirVaga 
+} from '@/actions/vagas'
+
 export default function AdminVagas() {
   const router = useRouter()
   const [vagas, setVagas] = useState<any[]>([])
   const [search, setSearch] = useState('')
-  const [editando, setEditando] = useState<number | null>(null)
+  const [editando, setEditando] = useState<string | null>(null) // Mudado para string (UUID do Supabase)
   const [editForm, setEditForm] = useState({ 
     titulo: '', 
     empresa: '', 
@@ -29,71 +36,23 @@ export default function AdminVagas() {
   })
   const [loading, setLoading] = useState(true)
 
-  // CARREGAR VAGAS DO LOCALSTORAGE
+  // CARREGAR VAGAS DO SUPABASE
   useEffect(() => {
-    const saved = localStorage.getItem('zenthos_vagas')
-    if (saved) {
-      setVagas(JSON.parse(saved))
-    } else {
-      // Dados iniciais se não houver nada
-      const initialVagas = [
-        { 
-          id: 1, 
-          titulo: 'Analista Administrativo', 
-          empresa: 'Empresa XPTO', 
-          status: 'Aberta', 
-          candidatos: 12, 
-          exibirCarrossel: true, 
-          badge: 'Destaque', 
-          corBadge: 'bg-purple-500', 
-          confidencial: false,
-          descricao: 'Análise de dados e relatórios',
-          local: 'Uberlândia/MG',
-          tipo: 'CLT'
-        },
-        { 
-          id: 2, 
-          titulo: 'Auxiliar de RH', 
-          empresa: 'Indústria ABC', 
-          status: 'Em análise', 
-          candidatos: 8, 
-          exibirCarrossel: false, 
-          badge: '', 
-          corBadge: 'bg-gray-400', 
-          confidencial: false,
-          descricao: 'Apoio ao departamento de RH',
-          local: 'Uberlândia/MG',
-          tipo: 'CLT'
-        },
-        { 
-          id: 3, 
-          titulo: 'Assistente Financeiro', 
-          empresa: 'Grupo Financeiro', 
-          status: 'Aberta', 
-          candidatos: 5, 
-          exibirCarrossel: false, 
-          badge: 'Urgente', 
-          corBadge: 'bg-red-500', 
-          confidencial: true,
-          descricao: 'Controle financeiro e conciliação',
-          local: 'Uberlândia/MG',
-          tipo: 'PJ'
-        },
-      ]
-      setVagas(initialVagas)
-      localStorage.setItem('zenthos_vagas', JSON.stringify(initialVagas))
+    const carregarVagas = async () => {
+      setLoading(true)
+      const resultado = await buscarTodasVagas()
+      if (resultado.success) {
+        setVagas(resultado.data)
+      } else {
+        console.error('Erro ao carregar:', resultado.message)
+      }
+      setLoading(false)
     }
-    setLoading(false)
+    carregarVagas()
   }, [])
 
-  // SALVAR VAGAS NO LOCALSTORAGE
-  const saveVagas = (data: typeof vagas) => {
-    setVagas(data)
-    localStorage.setItem('zenthos_vagas', JSON.stringify(data))
-  }
-
   // INICIAR EDIÇÃO
-  const handleEdit = (id: number) => {
+  const handleEdit = (id: string) => {
     const vaga = vagas.find(v => v.id === id)
     if (vaga) { 
       setEditForm({ 
@@ -113,17 +72,30 @@ export default function AdminVagas() {
     }
   }
 
-  // SALVAR EDIÇÃO
-  const handleSaveEdit = () => {
+  // SALVAR EDIÇÃO NO SUPABASE
+  const handleSaveEdit = async () => {
     if (editando === null) return
-    const updated = vagas.map(v => 
+    
+    // Atualização otimista na tela (para parecer instantâneo)
+    const updatedLocally = vagas.map(v => 
       v.id === editando ? { 
         ...v, 
         ...editForm,
         empresaExibida: editForm.confidencial ? 'Confidencial' : editForm.empresa
       } : v
     )
-    saveVagas(updated)
+    setVagas(updatedLocally)
+
+    // Envio real para o banco de dados
+    const resultado = await atualizarVaga(editando, editForm)
+    
+    if (!resultado.success) {
+      alert('Erro ao salvar: ' + resultado.message)
+      // Reverte em caso de erro (opcional, mas recomendado)
+      const resultadoRecarrega = await buscarTodasVagas()
+      if (resultadoRecarrega.success) setVagas(resultadoRecarrega.data)
+    }
+
     setEditando(null)
     setEditForm({ 
       titulo: '', empresa: '', status: 'Aberta', candidatos: 0, 
@@ -142,25 +114,42 @@ export default function AdminVagas() {
     })
   }
 
-  // EXCLUIR VAGA
-  const handleDelete = (id: number) => {
-    if (confirm('Tem certeza que deseja excluir esta vaga?')) {
-      saveVagas(vagas.filter(v => v.id !== id))
+  // EXCLUIR VAGA DO SUPABASE
+  const handleDelete = async (id: string) => {
+    if (confirm('Tem certeza que deseja excluir esta vaga? Esta ação não pode ser desfeita.')) {
+      // Remove da tela imediatamente
+      setVagas(vagas.filter(v => v.id !== id))
+      
+      // Exclui do banco
+      const resultado = await excluirVaga(id)
+      if (!resultado.success) {
+        alert('Erro ao excluir: ' + resultado.message)
+        // Recarrega em caso de erro
+        const resultadoRecarrega = await buscarTodasVagas()
+        if (resultadoRecarrega.success) setVagas(resultadoRecarrega.data)
+      }
     }
   }
 
-  // ALTERNAR CARROSSEL
-  const toggleCarrossel = (id: number) => {
-    const updated = vagas.map(v => 
-      v.id === id ? { ...v, exibirCarrossel: !v.exibirCarrossel } : v
-    )
-    saveVagas(updated)
+  // ALTERNAR CARROSSEL NO SUPABASE
+  const toggleCarrossel = async (id: string) => {
+    const vaga = vagas.find(v => v.id === id)
+    if (!vaga) return
+
+    const novoValor = !vaga.exibirCarrossel
+    
+    // Atualiza na tela
+    const updated = vagas.map(v => v.id === id ? { ...v, exibirCarrossel: novoValor } : v)
+    setVagas(updated)
+
+    // Salva no banco (enviando apenas o campo alterado)
+    await atualizarVaga(id, { exibirCarrossel: novoValor })
   }
 
-  // FILTRAR VAGAS
+  // FILTRAR VAGAS (Localmente, para ser rápido)
   const filtered = vagas.filter(v =>
-    v.titulo.toLowerCase().includes(search.toLowerCase()) ||
-    v.empresa.toLowerCase().includes(search.toLowerCase()) ||
+    v.titulo?.toLowerCase().includes(search.toLowerCase()) ||
+    v.empresa?.toLowerCase().includes(search.toLowerCase()) ||
     (v.descricao && v.descricao.toLowerCase().includes(search.toLowerCase()))
   )
 
@@ -170,7 +159,10 @@ export default function AdminVagas() {
       <div className="min-h-screen bg-[#F8F4E6] flex flex-col">
         <SidebarAdmin />
         <div className="flex-1 ml-64 flex items-center justify-center">
-          <div className="text-[#8B0000] text-xl">Carregando vagas...</div>
+          <div className="text-[#8B0000] text-xl flex items-center gap-2">
+            <span className="animate-spin h-5 w-5 border-2 border-[#8B0000] border-t-transparent rounded-full"></span>
+            Carregando vagas do banco...
+          </div>
         </div>
       </div>
     )
@@ -185,7 +177,7 @@ export default function AdminVagas() {
         <header className="bg-white border-b border-[#E8EAE0] px-8 py-4 flex items-center justify-between">
           <div>
             <h1 className="text-2xl font-bold text-[#2D343A]">Vagas</h1>
-            <p className="text-sm text-[#708090]">{vagas.length} vagas cadastradas</p>
+            <p className="text-sm text-[#708090]">{vagas.length} vagas cadastradas no banco de dados</p>
           </div>
           <button 
             onClick={() => router.push('/admin/vagas/nova')}
@@ -350,7 +342,7 @@ export default function AdminVagas() {
                                 onClick={handleSaveEdit}
                                 className="px-4 py-1.5 bg-green-600 text-white rounded-lg hover:bg-green-700 transition flex items-center gap-1"
                               >
-                                <Save className="h-4 w-4" /> Salvar
+                                <Save className="h-4 w-4" /> Salvar no Banco
                               </button>
                               <button 
                                 onClick={handleCancelEdit}
