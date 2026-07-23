@@ -15,24 +15,12 @@ export default function Login() {
   const [error, setError] = useState('')
   const [aceitouLGPD, setAceitouLGPD] = useState(false)
   const [mostrarLGPD, setMostrarLGPD] = useState(false)
-  const [rememberMe, setRememberMe] = useState(false)
 
   useEffect(() => {
     const checkUser = async () => {
       const { data: { user } } = await supabase.auth.getUser()
       if (user) {
-        const { data: userData } = await supabase
-          .from('usuarios')
-          .select('role')
-          .eq('id', user.id)
-          .single()
-
-        const role = userData?.role || 'admin'
-        
-        if (role === 'admin') router.push('/admin/dashboard')
-        else if (role === 'empresa') router.push('/empresa/dashboard')
-        else if (role === 'candidato') router.push('/candidato/dashboard')
-        else router.push('/admin/dashboard')
+        router.push('/admin/dashboard')
       }
     }
     checkUser()
@@ -58,25 +46,15 @@ export default function Login() {
       if (error) throw error
 
       if (data.user) {
-        const { data: userData } = await supabase
-          .from('usuarios')
-          .select('role')
-          .eq('id', data.user.id)
-          .single()
-
-        const role = userData?.role || 'admin'
-        
+        // SALVAR NO LOCALSTORAGE
         localStorage.setItem('zenthos_user', JSON.stringify({
           email: data.user.email,
           name: data.user.email?.split('@')[0] || 'Usuário',
-          role: role,
+          role: 'admin',
           id: data.user.id
         }))
 
-        if (role === 'admin') router.push('/admin/dashboard')
-        else if (role === 'empresa') router.push('/empresa/dashboard')
-        else if (role === 'candidato') router.push('/candidato/dashboard')
-        else router.push('/admin/dashboard')
+        router.push('/admin/dashboard')
       }
     } catch (err: any) {
       setError(err.message || 'Erro ao fazer login. Verifique suas credenciais.')
@@ -88,7 +66,6 @@ export default function Login() {
   return (
     <div className="w-full max-w-md">
       <div className="bg-white rounded-2xl shadow-xl p-8 border border-[#E8EAE0]">
-        {/* LOGO */}
         <div className="text-center mb-8">
           <img src="/logo.png" alt="ZENTHOS" className="h-[1.5cm] w-auto mx-auto object-contain" />
           <h2 className="text-2xl font-bold text-[#2D343A] mt-4">Acesse sua conta</h2>
@@ -140,7 +117,6 @@ export default function Login() {
             </div>
           </div>
 
-          {/* LGPD CHECKBOX */}
           <div className="flex items-start gap-3 p-3 bg-[#F8F4E6] rounded-lg border border-[#E8EAE0]">
             <button
               type="button"
@@ -167,14 +143,7 @@ export default function Login() {
               {mostrarLGPD && (
                 <div className="mt-2 p-3 bg-white rounded-lg border border-[#E8EAE0] text-xs text-[#708090] max-h-40 overflow-y-auto">
                   <p className="font-semibold text-[#2D343A] mb-1">TERMOS DE USO E POLÍTICA DE PRIVACIDADE</p>
-                  <p>A ZENTHOS coleta e armazena seus dados pessoais para fins de recrutamento e seleção. Seus dados serão utilizados exclusivamente para:</p>
-                  <ul className="list-disc pl-4 mt-1 space-y-0.5">
-                    <li>Processos seletivos e candidaturas</li>
-                    <li>Comunicação sobre vagas e oportunidades</li>
-                    <li>Análise de perfil e compatibilidade</li>
-                    <li>Melhoria dos serviços da plataforma</li>
-                  </ul>
-                  <p className="mt-1">Você tem direito a acessar, corrigir ou excluir seus dados a qualquer momento.</p>
+                  <p>A ZENTHOS coleta e armazena seus dados pessoais para fins de recrutamento e seleção.</p>
                   <button
                     type="button"
                     onClick={() => setMostrarLGPD(false)}
@@ -187,26 +156,10 @@ export default function Login() {
             </div>
           </div>
 
-          {/* REMEMBER ME */}
-          <div className="flex items-center gap-2 px-1">
-            <button
-              type="button"
-              onClick={() => setRememberMe(!rememberMe)}
-              className="flex items-center gap-2 text-sm text-[#708090] hover:text-[#2D343A] transition"
-            >
-              {rememberMe ? (
-                <CheckSquare className="h-4 w-4 text-[#8B0000]" />
-              ) : (
-                <Square className="h-4 w-4 text-[#708090]" />
-              )}
-              Lembrar-me
-            </button>
-          </div>
-
           <button
             type="submit"
             disabled={loading || !aceitouLGPD}
-            className="w-full py-3.5 bg-[#8B0000] hover:bg-[#700000] text-white font-semibold rounded-lg transition-all duration-300 shadow-md shadow-[#8B0000]/20 hover:shadow-lg hover:-translate-y-0.5 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:translate-y-0"
+            className="w-full py-3.5 bg-[#8B0000] hover:bg-[#700000] text-white font-semibold rounded-lg transition-all duration-300 shadow-md shadow-[#8B0000]/20 hover:shadow-lg hover:-translate-y-0.5 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {loading ? 'Entrando...' : (
               <>
