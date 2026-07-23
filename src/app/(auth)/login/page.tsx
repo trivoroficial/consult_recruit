@@ -38,29 +38,34 @@ export default function Login() {
     setError('')
 
     try {
-      console.log('Tentando login com:', email)
-      
       const { data, error } = await supabase.auth.signInWithPassword({
         email,
         password,
       })
 
-      console.log('Resposta do Supabase:', { data, error })
-
-      if (error) throw error
+      if (error) {
+        // Verifica se é erro de email não confirmado
+        if (error.message.includes('Email not confirmed')) {
+          throw new Error('Email não confirmado. Verifique sua caixa de entrada.')
+        }
+        throw error
+      }
 
       if (data.user) {
+        // Salva informações do usuário
         localStorage.setItem('zenthos_user', JSON.stringify({
           email: data.user.email,
-          name: data.user.email?.split('@')[0] || 'Usuário',
-          role: 'admin',
+          name: data.user.user_metadata?.name || data.user.email?.split('@')[0] || 'Usuário',
+          role: data.user.user_metadata?.role || 'admin',
           id: data.user.id
         }))
 
-        router.push('/admin/dashboard')
+        // Aguarda um pequeno delay e redireciona
+        setTimeout(() => {
+          router.push('/admin/dashboard')
+        }, 100)
       }
     } catch (err: any) {
-      console.error('Erro no login:', err)
       setError(err.message || 'Erro ao fazer login. Verifique suas credenciais.')
     } finally {
       setLoading(false)
