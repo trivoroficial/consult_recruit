@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { Eye, EyeOff, LogIn, CheckSquare, Square } from 'lucide-react'
@@ -8,7 +8,6 @@ import { supabase } from '@/lib/supabase/client'
 
 export default function Login() {
   const router = useRouter()
-  // ATUALIZADO COM O NOVO USUÁRIO DE TESTE
   const [email, setEmail] = useState('teste.novo@zenthos.com')
   const [password, setPassword] = useState('admin@123')
   
@@ -18,15 +17,8 @@ export default function Login() {
   const [aceitouLGPD, setAceitouLGPD] = useState(true)
   const [mostrarLGPD, setMostrarLGPD] = useState(false)
 
-  useEffect(() => {
-    const checkUser = async () => {
-      const { data: { user } } = await supabase.auth.getUser()
-      if (user) {
-        router.push('/admin/dashboard')
-      }
-    }
-    checkUser()
-  }, [router])
+  // Removemos o useEffect de verificação para evitar conflito de redirecionamento
+  // O redirecionamento será feito apenas pelo botão de submit
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -49,8 +41,6 @@ export default function Login() {
         console.error('Erro do Supabase:', error.message)
         if (error.message.includes('Invalid login credentials')) {
           throw new Error('E-mail ou senha incorretos.')
-        } else if (error.message.includes('Email not confirmed')) {
-          throw new Error('E-mail não confirmado. Verifique sua caixa de entrada.')
         }
         throw error
       }
@@ -58,6 +48,7 @@ export default function Login() {
       if (data.user) {
         console.log('✅ Login realizado com sucesso!', data.user.email)
         
+        // Salva os dados no localStorage
         localStorage.setItem('zenthos_user', JSON.stringify({
           email: data.user.email,
           name: data.user.user_metadata?.name || data.user.email?.split('@')[0] || 'Usuário',
@@ -65,9 +56,9 @@ export default function Login() {
           id: data.user.id
         }))
 
-        setTimeout(() => {
-          router.push('/admin/dashboard')
-        }, 100)
+        // REDIRECIONAMENTO FORÇADO (Infalível)
+        // Usamos window.location.href para evitar bugs de cache do Next.js router
+        window.location.href = '/admin/dashboard'
       }
     } catch (err: any) {
       setError(err.message || 'Erro ao fazer login. Verifique suas credenciais.')
