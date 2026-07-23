@@ -178,7 +178,8 @@ export default function Login() {
 
         <div className="mt-4 text-center text-xs text-[#708090]">
           <p>Credenciais de teste:</p>
-          <p className="mt-0.5">admin@zenthos.com / Admin@123456</p>
+          <p className="mt-0.5 text-[#8B0000] font-mono">admin@zenthos.com</p>
+          <p className="font-mono">Admin@123456</p>
         </div>
       </div>
     </div>
