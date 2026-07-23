@@ -6,10 +6,15 @@ import { SidebarAdmin } from '@/components/dashboard/SidebarAdmin'
 import { DashboardFooter } from '@/components/dashboard/DashboardFooter'
 import { User, Mail, Phone, MapPin, Briefcase, Save, ArrowLeft, CheckCircle } from 'lucide-react'
 
+// Importação centralizada da Action
+import { salvarCandidatoNoBanco } from '@/actions/candidatos'
+
 export default function NovoCandidato() {
   const router = useRouter()
   const [loading, setLoading] = useState(false)
   const [success, setSuccess] = useState(false)
+  const [error, setError] = useState('')
+  
   const [form, setForm] = useState({
     nome: '',
     email: '',
@@ -21,60 +26,24 @@ export default function NovoCandidato() {
     experiencia: '',
     competencias: '',
     resumo: '',
-    senha: '',
     status: 'Disponível'
   })
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setLoading(true)
+    setError('')
 
-    setTimeout(() => {
-      // GERAR ID
-      const id = Date.now()
-      
-      // CRIAR OBJETO DO CANDIDATO
-      const novoCandidato = {
-        id,
-        ...form,
-        score: Math.floor(Math.random() * 30) + 70,
-        dataCadastro: new Date().toISOString()
-      }
+    const resultado = await salvarCandidatoNoBanco(form)
+    
+    setLoading(false)
 
-      // SALVAR NO LOCALSTORAGE
-      const saved = localStorage.getItem('zenthos_candidatos')
-      let candidatos = []
-      if (saved) {
-        candidatos = JSON.parse(saved)
-      }
-      candidatos.push(novoCandidato)
-      localStorage.setItem('zenthos_candidatos', JSON.stringify(candidatos))
-
-      // SALVAR USUÁRIO DO CANDIDATO
-      if (form.email && form.senha) {
-        const userData = {
-          email: form.email,
-          password: form.senha,
-          name: form.nome,
-          role: 'candidato',
-          candidatoId: id
-        }
-        const savedUsers = localStorage.getItem('zenthos_users')
-        let users = []
-        if (savedUsers) {
-          users = JSON.parse(savedUsers)
-        }
-        users.push(userData)
-        localStorage.setItem('zenthos_users', JSON.stringify(users))
-      }
-
-      setLoading(false)
+    if (resultado.success) {
       setSuccess(true)
-
-      setTimeout(() => {
-        router.push('/admin/candidatos')
-      }, 2000)
-    }, 1500)
+      setTimeout(() => router.push('/admin/candidatos'), 2000)
+    } else {
+      setError(resultado.message)
+    }
   }
 
   if (success) {
@@ -89,7 +58,7 @@ export default function NovoCandidato() {
               </div>
               <h2 className="text-2xl font-bold text-[#2D343A]">Candidato cadastrado com sucesso!</h2>
               <p className="text-[#708090] mt-2">
-                O candidato {form.nome} foi cadastrado e já pode acessar a plataforma.
+                O candidato {form.nome} foi salvo no banco de dados.
               </p>
               <button
                 onClick={() => router.push('/admin/candidatos')}
@@ -129,6 +98,12 @@ export default function NovoCandidato() {
 
         <div className="flex-1 p-8">
           <form onSubmit={handleSubmit} className="bg-white rounded-2xl shadow-sm border border-[#E8EAE0] p-8">
+            {error && (
+              <div className="mb-6 p-4 bg-red-50 border border-red-200 text-red-700 rounded-lg text-sm">
+                Erro: {error}
+              </div>
+            )}
+
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
                 <label className="block text-sm font-medium text-[#2D343A] mb-1.5">
@@ -260,20 +235,7 @@ export default function NovoCandidato() {
                   placeholder="Resumo sobre o candidato..."
                 />
               </div>
-              <div>
-                <label className="block text-sm font-medium text-[#2D343A] mb-1.5">
-                  Senha <span className="text-[#8B0000]">*</span>
-                </label>
-                <input
-                  type="password"
-                  required
-                  className="w-full px-4 py-3 border border-[#E8EAE0] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#8B0000] transition"
-                  value={form.senha}
-                  onChange={(e) => setForm({...form, senha: e.target.value})}
-                  placeholder="••••••••"
-                />
-              </div>
-              <div>
+              <div className="md:col-span-2">
                 <label className="block text-sm font-medium text-[#2D343A] mb-1.5">
                   Status
                 </label>
@@ -297,7 +259,7 @@ export default function NovoCandidato() {
                 className="px-8 py-3 bg-[#8B0000] text-white rounded-lg hover:bg-[#700000] transition font-medium flex items-center gap-2 disabled:opacity-50"
               >
                 <Save className="h-5 w-5" />
-                {loading ? 'Cadastrando...' : 'Cadastrar Candidato'}
+                {loading ? 'Salvando no Banco...' : 'Cadastrar Candidato'}
               </button>
               <button
                 type="button"
