@@ -1,3 +1,4 @@
+// src/app/(auth)/layout.tsx
 import { ReactNode } from 'react'
 
 export default function AuthLayout({
@@ -6,10 +7,8 @@ export default function AuthLayout({
   children: ReactNode
 }) {
   return (
-    <div className="min-h-screen flex items-center justify-center bg-[#F8F4E6] p-4">
-      <div className="w-full max-w-md bg-white rounded-xl shadow-lg p-8">
-        {children}
-      </div>
+    <div className="min-h-screen bg-[#F8F4E6] flex items-center justify-center p-4">
+      {children}
     </div>
   )
 }
