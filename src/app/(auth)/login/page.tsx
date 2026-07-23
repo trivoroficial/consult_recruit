@@ -14,8 +14,8 @@ const setCookie = (name: string, value: string, days: number = 7) => {
 
 export default function Login() {
   const router = useRouter()
-  const [email, setEmail] = useState('teste.novo@zenthos.com')
-  const [password, setPassword] = useState('admin@123')
+  const [email, setEmail] = useState('emersondivino@gmail.com') // Já atualizado para o master
+  const [password, setPassword] = useState('divino@2026')       // Já atualizado para o master
   
   const [showPassword, setShowPassword] = useState(false)
   const [loading, setLoading] = useState(false)
@@ -40,28 +40,35 @@ export default function Login() {
         password,
       })
 
+      // 🔒 CORREÇÃO: Tratamento de erro blindado para evitar o crash do "{}"
       if (error) {
-        console.error('Erro do Supabase:', error.message)
-        throw new Error(error.message.includes('Invalid login') ? 'E-mail ou senha incorretos.' : error.message)
+        console.error('Erro detalhado do Supabase:', error)
+        const msg = error?.message || 'Erro de autenticação desconhecido.'
+        const isInvalidLogin = msg.toLowerCase().includes('invalid') || msg.toLowerCase().includes('credenciais')
+        throw new Error(isInvalidLogin ? 'E-mail ou senha incorretos.' : msg)
       }
 
-      if (data.user) {
+      if (data?.user) {
         console.log('✅ 1. Login realizado com sucesso!', data.user.email)
         
+        // 🔑 CORREÇÃO: Lendo 'full_name' conforme definido no script SQL anterior
+        const userName = data.user.user_metadata?.full_name || data.user.user_metadata?.name || data.user.email?.split('@')[0] || 'Usuário'
+        const userRole = data.user.user_metadata?.role || 'admin'
+
         const userData = JSON.stringify({
           email: data.user.email,
-          name: data.user.user_metadata?.name || data.user.email?.split('@')[0] || 'Usuário',
-          role: data.user.user_metadata?.role || 'admin',
+          name: userName, // Agora será "Emerson Divino"
+          role: userRole, // Agora será "admin_master"
           id: data.user.id
         })
 
         // SALVA NO LOCALSTORAGE (para o frontend usar)
         localStorage.setItem('zenthos_user', userData)
         
-        // 🚀 O SEGREDO: SALVA TAMBÉM COMO COOKIE (para o Middleware ler no servidor)
+        // 🚀 SALVA TAMBÉM COMO COOKIE (para o Middleware ler no servidor)
         setCookie('zenthos_user', userData, 7)
 
-        console.log('🚀 2. Cookie definido. Redirecionando...')
+        console.log('🚀 2. Cookie definido com nome:', userName, '. Redirecionando...')
         
         // Força o Next.js a reconhecer a mudança antes de mudar de página
         router.refresh()
@@ -69,10 +76,12 @@ export default function Login() {
         setTimeout(() => {
           window.location.href = '/admin/dashboard'
         }, 300)
+      } else {
+        throw new Error('Dados do usuário não retornados pelo Supabase.')
       }
     } catch (err: any) {
-      console.error('Erro capturado:', err)
-      setError(err.message || 'Erro ao fazer login.')
+      console.error('Erro capturado no login:', err)
+      setError(err?.message || 'Erro ao fazer login.')
       setLoading(false)
     }
   }
@@ -191,11 +200,11 @@ export default function Login() {
         </div>
 
         <div className="mt-4 p-3 bg-[#F8F4E6] rounded-lg text-center text-xs">
-          <p className="font-medium text-[#2D343A]">🔑 Credenciais de Teste:</p>
+          <p className="font-medium text-[#2D343A]">🔑 Credenciais Master:</p>
           <p className="mt-1">
-            <span className="text-[#8B0000] font-mono">teste.novo@zenthos.com</span>
+            <span className="text-[#8B0000] font-mono">emersondivino@gmail.com</span>
             {' / '}
-            <span className="font-mono">admin@123</span>
+            <span className="font-mono">divino@2026</span>
           </p>
         </div>
       </div>
