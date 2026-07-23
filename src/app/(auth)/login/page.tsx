@@ -6,6 +6,12 @@ import Link from 'next/link'
 import { Eye, EyeOff, LogIn, CheckSquare, Square } from 'lucide-react'
 import { supabase } from '@/lib/supabase/client'
 
+// Função auxiliar para salvar um Cookie que o Middleware consegue ler
+const setCookie = (name: string, value: string, days: number = 7) => {
+  const expires = new Date(Date.now() + days * 864e5).toUTCString();
+  document.cookie = name + '=' + encodeURIComponent(value) + '; expires=' + expires + '; path=/';
+};
+
 export default function Login() {
   const router = useRouter()
   const [email, setEmail] = useState('teste.novo@zenthos.com')
@@ -16,9 +22,6 @@ export default function Login() {
   const [error, setError] = useState('')
   const [aceitouLGPD, setAceitouLGPD] = useState(true)
   const [mostrarLGPD, setMostrarLGPD] = useState(false)
-
-  // Removemos o useEffect de verificação para evitar conflito de redirecionamento
-  // O redirecionamento será feito apenas pelo botão de submit
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -39,30 +42,37 @@ export default function Login() {
 
       if (error) {
         console.error('Erro do Supabase:', error.message)
-        if (error.message.includes('Invalid login credentials')) {
-          throw new Error('E-mail ou senha incorretos.')
-        }
-        throw error
+        throw new Error(error.message.includes('Invalid login') ? 'E-mail ou senha incorretos.' : error.message)
       }
 
       if (data.user) {
-        console.log('✅ Login realizado com sucesso!', data.user.email)
+        console.log('✅ 1. Login realizado com sucesso!', data.user.email)
         
-        // Salva os dados no localStorage
-        localStorage.setItem('zenthos_user', JSON.stringify({
+        const userData = JSON.stringify({
           email: data.user.email,
           name: data.user.user_metadata?.name || data.user.email?.split('@')[0] || 'Usuário',
           role: data.user.user_metadata?.role || 'admin',
           id: data.user.id
-        }))
+        })
 
-        // REDIRECIONAMENTO FORÇADO (Infalível)
-        // Usamos window.location.href para evitar bugs de cache do Next.js router
-        window.location.href = '/admin/dashboard'
+        // SALVA NO LOCALSTORAGE (para o frontend usar)
+        localStorage.setItem('zenthos_user', userData)
+        
+        // 🚀 O SEGREDO: SALVA TAMBÉM COMO COOKIE (para o Middleware ler no servidor)
+        setCookie('zenthos_user', userData, 7)
+
+        console.log('🚀 2. Cookie definido. Redirecionando...')
+        
+        // Força o Next.js a reconhecer a mudança antes de mudar de página
+        router.refresh()
+        
+        setTimeout(() => {
+          window.location.href = '/admin/dashboard'
+        }, 300)
       }
     } catch (err: any) {
-      setError(err.message || 'Erro ao fazer login. Verifique suas credenciais.')
-    } finally {
+      console.error('Erro capturado:', err)
+      setError(err.message || 'Erro ao fazer login.')
       setLoading(false)
     }
   }
@@ -181,14 +191,4 @@ export default function Login() {
         </div>
 
         <div className="mt-4 p-3 bg-[#F8F4E6] rounded-lg text-center text-xs">
-          <p className="font-medium text-[#2D343A]">🔑 Credenciais de Teste:</p>
-          <p className="mt-1">
-            <span className="text-[#8B0000] font-mono">teste.novo@zenthos.com</span>
-            {' / '}
-            <span className="font-mono">admin@123</span>
-          </p>
-        </div>
-      </div>
-    </div>
-  )
-}
+          <p className="font-medium text-[#2D343A]">
