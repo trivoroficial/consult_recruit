@@ -8,8 +8,10 @@ import { supabase } from '@/lib/supabase/client'
 
 export default function Login() {
   const router = useRouter()
-  const [email, setEmail] = useState('admin@zenthos.com')
-  const [password, setPassword] = useState('admin!123')
+  // ATUALIZADO COM O NOVO USUÁRIO DE TESTE
+  const [email, setEmail] = useState('teste.novo@zenthos.com')
+  const [password, setPassword] = useState('admin@123')
+  
   const [showPassword, setShowPassword] = useState(false)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
@@ -44,15 +46,18 @@ export default function Login() {
       })
 
       if (error) {
-        // Verifica se é erro de email não confirmado
-        if (error.message.includes('Email not confirmed')) {
-          throw new Error('Email não confirmado. Verifique sua caixa de entrada.')
+        console.error('Erro do Supabase:', error.message)
+        if (error.message.includes('Invalid login credentials')) {
+          throw new Error('E-mail ou senha incorretos.')
+        } else if (error.message.includes('Email not confirmed')) {
+          throw new Error('E-mail não confirmado. Verifique sua caixa de entrada.')
         }
         throw error
       }
 
       if (data.user) {
-        // Salva informações do usuário
+        console.log('✅ Login realizado com sucesso!', data.user.email)
+        
         localStorage.setItem('zenthos_user', JSON.stringify({
           email: data.user.email,
           name: data.user.user_metadata?.name || data.user.email?.split('@')[0] || 'Usuário',
@@ -60,7 +65,6 @@ export default function Login() {
           id: data.user.id
         }))
 
-        // Aguarda um pequeno delay e redireciona
         setTimeout(() => {
           router.push('/admin/dashboard')
         }, 100)
@@ -186,11 +190,11 @@ export default function Login() {
         </div>
 
         <div className="mt-4 p-3 bg-[#F8F4E6] rounded-lg text-center text-xs">
-          <p className="font-medium text-[#2D343A]">🔑 Credenciais:</p>
+          <p className="font-medium text-[#2D343A]">🔑 Credenciais de Teste:</p>
           <p className="mt-1">
-            <span className="text-[#8B0000] font-mono">admin@zenthos.com</span>
+            <span className="text-[#8B0000] font-mono">teste.novo@zenthos.com</span>
             {' / '}
-            <span className="font-mono">admin!123</span>
+            <span className="font-mono">admin@123</span>
           </p>
         </div>
       </div>
