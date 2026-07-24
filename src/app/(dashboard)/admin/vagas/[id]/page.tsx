@@ -10,6 +10,9 @@ import {
   DollarSign, FileText, MessageCircle, Share2, Eye
 } from 'lucide-react'
 
+// ✅ CORREÇÃO: Importando as actions do Supabase
+import { buscarTodasVagas, excluirVaga } from '@/actions/vagas'
+
 export default function VisualizarVaga() {
   const router = useRouter()
   const params = useParams()
@@ -17,24 +20,29 @@ export default function VisualizarVaga() {
   const [vaga, setVaga] = useState<any>(null)
   const [loading, setLoading] = useState(true)
 
+  // ✅ CORREÇÃO: Buscando do Supabase em vez do localStorage
   useEffect(() => {
-    const saved = localStorage.getItem('zenthos_vagas')
-    if (saved) {
-      const vagas = JSON.parse(saved)
-      const found = vagas.find((v: any) => v.id === parseInt(id))
-      setVaga(found || null)
+    const carregarVaga = async () => {
+      setLoading(true)
+      const resultado = await buscarTodasVagas()
+      if (resultado.success) {
+        // Comparação como String, pois o Supabase usa UUID
+        const found = resultado.data.find((v: any) => String(v.id) === String(id))
+        setVaga(found || null)
+      }
+      setLoading(false)
     }
-    setLoading(false)
+    carregarVaga()
   }, [id])
 
-  const handleDelete = () => {
+  // ✅ CORREÇÃO: Excluindo via Server Action
+  const handleDelete = async () => {
     if (confirm('Tem certeza que deseja excluir esta vaga?')) {
-      const saved = localStorage.getItem('zenthos_vagas')
-      if (saved) {
-        const vagas = JSON.parse(saved)
-        const updated = vagas.filter((v: any) => v.id !== parseInt(id))
-        localStorage.setItem('zenthos_vagas', JSON.stringify(updated))
+      const resultado = await excluirVaga(id)
+      if (resultado.success) {
         router.push('/admin/vagas')
+      } else {
+        alert('Erro ao excluir: ' + resultado.message)
       }
     }
   }
@@ -44,7 +52,10 @@ export default function VisualizarVaga() {
       <div className="min-h-screen bg-[#F8F4E6] flex flex-col">
         <SidebarAdmin />
         <div className="flex-1 ml-64 flex items-center justify-center">
-          <div className="text-[#8B0000] text-xl">Carregando...</div>
+          <div className="text-[#8B0000] text-xl flex items-center gap-2">
+            <span className="animate-spin h-5 w-5 border-2 border-[#8B0000] border-t-transparent rounded-full"></span>
+            Carregando vaga...
+          </div>
         </div>
       </div>
     )
@@ -57,7 +68,7 @@ export default function VisualizarVaga() {
         <div className="flex-1 ml-64 flex flex-col items-center justify-center">
           <Briefcase className="h-16 w-16 text-[#708090] mb-4" />
           <h2 className="text-2xl font-bold text-[#2D343A]">Vaga não encontrada</h2>
-          <p className="text-[#708090]">A vaga que você está procurando não existe.</p>
+          <p className="text-[#708090]">A vaga que você está procurando não existe ou foi removida.</p>
           <button 
             onClick={() => router.push('/admin/vagas')}
             className="mt-4 px-6 py-2 bg-[#8B0000] text-white rounded-lg hover:bg-[#700000] transition flex items-center gap-2"
@@ -114,7 +125,7 @@ export default function VisualizarVaga() {
               <div className="bg-white rounded-2xl shadow-sm border border-[#E8EAE0] p-6">
                 <div className="flex items-start gap-4 mb-6">
                   <div className="w-20 h-20 bg-[#8B0000]/10 rounded-2xl flex items-center justify-center text-[#8B0000] text-3xl font-bold">
-                    {vaga.titulo.charAt(0)}
+                    {vaga.titulo ? vaga.titulo.charAt(0).toUpperCase() : 'V'}
                   </div>
                   <div className="flex-1">
                     <h2 className="text-xl font-bold text-[#2D343A]">{vaga.titulo}</h2>
@@ -167,7 +178,7 @@ export default function VisualizarVaga() {
                     <DollarSign className="h-5 w-5 text-[#8B0000]" />
                     <div>
                       <p className="text-sm text-[#708090]">Tipo</p>
-                      <p className="font-medium text-[#2D343A]">{vaga.tipo || 'CLT'}</p>
+                      <p className="font-medium text-[#2D343A]">{vaga.tipo ? vaga.tipo.toUpperCase() : 'CLT'}</p>
                     </div>
                   </div>
                   <div className="flex items-center gap-3 p-3 bg-[#F8F4E6] rounded-lg">
@@ -181,14 +192,14 @@ export default function VisualizarVaga() {
 
                 <div className="mt-6 p-4 border border-[#E8EAE0] rounded-lg">
                   <h3 className="font-semibold text-[#2D343A] mb-2">Descrição da Vaga</h3>
-                  <p className="text-[#708090] text-sm">
+                  <p className="text-[#708090] text-sm whitespace-pre-wrap">
                     {vaga.descricao || 'Nenhuma descrição cadastrada para esta vaga.'}
                   </p>
                 </div>
 
                 <div className="mt-4 p-4 border border-[#E8EAE0] rounded-lg">
                   <h3 className="font-semibold text-[#2D343A] mb-2">Requisitos</h3>
-                  <p className="text-[#708090] text-sm">
+                  <p className="text-[#708090] text-sm whitespace-pre-wrap">
                     {vaga.requisitos || 'Nenhum requisito cadastrado.'}
                   </p>
                 </div>
@@ -203,7 +214,7 @@ export default function VisualizarVaga() {
                 <div className="space-y-4">
                   <div className="flex items-center gap-3 text-sm">
                     <Calendar className="h-4 w-4 text-[#708090]" />
-                    <span className="text-[#708090]">Publicada: {new Date().toLocaleDateString('pt-BR')}</span>
+                    <span className="text-[#708090]">Publicada: {vaga.created_at ? new Date(vaga.created_at).toLocaleDateString('pt-BR') : 'Data não disponível'}</span>
                   </div>
                   <div className="flex items-center gap-3 text-sm">
                     <Clock className="h-4 w-4 text-[#708090]" />
