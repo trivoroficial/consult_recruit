@@ -9,8 +9,8 @@ export async function salvarVagaNoBanco(dadosVaga: any) {
   const dadosParaSalvar = {
     ...dadosVaga,
     quantidade: parseInt(dadosVaga.quantidade) || 1,
-    candidatos: parseInt(dadosVaga.candidatos) || 0,
-    status: dadosVaga.status || 'Aberta',
+    candidatos: 0, // Sempre começa com 0 candidatos ao criar
+    status: 'Aberta', // Status padrão ao criar
     empresaExibida: dadosVaga.confidencial ? 'Confidencial' : dadosVaga.empresa,
     created_at: new Date().toISOString()
   }
@@ -44,7 +44,6 @@ export async function buscarTodasVagas() {
 export async function atualizarVaga(id: string, dados: any) {
   const supabase = createClient()
   
-  // Garante que o nome exibido esteja correto baseado na confidencialidade
   const dadosAtualizados = {
     ...dados,
     empresaExibida: dados.confidencial ? 'Confidencial' : dados.empresa
