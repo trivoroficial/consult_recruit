@@ -8,7 +8,8 @@ import {
   Briefcase, MapPin, DollarSign, Users, Save, ArrowLeft, 
   CheckCircle, Calendar, Clock, FileText, Award, Eye, EyeOff, Star, Lock, Unlock
 } from 'lucide-react'
-import { salvarVagaNoBanco } from '@/actions/criarVaga'
+// ✅ CORREÇÃO: Importando do arquivo centralizado
+import { salvarVagaNoBanco } from '@/actions/vagas'
 
 export default function NovaVaga() {
   const router = useRouter()
@@ -46,9 +47,7 @@ export default function NovaVaga() {
     setLoading(true)
     setError('')
     
-    // Chama a Server Action que está em um arquivo separado
     const resultado = await salvarVagaNoBanco(form)
-
     setLoading(false)
 
     if (resultado.success) {
@@ -90,7 +89,6 @@ export default function NovaVaga() {
             </div>
           ) : (
             <form onSubmit={handleSubmit} className="bg-white rounded-2xl shadow-sm border border-[#E8EAE0] p-8">
-              
               {error && (
                 <div className="mb-6 p-4 bg-red-50 border border-red-200 text-red-700 rounded-lg text-sm">
                   Erro: {error}
@@ -126,9 +124,7 @@ export default function NovaVaga() {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-[#2D343A] mb-1.5">
-                    Departamento
-                  </label>
+                  <label className="block text-sm font-medium text-[#2D343A] mb-1.5">Departamento</label>
                   <input type="text" className="w-full px-4 py-3 border border-[#E8EAE0] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#8B0000] transition" value={form.departamento} onChange={(e) => setForm({...form, departamento: e.target.value})} placeholder="Ex: Recursos Humanos" />
                 </div>
 
@@ -173,9 +169,7 @@ export default function NovaVaga() {
                 </div>
 
                 <div className="md:col-span-2">
-                  <label className="block text-sm font-medium text-[#2D343A] mb-1.5">
-                    Benefícios
-                  </label>
+                  <label className="block text-sm font-medium text-[#2D343A] mb-1.5">Benefícios</label>
                   <textarea rows={2} className="w-full px-4 py-3 border border-[#E8EAE0] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#8B0000] transition resize-none" value={form.beneficios} onChange={(e) => setForm({...form, beneficios: e.target.value})} placeholder="Vale transporte, Vale alimentação, Plano de saúde..." />
                 </div>
 
@@ -246,9 +240,7 @@ export default function NovaVaga() {
                 {form.exibirCarrossel && (
                   <>
                     <div>
-                      <label className="block text-sm font-medium text-[#2D343A] mb-1.5">
-                        Badge do Carrossel
-                      </label>
+                      <label className="block text-sm font-medium text-[#2D343A] mb-1.5">Badge do Carrossel</label>
                       <select className="w-full px-4 py-3 border border-[#E8EAE0] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#8B0000] transition" value={form.badgeCarrossel} onChange={(e) => setForm({...form, badgeCarrossel: e.target.value})}>
                         <option value="Destaque">Destaque</option>
                         <option value="Urgente">Urgente</option>
@@ -259,9 +251,7 @@ export default function NovaVaga() {
                     </div>
 
                     <div>
-                      <label className="block text-sm font-medium text-[#2D343A] mb-1.5">
-                        Cor do Badge
-                      </label>
+                      <label className="block text-sm font-medium text-[#2D343A] mb-1.5">Cor do Badge</label>
                       <select className="w-full px-4 py-3 border border-[#E8EAE0] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#8B0000] transition" value={form.corBadge} onChange={(e) => setForm({...form, corBadge: e.target.value})}>
                         <option value="bg-purple-500">Roxo</option>
                         <option value="bg-red-500">Vermelho</option>
@@ -298,9 +288,7 @@ export default function NovaVaga() {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-[#2D343A] mb-1.5">
-                    Experiência Mínima
-                  </label>
+                  <label className="block text-sm font-medium text-[#2D343A] mb-1.5">Experiência Mínima</label>
                   <select className="w-full px-4 py-3 border border-[#E8EAE0] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#8B0000] transition" value={form.experiencia} onChange={(e) => setForm({...form, experiencia: e.target.value})}>
                     <option value="">Selecione...</option>
                     <option value="sem">Sem experiência</option>
@@ -313,9 +301,7 @@ export default function NovaVaga() {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-[#2D343A] mb-1.5">
-                    Escolaridade
-                  </label>
+                  <label className="block text-sm font-medium text-[#2D343A] mb-1.5">Escolaridade</label>
                   <select className="w-full px-4 py-3 border border-[#E8EAE0] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#8B0000] transition" value={form.escolaridade} onChange={(e) => setForm({...form, escolaridade: e.target.value})}>
                     <option value="">Selecione...</option>
                     <option value="fundamental">Ensino Fundamental</option>
@@ -328,9 +314,7 @@ export default function NovaVaga() {
                 </div>
 
                 <div className="md:col-span-2">
-                  <label className="block text-sm font-medium text-[#2D343A] mb-1.5">
-                    Competências Desejadas
-                  </label>
+                  <label className="block text-sm font-medium text-[#2D343A] mb-1.5">Competências Desejadas</label>
                   <textarea rows={2} className="w-full px-4 py-3 border border-[#E8EAE0] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#8B0000] transition resize-none" value={form.competencias} onChange={(e) => setForm({...form, competencias: e.target.value})} placeholder="Excel, Liderança, Comunicação, Gestão de Projetos..." />
                 </div>
 
