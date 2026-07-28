@@ -1,8 +1,9 @@
 // open-next.config.ts
-import { defineConfig } from '@opennextjs/cloudflare'
+import type { OpenNextConfig } from '@opennextjs/cloudflare'
 
-export default defineConfig({
+const config: OpenNextConfig = {
   platform: 'cloudflare',
   output: 'standalone',
-  incremental: true,
-})
+}
+
+export default config
