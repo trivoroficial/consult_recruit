@@ -7,6 +7,9 @@ const nextConfig = {
   swcMinify: true,
   transpilePackages: ['lucide-react'],
   output: 'standalone',
+  experimental: {
+    serverComponentsExternalPackages: ['@supabase/ssr'],
+  },
 }
 
 module.exports = nextConfig
