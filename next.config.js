@@ -6,11 +6,7 @@ const nextConfig = {
   reactStrictMode: true,
   swcMinify: true,
   transpilePackages: ['lucide-react'],
-  experimental: {
-    // Configurações experimentais
-  },
-  // Forçar limpeza de cache no build
-  distDir: '.next',
+  output: 'standalone',
 }
 
 module.exports = nextConfig
