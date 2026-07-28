@@ -10,7 +10,6 @@ const nextConfig = {
   experimental: {
     serverComponentsExternalPackages: ['@supabase/ssr'],
   },
-  // Ignorar erros de tipo no build
   typescript: {
     ignoreBuildErrors: true,
   },
