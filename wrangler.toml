@@ -1,0 +1,8 @@
+# wrangler.toml
+name = "consult-recruit"
+main = "dist/server/index.js"
+compatibility_date = "2024-09-01"
+
+[vars]
+NEXT_PUBLIC_SUPABASE_URL = "https://dhnmyofmavrsfjtntxjt.supabase.co"
+NEXT_PUBLIC_SUPABASE_ANON_KEY = "sb_publishable_NpAUC2GRqhwUsafIkFo6iQ_4azrbrsC"
