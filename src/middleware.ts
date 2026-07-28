@@ -1,43 +1,100 @@
+// src/middleware.ts
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
+import { createServerClient } from '@supabase/ssr'
 
-export function middleware(request: NextRequest) {
+const supabaseUrl = 'https://dhnmyofmavrsfjtntxjt.supabase.co'
+const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRobm15b2ZtYXZyc2ZqdG50eGp0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODM1OTgzMzMsImV4cCI6MjA5OTE3NDMzM30.2Ahc15Mw5FPqm4nMx8xCORAFt3OoobmsVQIjrTjXAhA'
+
+// Rotas protegidas
+const protectedRoutes = ['/admin', '/empresa', '/candidato']
+
+// Rotas públicas
+const publicRoutes = [
+  '/', '/sobre', '/servicos', '/contato', 
+  '/login', '/cadastro', '/recuperar-senha',
+  '/vagas', '/empresas'
+]
+
+export async function middleware(request: NextRequest) {
   const pathname = request.nextUrl.pathname
 
-  // 1. Rotas públicas (não exigem login)
-  const publicRoutes = ['/', '/sobre', '/servicos', '/contato', '/login', '/cadastro', '/recuperar-senha']
+  // Verifica se é uma rota pública
   if (publicRoutes.some(route => pathname === route || pathname.startsWith(route + '/'))) {
     return NextResponse.next()
   }
 
-  // 2. Ler o cookie que definimos no login
-  const userCookie = request.cookies.get('zenthos_user')?.value
-  let user = null
-
-  if (userCookie) {
-    try {
-      user = JSON.parse(userCookie)
-    } catch (e) {
-      const response = NextResponse.redirect(new URL('/login', request.url))
-      response.cookies.delete('zenthos_user')
-      return response
+  // Verifica se é uma rota protegida
+  const isProtected = protectedRoutes.some(route => pathname.startsWith(route))
+  
+  if (isProtected) {
+    // 1. VERIFICAR COOKIE (MÉTODO ATUAL)
+    const userCookie = request.cookies.get('zenthos_user')?.value
+    
+    if (!userCookie) {
+      return NextResponse.redirect(new URL('/login', request.url))
     }
-  }
 
-  // 3. Se não tiver usuário, manda para o login
-  if (!user) {
-    return NextResponse.redirect(new URL('/login', request.url))
-  }
+    // 2. VERIFICAR SUPABASE
+    let supabaseResponse = NextResponse.next({
+      request,
+    })
 
-  // 4. Proteção por PERFIL (Role)
-  if (pathname.startsWith('/admin') && user.role !== 'admin') {
-    return NextResponse.redirect(new URL('/login', request.url))
-  }
-  if (pathname.startsWith('/empresa') && user.role !== 'empresa') {
-    return NextResponse.redirect(new URL('/login', request.url))
-  }
-  if (pathname.startsWith('/candidato') && user.role !== 'candidato') {
-    return NextResponse.redirect(new URL('/login', request.url))
+    const supabase = createServerClient(
+      supabaseUrl,
+      supabaseAnonKey,
+      {
+        cookies: {
+          getAll() {
+            return request.cookies.getAll()
+          },
+          setAll(cookiesToSet: { name: string; value: string; options?: any }[]) {
+            cookiesToSet.forEach(({ name, value, options }) => request.cookies.set(name, value))
+            supabaseResponse = NextResponse.next({
+              request,
+            })
+            cookiesToSet.forEach(({ name, value, options }) =>
+              supabaseResponse.cookies.set(name, value, options)
+            )
+          },
+        },
+      }
+    )
+
+    const { data: { user } } = await supabase.auth.getUser()
+
+    if (!user) {
+      return NextResponse.redirect(new URL('/login', request.url))
+    }
+
+    // 3. VERIFICAR PERMISSÕES
+    try {
+      const { data: userData } = await supabase
+        .from('usuarios')
+        .select('role')
+        .eq('id', user.id)
+        .single()
+
+      const role = userData?.role || 'candidato'
+
+      if (pathname.startsWith('/admin') && role !== 'admin') {
+        return NextResponse.redirect(new URL('/login', request.url))
+      }
+
+      if (pathname.startsWith('/empresa') && role !== 'admin' && role !== 'empresa') {
+        return NextResponse.redirect(new URL('/login', request.url))
+      }
+
+      if (pathname.startsWith('/candidato') && role !== 'admin' && role !== 'candidato') {
+        return NextResponse.redirect(new URL('/login', request.url))
+      }
+
+    } catch (error) {
+      console.error('Erro ao verificar permissões:', error)
+      return NextResponse.redirect(new URL('/login', request.url))
+    }
+
+    return supabaseResponse
   }
 
   return NextResponse.next()
@@ -45,6 +102,6 @@ export function middleware(request: NextRequest) {
 
 export const config = {
   matcher: [
-    '/((?!_next/static|_next/image|favicon.ico|.*\\.png$|.*\\.svg$|.*\\.jpg$|.*\\.webp$).*)',
+    '/((?!_next/static|_next/image|favicon.ico|.*\\.png$|.*\\.svg$|.*\\.jpg$|.*\\.webp$|logo.png).*)',
   ],
 }
