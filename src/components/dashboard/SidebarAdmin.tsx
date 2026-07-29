@@ -8,7 +8,7 @@ import {
   CreditCard, Settings, LogOut, QrCode, FileText, 
   Calendar, Database, Shield, UsersRound,
   ChevronDown, ChevronRight, ChevronLeft, Menu,
-  User, TrendingUp
+  User, TrendingUp, CircleDollarSign
 } from 'lucide-react'
 import { supabase } from '@/lib/supabase/client'
 
@@ -25,7 +25,6 @@ export function SidebarAdmin() {
     if (userData) {
       try {
         const parsed = JSON.parse(userData)
-        // Formatar nome com primeira letra maiúscula
         const name = parsed.name || 'Emerson Divino'
         const formattedName = name.split(' ').map((n: string) => 
           n.charAt(0).toUpperCase() + n.slice(1).toLowerCase()
@@ -88,7 +87,6 @@ export function SidebarAdmin() {
         { icon: Calendar, label: 'Agenda', href: '/admin/agenda' },
         { icon: QrCode, label: 'QR Code Center', href: '/admin/qrcode' },
         { icon: Settings, label: 'Configurações', href: '/admin/configuracoes' },
-        // Acessos e Backup DENTRO de Configurações (subitens)
         { icon: Shield, label: 'Controle de Acessos', href: '/admin/acessos' },
         { icon: Database, label: 'Backup', href: '/admin/backup' },
       ]
@@ -100,6 +98,7 @@ export function SidebarAdmin() {
       collapsed ? 'w-20' : 'w-64'
     }`}>
       
+      {/* LOGO */}
       <div className={`p-4 border-b border-white/10 flex items-center ${collapsed ? 'justify-center' : 'justify-between'}`}>
         {!collapsed ? (
           <img src="/logo.png" alt="ZENTHOS" className="h-[1.5cm] w-auto object-contain brightness-0 invert" />
@@ -114,26 +113,28 @@ export function SidebarAdmin() {
         </button>
       </div>
 
+      {/* PERFIL DO USUÁRIO - VISÍVEL NO MENU */}
       <div className={`p-4 border-b border-white/10 ${collapsed ? 'text-center' : ''}`}>
         <div className={`flex items-center ${collapsed ? 'justify-center' : 'gap-3'}`}>
-          <div className="w-10 h-10 bg-[#8B0000] rounded-full flex items-center justify-center text-white font-bold text-sm flex-shrink-0">
+          <div className="w-10 h-10 bg-[#6B1A2A] rounded-full flex items-center justify-center text-white font-bold text-sm flex-shrink-0">
             {userName.charAt(0)}
           </div>
           {!collapsed && (
             <div className="flex-1 min-w-0">
               <p className="font-semibold text-sm text-white truncate">{userName}</p>
-              <p className="text-xs text-white/50 truncate">{userRole}</p>
+              <p className="text-xs text-[#E3C9A8] truncate">{userRole}</p>
             </div>
           )}
         </div>
       </div>
 
+      {/* MENU */}
       <nav className="flex-1 p-3 overflow-y-auto">
         <Link
           href="/admin/dashboard"
           className={`flex items-center gap-3 px-3 py-2.5 rounded-lg transition mb-1 ${
             isActive('/admin/dashboard')
-              ? 'bg-[#8B0000]/20 text-white'
+              ? 'bg-[#6B1A2A]/20 text-white'
               : 'text-white/60 hover:bg-white/5 hover:text-white'
           }`}
         >
@@ -178,7 +179,7 @@ export function SidebarAdmin() {
                         href={item.href}
                         className={`flex items-center gap-3 px-3 py-2 rounded-lg transition text-sm ${
                           isActive(item.href)
-                            ? 'bg-[#8B0000]/20 text-white'
+                            ? 'bg-[#6B1A2A]/20 text-white'
                             : 'text-white/50 hover:bg-white/5 hover:text-white'
                         }`}
                       >
@@ -194,10 +195,22 @@ export function SidebarAdmin() {
         })}
       </nav>
 
+      {/* RODAPÉ DO MENU - USUÁRIO E PERFIL */}
       <div className="p-4 border-t border-white/10">
+        <div className="flex items-center gap-3 px-3 py-2 mb-2 bg-white/5 rounded-lg">
+          <div className="w-8 h-8 bg-[#6B1A2A] rounded-full flex items-center justify-center text-white font-bold text-xs flex-shrink-0">
+            {userName.charAt(0)}
+          </div>
+          {!collapsed && (
+            <div className="flex-1 min-w-0">
+              <p className="font-medium text-xs text-white truncate">{userName}</p>
+              <p className="text-[10px] text-[#E3C9A8] truncate">{userRole}</p>
+            </div>
+          )}
+        </div>
         <button
           onClick={handleLogout}
-          className="flex items-center gap-3 px-3 py-2.5 text-red-400 hover:bg-red-500/10 hover:text-red-300 rounded-lg transition w-full"
+          className={`flex items-center gap-3 px-3 py-2.5 text-red-400 hover:bg-red-500/10 hover:text-red-300 rounded-lg transition w-full ${collapsed ? 'justify-center' : ''}`}
         >
           <LogOut className="h-5 w-5 flex-shrink-0" />
           {!collapsed && <span className="text-sm font-medium">Sair</span>}
