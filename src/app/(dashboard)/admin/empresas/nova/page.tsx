@@ -5,12 +5,13 @@ import { useRouter } from 'next/navigation'
 import { SidebarAdmin } from '@/components/dashboard/SidebarAdmin'
 import { DashboardFooter } from '@/components/dashboard/DashboardFooter'
 import { Building2, ArrowLeft, Save, CheckCircle } from 'lucide-react'
-import { supabase } from '@/lib/supabase/client'
+import { criarEmpresa } from '@/actions/empresas'
 
 export default function NovaEmpresa() {
   const router = useRouter()
   const [loading, setLoading] = useState(false)
   const [success, setSuccess] = useState(false)
+  const [error, setError] = useState<string | null>(null)
   const [form, setForm] = useState({
     nome: '',
     cnpj: '',
@@ -28,54 +29,21 @@ export default function NovaEmpresa() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setLoading(true)
+    setError(null)
 
     try {
-      // 1. SALVAR NO SUPABASE
-      const { data, error } = await supabase
-        .from('empresas')
-        .insert([{
-          nome: form.nome,
-          cnpj: form.cnpj,
-          telefone: form.telefone,
-          email: form.email,
-          cidade: form.cidade,
-          estado: form.estado,
-          funcionarios: parseInt(form.funcionarios) || 0,
-          plano: form.plano,
-          status: form.status,
-          descricao: form.descricao,
-          responsavel: form.responsavel,
-          vagas_ativas: 0
-        }])
-        .select()
-
-      if (error) throw error
-
-      // 2. SALVAR NO LOCALSTORAGE (FALLBACK)
-      const saved = localStorage.getItem('zenthos_empresas')
-      let empresas = []
-      if (saved) {
-        empresas = JSON.parse(saved)
+      const result = await criarEmpresa(form)
+      if (result.success) {
+        setSuccess(true)
+        setTimeout(() => {
+          router.push('/admin/empresas')
+        }, 2000)
+      } else {
+        setError(result.error || 'Erro ao cadastrar empresa')
+        setLoading(false)
       }
-      empresas.push({
-        id: data?.[0]?.id || Date.now(),
-        ...form,
-        funcionarios: parseInt(form.funcionarios) || 0,
-        vagasAtivas: 0,
-        dataCadastro: new Date().toISOString()
-      })
-      localStorage.setItem('zenthos_empresas', JSON.stringify(empresas))
-
-      setLoading(false)
-      setSuccess(true)
-
-      setTimeout(() => {
-        router.push('/admin/empresas')
-      }, 2000)
-
-    } catch (error: any) {
-      console.error('Erro ao cadastrar empresa:', error)
-      alert('Erro ao cadastrar empresa: ' + error.message)
+    } catch (err) {
+      setError('Erro ao cadastrar empresa')
       setLoading(false)
     }
   }
@@ -132,6 +100,12 @@ export default function NovaEmpresa() {
 
         <div className="flex-1 p-8">
           <form onSubmit={handleSubmit} className="bg-white rounded-2xl shadow-sm border border-[#E8EAE0] p-8">
+            {error && (
+              <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg mb-4 text-sm">
+                {error}
+              </div>
+            )}
+
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
                 <label className="block text-sm font-medium text-[#2D343A] mb-1.5">
@@ -147,9 +121,7 @@ export default function NovaEmpresa() {
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-[#2D343A] mb-1.5">
-                  CNPJ
-                </label>
+                <label className="block text-sm font-medium text-[#2D343A] mb-1.5">CNPJ</label>
                 <input
                   type="text"
                   className="w-full px-4 py-3 border border-[#E8EAE0] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#6B1A2A] transition"
@@ -159,9 +131,7 @@ export default function NovaEmpresa() {
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-[#2D343A] mb-1.5">
-                  Telefone
-                </label>
+                <label className="block text-sm font-medium text-[#2D343A] mb-1.5">Telefone</label>
                 <input
                   type="text"
                   className="w-full px-4 py-3 border border-[#E8EAE0] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#6B1A2A] transition"
@@ -184,9 +154,7 @@ export default function NovaEmpresa() {
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-[#2D343A] mb-1.5">
-                  Cidade
-                </label>
+                <label className="block text-sm font-medium text-[#2D343A] mb-1.5">Cidade</label>
                 <input
                   type="text"
                   className="w-full px-4 py-3 border border-[#E8EAE0] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#6B1A2A] transition"
@@ -196,9 +164,7 @@ export default function NovaEmpresa() {
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-[#2D343A] mb-1.5">
-                  Estado
-                </label>
+                <label className="block text-sm font-medium text-[#2D343A] mb-1.5">Estado</label>
                 <select
                   className="w-full px-4 py-3 border border-[#E8EAE0] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#6B1A2A] transition"
                   value={form.estado}
@@ -216,9 +182,7 @@ export default function NovaEmpresa() {
                 </select>
               </div>
               <div>
-                <label className="block text-sm font-medium text-[#2D343A] mb-1.5">
-                  Número de Funcionários
-                </label>
+                <label className="block text-sm font-medium text-[#2D343A] mb-1.5">Funcionários</label>
                 <input
                   type="number"
                   className="w-full px-4 py-3 border border-[#E8EAE0] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#6B1A2A] transition"
@@ -228,9 +192,7 @@ export default function NovaEmpresa() {
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-[#2D343A] mb-1.5">
-                  Plano
-                </label>
+                <label className="block text-sm font-medium text-[#2D343A] mb-1.5">Plano</label>
                 <select
                   className="w-full px-4 py-3 border border-[#E8EAE0] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#6B1A2A] transition"
                   value={form.plano}
@@ -242,9 +204,7 @@ export default function NovaEmpresa() {
                 </select>
               </div>
               <div>
-                <label className="block text-sm font-medium text-[#2D343A] mb-1.5">
-                  Status
-                </label>
+                <label className="block text-sm font-medium text-[#2D343A] mb-1.5">Status</label>
                 <select
                   className="w-full px-4 py-3 border border-[#E8EAE0] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#6B1A2A] transition"
                   value={form.status}
@@ -256,9 +216,7 @@ export default function NovaEmpresa() {
                 </select>
               </div>
               <div className="md:col-span-2">
-                <label className="block text-sm font-medium text-[#2D343A] mb-1.5">
-                  Responsável
-                </label>
+                <label className="block text-sm font-medium text-[#2D343A] mb-1.5">Responsável</label>
                 <input
                   type="text"
                   className="w-full px-4 py-3 border border-[#E8EAE0] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#6B1A2A] transition"
@@ -268,9 +226,7 @@ export default function NovaEmpresa() {
                 />
               </div>
               <div className="md:col-span-2">
-                <label className="block text-sm font-medium text-[#2D343A] mb-1.5">
-                  Descrição
-                </label>
+                <label className="block text-sm font-medium text-[#2D343A] mb-1.5">Descrição</label>
                 <textarea
                   rows={3}
                   className="w-full px-4 py-3 border border-[#E8EAE0] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#6B1A2A] transition resize-none"
