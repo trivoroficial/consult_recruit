@@ -1,9 +1,9 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import { Eye, EyeOff, LogIn, CheckSquare, Square, Key, Mail, X } from 'lucide-react'
+import { Eye, EyeOff, LogIn, CheckSquare, Square, Key, Mail, X, ArrowLeft } from 'lucide-react'
 import { supabase } from '@/lib/supabase/client'
 
 export default function Login() {
@@ -20,6 +20,16 @@ export default function Login() {
   const [recuperarLoading, setRecuperarLoading] = useState(false)
   const [recuperarStatus, setRecuperarStatus] = useState<'idle' | 'success' | 'error'>('idle')
   const [recuperarMensagem, setRecuperarMensagem] = useState('')
+
+  useEffect(() => {
+    const checkUser = async () => {
+      const { data: { user } } = await supabase.auth.getUser()
+      if (user) {
+        window.location.href = '/admin/dashboard'
+      }
+    }
+    checkUser()
+  }, [])
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -41,7 +51,6 @@ export default function Login() {
       if (error) throw error
 
       if (data?.user) {
-        // Salvar no localStorage
         localStorage.setItem('zenthos_user', JSON.stringify({
           email: data.user.email,
           name: data.user.email?.split('@')[0] || 'Usuário',
@@ -49,14 +58,12 @@ export default function Login() {
           id: data.user.id
         }))
 
-        // Salvar cookie para o middleware
         document.cookie = `zenthos_user=${JSON.stringify({
           email: data.user.email,
           role: 'admin',
           id: data.user.id
         })}; path=/; max-age=86400`
 
-        // Redirecionar
         window.location.href = '/admin/dashboard'
       }
     } catch (err: any) {
@@ -104,6 +111,17 @@ export default function Login() {
   return (
     <div className="w-full max-w-md relative">
       <div className="bg-white rounded-2xl shadow-xl p-8 border border-[#E8EAE0]">
+        {/* BOTÃO VOLTAR */}
+        <div className="mb-6">
+          <Link 
+            href="/" 
+            className="inline-flex items-center gap-2 text-sm text-[#708090] hover:text-[#6B1A2A] transition"
+          >
+            <ArrowLeft className="h-4 w-4" />
+            Voltar para o site
+          </Link>
+        </div>
+
         <div className="text-center mb-8">
           <img src="/logo.png" alt="ZENTHOS" className="h-[1.5cm] w-auto mx-auto object-contain" />
           <h2 className="text-2xl font-bold text-[#2D343A] mt-4">Acesse sua conta</h2>
@@ -122,7 +140,7 @@ export default function Login() {
             <input
               type="email"
               required
-              className="w-full px-4 py-3 border border-[#E8EAE0] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#8B0000] transition"
+              className="w-full px-4 py-3 border border-[#E8EAE0] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#6B1A2A] transition"
               placeholder="seu@email.com"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
@@ -135,7 +153,7 @@ export default function Login() {
               <button
                 type="button"
                 onClick={() => setMostrarRecuperar(true)}
-                className="text-xs text-[#8B0000] hover:underline font-medium"
+                className="text-xs text-[#6B1A2A] hover:underline font-medium"
               >
                 Esqueci minha senha
               </button>
@@ -144,7 +162,7 @@ export default function Login() {
               <input
                 type={showPassword ? 'text' : 'password'}
                 required
-                className="w-full px-4 py-3 border border-[#E8EAE0] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#8B0000] transition pr-12"
+                className="w-full px-4 py-3 border border-[#E8EAE0] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#6B1A2A] transition pr-12"
                 placeholder="••••••••"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
@@ -166,7 +184,7 @@ export default function Login() {
               className="mt-0.5 flex-shrink-0"
             >
               {aceitouLGPD ? (
-                <CheckSquare className="h-5 w-5 text-[#8B0000]" />
+                <CheckSquare className="h-5 w-5 text-[#6B1A2A]" />
               ) : (
                 <Square className="h-5 w-5 text-[#708090]" />
               )}
@@ -177,7 +195,7 @@ export default function Login() {
                 <button
                   type="button"
                   onClick={() => setMostrarLGPD(!mostrarLGPD)}
-                  className="text-[#8B0000] hover:underline font-medium"
+                  className="text-[#6B1A2A] hover:underline font-medium"
                 >
                   Termos de Uso e Política de Privacidade (LGPD)
                 </button>
@@ -189,7 +207,7 @@ export default function Login() {
                   <button
                     type="button"
                     onClick={() => setMostrarLGPD(false)}
-                    className="mt-2 text-[#8B0000] hover:underline text-xs font-medium"
+                    className="mt-2 text-[#6B1A2A] hover:underline text-xs font-medium"
                   >
                     Fechar
                   </button>
@@ -201,7 +219,7 @@ export default function Login() {
           <button
             type="submit"
             disabled={loading || !aceitouLGPD}
-            className="w-full py-3.5 bg-[#8B0000] hover:bg-[#700000] text-white font-semibold rounded-lg transition-all duration-300 shadow-md shadow-[#8B0000]/20 hover:shadow-lg hover:-translate-y-0.5 flex items-center justify-center gap-2 disabled:opacity-50"
+            className="w-full py-3.5 bg-[#6B1A2A] hover:bg-[#4A0E1A] text-white font-semibold rounded-lg transition-all duration-300 shadow-md shadow-[#6B1A2A]/20 hover:shadow-lg hover:-translate-y-0.5 flex items-center justify-center gap-2 disabled:opacity-50"
           >
             {loading ? (
               <span className="flex items-center gap-2">
@@ -218,13 +236,13 @@ export default function Login() {
         </form>
 
         <div className="mt-6 pt-6 border-t border-[#E8EAE0] text-center">
-          <Link href="/cadastro" className="text-[#8B0000] hover:underline text-sm font-medium">
+          <Link href="/cadastro" className="text-[#6B1A2A] hover:underline text-sm font-medium">
             Não tem uma conta? Cadastre-se
           </Link>
         </div>
       </div>
 
-      {/* MODAL DE RECUPERAÇÃO DE SENHA */}
+      {/* MODAL RECUPERAR SENHA */}
       {mostrarRecuperar && (
         <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
           <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full p-8 relative border border-[#E8EAE0]">
@@ -241,8 +259,8 @@ export default function Login() {
             </button>
 
             <div className="text-center mb-6">
-              <div className="w-16 h-16 bg-[#8B0000]/10 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Key className="h-8 w-8 text-[#8B0000]" />
+              <div className="w-16 h-16 bg-[#6B1A2A]/10 rounded-full flex items-center justify-center mx-auto mb-4">
+                <Key className="h-8 w-8 text-[#6B1A2A]" />
               </div>
               <h2 className="text-2xl font-bold text-[#2D343A]">Recuperar Senha</h2>
               <p className="text-sm text-[#708090] mt-1">Digite seu email para receber o link</p>
@@ -266,7 +284,7 @@ export default function Login() {
                   <input
                     type="email"
                     required
-                    className="w-full pl-10 pr-4 py-3 border border-[#E8EAE0] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#8B0000] transition"
+                    className="w-full pl-10 pr-4 py-3 border border-[#E8EAE0] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#6B1A2A] transition"
                     placeholder="seu@email.com"
                     value={emailRecuperar}
                     onChange={(e) => setEmailRecuperar(e.target.value)}
@@ -290,7 +308,7 @@ export default function Login() {
                 <button
                   type="submit"
                   disabled={recuperarLoading}
-                  className="flex-1 py-3 bg-[#8B0000] text-white rounded-lg hover:bg-[#700000] transition font-medium flex items-center justify-center gap-2 disabled:opacity-50"
+                  className="flex-1 py-3 bg-[#6B1A2A] text-white rounded-lg hover:bg-[#4A0E1A] transition font-medium flex items-center justify-center gap-2 disabled:opacity-50"
                 >
                   {recuperarLoading ? (
                     <span className="animate-spin h-4 w-4 border-2 border-white border-t-transparent rounded-full" />
