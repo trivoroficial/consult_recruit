@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
-import { Eye, EyeOff, UserPlus, CheckSquare, Square } from 'lucide-react'
+import { Eye, EyeOff, UserPlus, CheckSquare, Square, ArrowLeft } from 'lucide-react'
 import { supabase } from '@/lib/supabase/client'
 
 export default function Cadastro() {
@@ -51,7 +51,6 @@ export default function Cadastro() {
       if (error) throw error
 
       if (data?.user) {
-        // Salvar na tabela usuarios
         await supabase.from('usuarios').insert([
           {
             id: data.user.id,
@@ -80,6 +79,17 @@ export default function Cadastro() {
   return (
     <div className="w-full max-w-md">
       <div className="bg-white rounded-2xl shadow-xl p-8 border border-[#E8EAE0]">
+        {/* BOTÃO VOLTAR */}
+        <div className="mb-6">
+          <Link 
+            href="/" 
+            className="inline-flex items-center gap-2 text-sm text-[#708090] hover:text-[#6B1A2A] transition"
+          >
+            <ArrowLeft className="h-4 w-4" />
+            Voltar para o site
+          </Link>
+        </div>
+
         <div className="text-center mb-8">
           <img src="/logo.png" alt="ZENTHOS" className="h-[1.5cm] w-auto mx-auto object-contain" />
           <h2 className="text-2xl font-bold text-[#2D343A] mt-4">Crie sua conta</h2>
@@ -98,7 +108,7 @@ export default function Cadastro() {
             <input
               type="text"
               required
-              className="w-full px-4 py-3 border border-[#E8EAE0] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#8B0000] transition"
+              className="w-full px-4 py-3 border border-[#E8EAE0] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#6B1A2A] transition"
               placeholder="Seu nome completo"
               value={form.nome}
               onChange={(e) => setForm({...form, nome: e.target.value})}
@@ -110,7 +120,7 @@ export default function Cadastro() {
             <input
               type="email"
               required
-              className="w-full px-4 py-3 border border-[#E8EAE0] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#8B0000] transition"
+              className="w-full px-4 py-3 border border-[#E8EAE0] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#6B1A2A] transition"
               placeholder="seu@email.com"
               value={form.email}
               onChange={(e) => setForm({...form, email: e.target.value})}
@@ -124,7 +134,7 @@ export default function Cadastro() {
                 type={showPassword ? 'text' : 'password'}
                 required
                 minLength={6}
-                className="w-full px-4 py-3 border border-[#E8EAE0] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#8B0000] transition pr-12"
+                className="w-full px-4 py-3 border border-[#E8EAE0] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#6B1A2A] transition pr-12"
                 placeholder="•••••••• (mínimo 6 caracteres)"
                 value={form.password}
                 onChange={(e) => setForm({...form, password: e.target.value})}
@@ -144,7 +154,7 @@ export default function Cadastro() {
             <input
               type={showPassword ? 'text' : 'password'}
               required
-              className="w-full px-4 py-3 border border-[#E8EAE0] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#8B0000] transition"
+              className="w-full px-4 py-3 border border-[#E8EAE0] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#6B1A2A] transition"
               placeholder="••••••••"
               value={form.confirmPassword}
               onChange={(e) => setForm({...form, confirmPassword: e.target.value})}
@@ -158,7 +168,7 @@ export default function Cadastro() {
               className="mt-0.5 flex-shrink-0"
             >
               {aceitouLGPD ? (
-                <CheckSquare className="h-5 w-5 text-[#8B0000]" />
+                <CheckSquare className="h-5 w-5 text-[#6B1A2A]" />
               ) : (
                 <Square className="h-5 w-5 text-[#708090]" />
               )}
@@ -169,7 +179,7 @@ export default function Cadastro() {
                 <button
                   type="button"
                   onClick={() => setMostrarLGPD(!mostrarLGPD)}
-                  className="text-[#8B0000] hover:underline font-medium"
+                  className="text-[#6B1A2A] hover:underline font-medium"
                 >
                   Termos de Uso e Política de Privacidade (LGPD)
                 </button>
@@ -181,7 +191,7 @@ export default function Cadastro() {
                   <button
                     type="button"
                     onClick={() => setMostrarLGPD(false)}
-                    className="mt-2 text-[#8B0000] hover:underline text-xs font-medium"
+                    className="mt-2 text-[#6B1A2A] hover:underline text-xs font-medium"
                   >
                     Fechar
                   </button>
@@ -193,7 +203,7 @@ export default function Cadastro() {
           <button
             type="submit"
             disabled={loading || !aceitouLGPD}
-            className="w-full py-3.5 bg-[#8B0000] hover:bg-[#700000] text-white font-semibold rounded-lg transition-all duration-300 shadow-md shadow-[#8B0000]/20 hover:shadow-lg hover:-translate-y-0.5 flex items-center justify-center gap-2 disabled:opacity-50"
+            className="w-full py-3.5 bg-[#6B1A2A] hover:bg-[#4A0E1A] text-white font-semibold rounded-lg transition-all duration-300 shadow-md shadow-[#6B1A2A]/20 hover:shadow-lg hover:-translate-y-0.5 flex items-center justify-center gap-2 disabled:opacity-50"
           >
             {loading ? 'Criando conta...' : (
               <>
@@ -205,7 +215,7 @@ export default function Cadastro() {
         </form>
 
         <div className="mt-6 pt-6 border-t border-[#E8EAE0] text-center">
-          <Link href="/login" className="text-[#8B0000] hover:underline text-sm font-medium">
+          <Link href="/login" className="text-[#6B1A2A] hover:underline text-sm font-medium">
             Já tem uma conta? Faça login
           </Link>
         </div>
