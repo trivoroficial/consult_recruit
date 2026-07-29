@@ -1,50 +1,208 @@
 'use client'
 
-import { useState } from 'react'
-import { useRouter } from 'next/navigation'
+import { useState, useEffect } from 'react'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { SidebarAdmin } from '@/components/dashboard/SidebarAdmin'
 import { DashboardFooter } from '@/components/dashboard/DashboardFooter'
-import { 
-  GripVertical, Plus, Save, ArrowLeft, CheckCircle,
-  MessageSquare, Trash2, Copy, ArrowUp, ArrowDown,
-  Edit, Eye, Clock, Users, Briefcase
+import {
+  ArrowLeft, Save, CheckCircle, Plus, Trash2,
+  GripVertical, Layers, HelpCircle, Tag, Type,
+  List, CheckSquare, Sliders, ToggleLeft,
+  X, Edit, Copy, Eye, EyeOff, AlertCircle
 } from 'lucide-react'
+import { supabase } from '@/lib/supabase/client'
 
-export default function OperacionalConstrutor() {
+export default function ConstrutorEntrevista() {
   const router = useRouter()
-  const [nome, setNome] = useState('Nova Entrevista')
-  const [descricao, setDescricao] = useState('Descrição do modelo')
-  const [perguntas, setPerguntas] = useState([
-    { id: 1, texto: 'Quais são seus principais objetivos profissionais?', tipo: 'texto_longo', obrigatoria: true },
-    { id: 2, texto: 'Quais competências considera fundamentais para esta função?', tipo: 'texto_longo', obrigatoria: true },
-    { id: 3, texto: 'Como costuma superar desafios profissionais?', tipo: 'texto_longo', obrigatoria: false },
-  ])
-
+  const searchParams = useSearchParams()
+  const id = searchParams.get('id')
+  const tipo = searchParams.get('tipo') || 'modelo'
+  
+  const [loading, setLoading] = useState(false)
+  const [saving, setSaving] = useState(false)
+  const [success, setSuccess] = useState(false)
+  const [error, setError] = useState<string | null>(null)
+  const [form, setForm] = useState({
+    nome: '',
+    descricao: '',
+    tipo: 'padrao',
+    perguntas: [] as any[],
+    competencias: [] as string[]
+  })
   const [novaPergunta, setNovaPergunta] = useState('')
+  const [novaCompetencia, setNovaCompetencia] = useState('')
+  const [tipoPergunta, setTipoPergunta] = useState('texto_longo')
+  const [perguntaObrigatoria, setPerguntaObrigatoria] = useState(true)
 
-  const adicionarPergunta = () => {
-    if (novaPergunta.trim()) {
-      setPerguntas([...perguntas, { 
-        id: Date.now(), 
-        texto: novaPergunta, 
-        tipo: 'texto_longo', 
-        obrigatoria: false 
-      }])
-      setNovaPergunta('')
+  useEffect(() => {
+    if (id) {
+      carregarModelo()
+    }
+  }, [id])
+
+  const carregarModelo = async () => {
+    setLoading(true)
+    try {
+      const { data, error } = await supabase
+        .from('modelos_entrevista')
+        .select('*')
+        .eq('id', parseInt(id))
+        .single()
+
+      if (error) throw error
+      if (data) {
+        setForm({
+          nome: data.nome || '',
+          descricao: data.descricao || '',
+          tipo: data.tipo || 'padrao',
+          perguntas: data.perguntas || [],
+          competencias: data.competencias || []
+        })
+      }
+    } catch (err: any) {
+      setError(err.message || 'Erro ao carregar modelo')
+    } finally {
+      setLoading(false)
     }
   }
 
-  const removerPergunta = (id: number) => {
-    setPerguntas(perguntas.filter(p => p.id !== id))
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setSaving(true)
+    setError(null)
+
+    if (!form.nome.trim()) {
+      setError('Nome do modelo é obrigatório')
+      setSaving(false)
+      return
+    }
+
+    try {
+      if (id) {
+        const { error } = await supabase
+          .from('modelos_entrevista')
+          .update({
+            nome: form.nome,
+            descricao: form.descricao,
+            tipo: form.tipo,
+            perguntas: form.perguntas,
+            competencias: form.competencias
+          })
+          .eq('id', parseInt(id))
+
+        if (error) throw error
+      } else {
+        const { error } = await supabase
+          .from('modelos_entrevista')
+          .insert([{
+            nome: form.nome,
+            descricao: form.descricao,
+            tipo: form.tipo,
+            perguntas: form.perguntas,
+            competencias: form.competencias
+          }])
+
+        if (error) throw error
+      }
+
+      setSuccess(true)
+      setTimeout(() => {
+        router.push('/admin/operacional/modelos')
+      }, 2000)
+    } catch (err: any) {
+      setError(err.message || 'Erro ao salvar modelo')
+    } finally {
+      setSaving(false)
+    }
   }
 
-  const moverPergunta = (index: number, direcao: 'up' | 'down') => {
-    const novoIndex = direcao === 'up' ? index - 1 : index + 1
-    if (novoIndex < 0 || novoIndex >= perguntas.length) return
-    const newPerguntas = [...perguntas]
-    const [item] = newPerguntas.splice(index, 1)
-    newPerguntas.splice(novoIndex, 0, item)
-    setPerguntas(newPerguntas)
+  const adicionarPergunta = () => {
+    if (!novaPergunta.trim()) return
+
+    setForm({
+      ...form,
+      perguntas: [
+        ...form.perguntas,
+        {
+          id: Date.now(),
+          pergunta: novaPergunta,
+          tipo: tipoPergunta,
+          obrigatoria: perguntaObrigatoria
+        }
+      ]
+    })
+    setNovaPergunta('')
+  }
+
+  const removerPergunta = (id: number) => {
+    setForm({
+      ...form,
+      perguntas: form.perguntas.filter(p => p.id !== id)
+    })
+  }
+
+  const adicionarCompetencia = () => {
+    if (!novaCompetencia.trim()) return
+    setForm({
+      ...form,
+      competencias: [...form.competencias, novaCompetencia.trim()]
+    })
+    setNovaCompetencia('')
+  }
+
+  const removerCompetencia = (index: number) => {
+    setForm({
+      ...form,
+      competencias: form.competencias.filter((_, i) => i !== index)
+    })
+  }
+
+  const moverPergunta = (from: number, to: number) => {
+    const items = [...form.perguntas]
+    const [movedItem] = items.splice(from, 1)
+    items.splice(to, 0, movedItem)
+    setForm({ ...form, perguntas: items })
+  }
+
+  if (success) {
+    return (
+      <div className="min-h-screen bg-[#F8F4E6] flex flex-col">
+        <SidebarAdmin />
+        <div className="flex-1 ml-64 flex flex-col min-h-screen">
+          <div className="flex-1 p-8 flex items-center justify-center">
+            <div className="bg-white rounded-2xl shadow-sm border border-[#E8EAE0] p-12 text-center max-w-md w-full">
+              <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <CheckCircle className="h-10 w-10 text-green-600" />
+              </div>
+              <h2 className="text-2xl font-bold text-[#2D343A]">Modelo salvo com sucesso!</h2>
+              <p className="text-[#708090] mt-2">
+                O modelo {form.nome} foi {id ? 'atualizado' : 'criado'}.
+              </p>
+              <button
+                onClick={() => router.push('/admin/operacional/modelos')}
+                className="mt-6 px-6 py-2 bg-[#6B1A2A] text-white rounded-lg hover:bg-[#4A0E1A] transition"
+              >
+                Voltar para Modelos
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-[#F8F4E6] flex flex-col">
+        <SidebarAdmin />
+        <div className="flex-1 ml-64 flex items-center justify-center">
+          <div className="text-center">
+            <Layers className="h-12 w-12 text-[#6B1A2A] animate-pulse mx-auto mb-4" />
+            <p className="text-[#708090]">Carregando...</p>
+          </div>
+        </div>
+      </div>
+    )
   }
 
   return (
@@ -54,170 +212,138 @@ export default function OperacionalConstrutor() {
       <div className="flex-1 ml-64 flex flex-col min-h-screen">
         <header className="bg-white border-b border-[#E8EAE0] px-8 py-4 flex items-center justify-between">
           <div className="flex items-center gap-4">
-            <button onClick={() => router.push('/admin/operacional/modelos')} className="p-2 hover:bg-[#F8F4E6] rounded-lg transition">
+            <button 
+              onClick={() => router.push('/admin/operacional/modelos')}
+              className="p-2 hover:bg-[#F8F4E6] rounded-lg transition"
+            >
               <ArrowLeft className="h-5 w-5 text-[#708090]" />
             </button>
             <div>
-              <h1 className="text-2xl font-bold text-[#2D343A]">Construtor de Entrevistas</h1>
-              <p className="text-sm text-[#708090]">Monte sua entrevista arrastando perguntas</p>
+              <h1 className="text-2xl font-bold text-[#2D343A] flex items-center gap-2">
+                <Layers className="h-6 w-6 text-[#6B1A2A]" />
+                {id ? 'Editar Modelo' : 'Novo Modelo'}
+              </h1>
+              <p className="text-sm text-[#708090]">Construa seu modelo de entrevista</p>
             </div>
           </div>
-          <button className="px-4 py-2 bg-[#8B0000] text-white rounded-lg hover:bg-[#700000] transition font-medium flex items-center gap-2">
+          <button
+            onClick={handleSubmit}
+            disabled={saving}
+            className="px-4 py-2 bg-[#6B1A2A] text-white rounded-lg hover:bg-[#4A0E1A] transition font-medium flex items-center gap-2 disabled:opacity-50"
+          >
             <Save className="h-4 w-4" />
-            Salvar Modelo
+            {saving ? 'Salvando...' : 'Salvar Modelo'}
           </button>
         </header>
 
         <div className="flex-1 p-8">
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            {/* PAINEL ESQUERDO - CONFIGURAÇÃO */}
-            <div className="lg:col-span-1 space-y-4">
-              <div className="bg-white rounded-xl shadow-sm border border-[#E8EAE0] p-6">
-                <h3 className="text-lg font-semibold text-[#2D343A] mb-4">Informações</h3>
-                <div className="space-y-4">
-                  <div>
-                    <label className="block text-sm font-medium text-[#2D343A] mb-1.5">Nome do Modelo</label>
-                    <input 
-                      type="text" 
-                      className="w-full px-4 py-2 border border-[#E8EAE0] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#8B0000]"
-                      value={nome}
-                      onChange={(e) => setNome(e.target.value)}
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-[#2D343A] mb-1.5">Descrição</label>
-                    <textarea 
-                      rows={2}
-                      className="w-full px-4 py-2 border border-[#E8EAE0] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#8B0000] resize-none"
-                      value={descricao}
-                      onChange={(e) => setDescricao(e.target.value)}
-                    />
-                  </div>
-                </div>
+          <form onSubmit={handleSubmit} className="space-y-6">
+            {error && (
+              <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg text-sm flex items-start gap-2">
+                <AlertCircle className="h-5 w-5 flex-shrink-0 mt-0.5" />
+                {error}
               </div>
+            )}
 
-              <div className="bg-white rounded-xl shadow-sm border border-[#E8EAE0] p-6">
-                <h3 className="text-lg font-semibold text-[#2D343A] mb-4">Adicionar Pergunta</h3>
-                <div className="flex gap-2">
-                  <input 
-                    type="text" 
-                    className="flex-1 px-4 py-2 border border-[#E8EAE0] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#8B0000]"
-                    placeholder="Digite a pergunta..."
-                    value={novaPergunta}
-                    onChange={(e) => setNovaPergunta(e.target.value)}
-                    onKeyDown={(e) => e.key === 'Enter' && adicionarPergunta()}
+            <div className="bg-white rounded-2xl shadow-sm border border-[#E8EAE0] p-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <label className="block text-sm font-medium text-[#2D343A] mb-1.5">
+                    Nome do Modelo <span className="text-[#6B1A2A]">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    required
+                    className="w-full px-4 py-3 border border-[#E8EAE0] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#6B1A2A] transition"
+                    value={form.nome}
+                    onChange={(e) => setForm({...form, nome: e.target.value})}
+                    placeholder="Ex: Entrevista Operacional"
                   />
-                  <button 
-                    onClick={adicionarPergunta}
-                    className="p-2 bg-[#8B0000] text-white rounded-lg hover:bg-[#700000] transition"
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-[#2D343A] mb-1.5">Tipo</label>
+                  <select
+                    className="w-full px-4 py-3 border border-[#E8EAE0] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#6B1A2A] transition"
+                    value={form.tipo}
+                    onChange={(e) => setForm({...form, tipo: e.target.value})}
                   >
-                    <Plus className="h-5 w-5" />
-                  </button>
-                </div>
-                <div className="mt-2 text-xs text-[#708090]">
-                  Dica: Pressione Enter para adicionar rapidamente
+                    <option value="padrao">Padrão</option>
+                    <option value="operacional">Operacional</option>
+                    <option value="administrativa">Administrativa</option>
+                    <option value="lideranca">Liderança</option>
+                    <option value="comercial">Comercial</option>
+                    <option value="tecnica">Técnica</option>
+                  </select>
                 </div>
               </div>
-
-              <div className="bg-white rounded-xl shadow-sm border border-[#E8EAE0] p-6">
-                <h3 className="text-lg font-semibold text-[#2D343A] mb-4">Resumo</h3>
-                <div className="space-y-2 text-sm">
-                  <div className="flex justify-between">
-                    <span className="text-[#708090]">Total de perguntas</span>
-                    <span className="font-medium text-[#2D343A]">{perguntas.length}</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-[#708090]">Obrigatórias</span>
-                    <span className="font-medium text-[#2D343A]">{perguntas.filter(p => p.obrigatoria).length}</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-[#708090]">Tempo estimado</span>
-                    <span className="font-medium text-[#2D343A]">{perguntas.length * 2} min</span>
-                  </div>
-                </div>
+              <div className="mt-4">
+                <label className="block text-sm font-medium text-[#2D343A] mb-1.5">Descrição</label>
+                <textarea
+                  rows={2}
+                  className="w-full px-4 py-3 border border-[#E8EAE0] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#6B1A2A] transition resize-none"
+                  value={form.descricao}
+                  onChange={(e) => setForm({...form, descricao: e.target.value})}
+                  placeholder="Descreva o propósito deste modelo..."
+                />
               </div>
             </div>
 
-            {/* PAINEL DIREITO - CONSTRUTOR */}
-            <div className="lg:col-span-2">
-              <div className="bg-white rounded-xl shadow-sm border border-[#E8EAE0] p-6 min-h-[500px]">
-                <div className="flex items-center justify-between mb-4">
-                  <h3 className="text-lg font-semibold text-[#2D343A]">Perguntas</h3>
-                  <span className="text-sm text-[#708090]">Arraste para reorganizar</span>
-                </div>
+            {/* PERGUNTAS */}
+            <div className="bg-white rounded-2xl shadow-sm border border-[#E8EAE0] p-6">
+              <h3 className="font-semibold text-[#2D343A] mb-4 flex items-center gap-2">
+                <HelpCircle className="h-5 w-5 text-[#6B1A2A]" />
+                Perguntas ({form.perguntas.length})
+              </h3>
 
-                <div className="space-y-3">
-                  {perguntas.map((pergunta, index) => (
-                    <div 
-                      key={pergunta.id} 
-                      className="flex items-center gap-3 p-3 bg-[#F8F4E6] rounded-lg border border-[#E8EAE0] hover:border-[#8B0000]/30 transition group"
-                    >
-                      <div className="cursor-move text-[#708090]">
-                        <GripVertical className="h-5 w-5" />
-                      </div>
-                      <div className="flex-1">
-                        <div className="flex items-center gap-2">
-                          <MessageSquare className="h-4 w-4 text-[#8B0000]" />
-                          <span className="font-medium text-[#2D343A]">{pergunta.texto}</span>
-                        </div>
-                        <div className="flex items-center gap-3 mt-1 text-xs text-[#708090]">
-                          <span>Tipo: Texto longo</span>
-                          <span>{pergunta.obrigatoria ? 'Obrigatória' : 'Opcional'}</span>
-                        </div>
-                      </div>
-                      <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition">
-                        <button 
-                          onClick={() => moverPergunta(index, 'up')}
-                          className="p-1 hover:bg-[#F8F4E6] rounded"
-                          disabled={index === 0}
-                        >
-                          <ArrowUp className="h-4 w-4 text-[#708090]" />
-                        </button>
-                        <button 
-                          onClick={() => moverPergunta(index, 'down')}
-                          className="p-1 hover:bg-[#F8F4E6] rounded"
-                          disabled={index === perguntas.length - 1}
-                        >
-                          <ArrowDown className="h-4 w-4 text-[#708090]" />
-                        </button>
-                        <button 
-                          onClick={() => removerPergunta(pergunta.id)}
-                          className="p-1 hover:bg-red-50 rounded"
-                        >
-                          <Trash2 className="h-4 w-4 text-red-500" />
-                        </button>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-
-                {perguntas.length === 0 && (
-                  <div className="text-center py-12 text-[#708090]">
-                    <MessageSquare className="h-12 w-12 mx-auto mb-4 text-[#E8EAE0]" />
-                    <p>Nenhuma pergunta adicionada</p>
-                    <p className="text-sm">Adicione perguntas ao lado esquerdo</p>
-                  </div>
-                )}
-              </div>
-
-              <div className="mt-6 flex justify-end gap-3">
-                <button 
-                  onClick={() => router.push('/admin/operacional/modelos')}
-                  className="px-6 py-3 border border-[#E8EAE0] rounded-lg hover:bg-[#F8F4E6] transition text-[#708090]"
+              <div className="flex flex-wrap gap-3 mb-4">
+                <input
+                  type="text"
+                  className="flex-1 min-w-[200px] px-4 py-2 border border-[#E8EAE0] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#6B1A2A] text-sm"
+                  placeholder="Digite a pergunta..."
+                  value={novaPergunta}
+                  onChange={(e) => setNovaPergunta(e.target.value)}
+                />
+                <select
+                  className="px-4 py-2 border border-[#E8EAE0] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#6B1A2A] bg-white text-sm"
+                  value={tipoPergunta}
+                  onChange={(e) => setTipoPergunta(e.target.value)}
                 >
-                  Cancelar
-                </button>
-                <button className="px-6 py-3 bg-[#8B0000] text-white rounded-lg hover:bg-[#700000] transition font-medium flex items-center gap-2">
-                  <CheckCircle className="h-5 w-5" />
-                  Salvar Modelo
+                  <option value="texto_curto">Texto Curto</option>
+                  <option value="texto_longo">Texto Longo</option>
+                  <option value="multipla_escolha">Múltipla Escolha</option>
+                  <option value="checkbox">Checkbox</option>
+                  <option value="escala">Escala</option>
+                  <option value="sim_nao">Sim/Não</option>
+                </select>
+                <label className="flex items-center gap-2 text-sm text-[#2D343A]">
+                  <input
+                    type="checkbox"
+                    checked={perguntaObrigatoria}
+                    onChange={(e) => setPerguntaObrigatoria(e.target.checked)}
+                    className="rounded border-[#E8EAE0] text-[#6B1A2A]"
+                  />
+                  Obrigatória
+                </label>
+                <button
+                  type="button"
+                  onClick={adicionarPergunta}
+                  className="px-4 py-2 bg-[#6B1A2A] text-white rounded-lg hover:bg-[#4A0E1A] transition flex items-center gap-2 text-sm"
+                >
+                  <Plus className="h-4 w-4" />
+                  Adicionar
                 </button>
               </div>
-            </div>
-          </div>
-        </div>
 
-        <DashboardFooter />
-      </div>
-    </div>
-  )
-}
+              <div className="space-y-2">
+                {form.perguntas.length === 0 ? (
+                  <p className="text-center text-[#708090] py-4 text-sm">
+                    Nenhuma pergunta adicionada. Adicione perguntas acima.
+                  </p>
+                ) : (
+                  form.perguntas.map((p, index) => {
+                    const tipoLabel = {
+                      'texto_curto': 'Texto Curto',
+                      'texto_longo': 'Texto Longo',
+                      'multipla_escolha': 'Múltipla Escolha',
+                      'checkbox': 'Checkbox',
+                     
