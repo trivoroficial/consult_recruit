@@ -7,7 +7,7 @@ import {
   Mail, Phone, MapPin, Send, 
   MessageCircle, Clock, Building2,
   Users, CheckCircle, ArrowRight,
-  Headphones
+  Headphones, ArrowLeft
 } from 'lucide-react'
 
 const fadeUp = {
@@ -244,7 +244,6 @@ export default function ContatoPage() {
               variants={fadeUp}
               transition={{ delay: 0.2 }}
             >
-              {/* CARD PRINCIPAL */}
               <div className="bg-gradient-to-br from-[#6B1A2A] to-[#4A0E1A] rounded-2xl p-8 text-white">
                 <div className="flex items-center gap-3 mb-6">
                   <div className="p-2 bg-white/10 rounded-lg">
@@ -297,7 +296,6 @@ export default function ContatoPage() {
                 </div>
               </div>
 
-              {/* STATS */}
               <div className="grid grid-cols-2 gap-4">
                 <div className="bg-white rounded-2xl p-6 border border-[#E8EAE0] text-center">
                   <p className="text-2xl font-bold text-[#6B1A2A]">500+</p>
@@ -309,7 +307,6 @@ export default function ContatoPage() {
                 </div>
               </div>
 
-              {/* DEPOIMENTO */}
               <div className="bg-white rounded-2xl p-6 border border-[#E8EAE0]">
                 <div className="flex items-center gap-2 mb-3">
                   <span className="text-yellow-400">★★★★★</span>
