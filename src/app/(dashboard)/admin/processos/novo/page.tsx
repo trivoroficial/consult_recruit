@@ -4,12 +4,14 @@ import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { SidebarAdmin } from '@/components/dashboard/SidebarAdmin'
 import { DashboardFooter } from '@/components/dashboard/DashboardFooter'
-import { Briefcase, ArrowLeft, Save, CheckCircle, Building2, Users, Calendar, User } from 'lucide-react'
+import { FileText, ArrowLeft, Save, CheckCircle, Building2, Users, Calendar, User } from 'lucide-react'
+import { criarProcesso } from '@/actions/processos'
 
 export default function NovoProcesso() {
   const router = useRouter()
   const [loading, setLoading] = useState(false)
   const [success, setSuccess] = useState(false)
+  const [error, setError] = useState<string | null>(null)
   const [form, setForm] = useState({
     vaga: '',
     empresa: '',
@@ -17,37 +19,31 @@ export default function NovoProcesso() {
     candidatos: '',
     status: 'triagem',
     inicio: new Date().toISOString().split('T')[0],
+    previsaoFim: '',
     descricao: '',
     observacoes: ''
   })
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setLoading(true)
+    setError(null)
 
-    setTimeout(() => {
-      const novoProcesso = {
-        id: Date.now(),
-        ...form,
-        candidatos: parseInt(form.candidatos) || 0,
-        dataCriacao: new Date().toISOString()
+    try {
+      const result = await criarProcesso(form)
+      if (result.success) {
+        setSuccess(true)
+        setTimeout(() => {
+          router.push('/admin/processos')
+        }, 2000)
+      } else {
+        setError(result.error || 'Erro ao criar processo')
+        setLoading(false)
       }
-
-      const saved = localStorage.getItem('zenthos_processos')
-      let processos = []
-      if (saved) {
-        processos = JSON.parse(saved)
-      }
-      processos.push(novoProcesso)
-      localStorage.setItem('zenthos_processos', JSON.stringify(processos))
-
+    } catch (err) {
+      setError('Erro ao criar processo')
       setLoading(false)
-      setSuccess(true)
-
-      setTimeout(() => {
-        router.push('/admin/processos')
-      }, 2000)
-    }, 1500)
+    }
   }
 
   if (success) {
@@ -62,11 +58,11 @@ export default function NovoProcesso() {
               </div>
               <h2 className="text-2xl font-bold text-[#2D343A]">Processo criado com sucesso!</h2>
               <p className="text-[#708090] mt-2">
-                O processo para {form.vaga} foi criado e já está disponível.
+                O processo para {form.vaga} foi criado.
               </p>
               <button
                 onClick={() => router.push('/admin/processos')}
-                className="mt-6 px-6 py-2 bg-[#8B0000] text-white rounded-lg hover:bg-[#700000] transition"
+                className="mt-6 px-6 py-2 bg-[#6B1A2A] text-white rounded-lg hover:bg-[#4A0E1A] transition"
               >
                 Voltar para Processos
               </button>
@@ -92,7 +88,7 @@ export default function NovoProcesso() {
             </button>
             <div>
               <h1 className="text-2xl font-bold text-[#2D343A] flex items-center gap-2">
-                <Briefcase className="h-6 w-6 text-[#8B0000]" />
+                <FileText className="h-6 w-6 text-[#6B1A2A]" />
                 Novo Processo
               </h1>
               <p className="text-sm text-[#708090]">Crie um novo processo seletivo</p>
@@ -102,28 +98,34 @@ export default function NovoProcesso() {
 
         <div className="flex-1 p-8">
           <form onSubmit={handleSubmit} className="bg-white rounded-2xl shadow-sm border border-[#E8EAE0] p-8">
+            {error && (
+              <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg mb-4 text-sm">
+                {error}
+              </div>
+            )}
+
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
                 <label className="block text-sm font-medium text-[#2D343A] mb-1.5">
-                  Vaga <span className="text-[#8B0000]">*</span>
+                  Vaga <span className="text-[#6B1A2A]">*</span>
                 </label>
                 <input
                   type="text"
                   required
-                  className="w-full px-4 py-3 border border-[#E8EAE0] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#8B0000] transition"
+                  className="w-full px-4 py-3 border border-[#E8EAE0] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#6B1A2A] transition"
                   value={form.vaga}
                   onChange={(e) => setForm({...form, vaga: e.target.value})}
-                  placeholder="Ex: Analista Administrativo"
+                  placeholder="Analista Administrativo"
                 />
               </div>
               <div>
                 <label className="block text-sm font-medium text-[#2D343A] mb-1.5">
-                  Empresa <span className="text-[#8B0000]">*</span>
+                  Empresa <span className="text-[#6B1A2A]">*</span>
                 </label>
                 <input
                   type="text"
                   required
-                  className="w-full px-4 py-3 border border-[#E8EAE0] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#8B0000] transition"
+                  className="w-full px-4 py-3 border border-[#E8EAE0] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#6B1A2A] transition"
                   value={form.empresa}
                   onChange={(e) => setForm({...form, empresa: e.target.value})}
                   placeholder="Nome da empresa"
@@ -131,12 +133,12 @@ export default function NovoProcesso() {
               </div>
               <div>
                 <label className="block text-sm font-medium text-[#2D343A] mb-1.5">
-                  Responsável <span className="text-[#8B0000]">*</span>
+                  Responsável <span className="text-[#6B1A2A]">*</span>
                 </label>
                 <input
                   type="text"
                   required
-                  className="w-full px-4 py-3 border border-[#E8EAE0] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#8B0000] transition"
+                  className="w-full px-4 py-3 border border-[#E8EAE0] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#6B1A2A] transition"
                   value={form.responsavel}
                   onChange={(e) => setForm({...form, responsavel: e.target.value})}
                   placeholder="Nome do responsável"
@@ -148,7 +150,7 @@ export default function NovoProcesso() {
                 </label>
                 <input
                   type="number"
-                  className="w-full px-4 py-3 border border-[#E8EAE0] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#8B0000] transition"
+                  className="w-full px-4 py-3 border border-[#E8EAE0] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#6B1A2A] transition"
                   value={form.candidatos}
                   onChange={(e) => setForm({...form, candidatos: e.target.value})}
                   placeholder="0"
@@ -159,7 +161,7 @@ export default function NovoProcesso() {
                   Status
                 </label>
                 <select
-                  className="w-full px-4 py-3 border border-[#E8EAE0] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#8B0000] transition"
+                  className="w-full px-4 py-3 border border-[#E8EAE0] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#6B1A2A] transition"
                   value={form.status}
                   onChange={(e) => setForm({...form, status: e.target.value})}
                 >
@@ -175,9 +177,20 @@ export default function NovoProcesso() {
                 </label>
                 <input
                   type="date"
-                  className="w-full px-4 py-3 border border-[#E8EAE0] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#8B0000] transition"
+                  className="w-full px-4 py-3 border border-[#E8EAE0] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#6B1A2A] transition"
                   value={form.inicio}
                   onChange={(e) => setForm({...form, inicio: e.target.value})}
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-[#2D343A] mb-1.5">
+                  Previsão de Término
+                </label>
+                <input
+                  type="date"
+                  className="w-full px-4 py-3 border border-[#E8EAE0] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#6B1A2A] transition"
+                  value={form.previsaoFim}
+                  onChange={(e) => setForm({...form, previsaoFim: e.target.value})}
                 />
               </div>
               <div className="md:col-span-2">
@@ -186,7 +199,7 @@ export default function NovoProcesso() {
                 </label>
                 <textarea
                   rows={3}
-                  className="w-full px-4 py-3 border border-[#E8EAE0] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#8B0000] transition resize-none"
+                  className="w-full px-4 py-3 border border-[#E8EAE0] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#6B1A2A] transition resize-none"
                   value={form.descricao}
                   onChange={(e) => setForm({...form, descricao: e.target.value})}
                   placeholder="Descreva o processo seletivo..."
@@ -198,7 +211,7 @@ export default function NovoProcesso() {
                 </label>
                 <textarea
                   rows={2}
-                  className="w-full px-4 py-3 border border-[#E8EAE0] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#8B0000] transition resize-none"
+                  className="w-full px-4 py-3 border border-[#E8EAE0] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#6B1A2A] transition resize-none"
                   value={form.observacoes}
                   onChange={(e) => setForm({...form, observacoes: e.target.value})}
                   placeholder="Observações adicionais..."
@@ -210,7 +223,7 @@ export default function NovoProcesso() {
               <button
                 type="submit"
                 disabled={loading}
-                className="px-8 py-3 bg-[#8B0000] text-white rounded-lg hover:bg-[#700000] transition font-medium flex items-center gap-2 disabled:opacity-50"
+                className="px-8 py-3 bg-[#6B1A2A] text-white rounded-lg hover:bg-[#4A0E1A] transition font-medium flex items-center gap-2 disabled:opacity-50"
               >
                 <Save className="h-5 w-5" />
                 {loading ? 'Criando...' : 'Criar Processo'}
