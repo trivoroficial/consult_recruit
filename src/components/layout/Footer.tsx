@@ -55,17 +55,10 @@ export function Footer() {
           </div>
         </div>
 
+        {/* RODAPÉ FINAL COM COPYRIGHT VIGORRE */}
         <div className="border-t border-[#E8EAE0] mt-8 pt-6">
           <div className="flex flex-col md:flex-row items-center justify-between gap-4">
             <div className="flex items-center gap-3">
-              <img 
-                src="/logo-vigorre.png" 
-                alt="VIGORRE" 
-                className="h-10 w-auto object-contain"
-                onError={(e) => {
-                  (e.target as HTMLImageElement).src = '/logo.png'
-                }}
-              />
               <div>
                 <p className="text-sm font-semibold text-[#6B1A2A]">VIGORRE</p>
                 <p className="text-xs text-[#708090]">© 2026 VIGORRE TECH™. Todos os direitos reservados.</p>
