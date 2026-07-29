@@ -1,4 +1,3 @@
-// src/components/home/CtaFinal.tsx
 import Link from 'next/link'
 
 export function CtaFinal() {
@@ -14,12 +13,12 @@ export function CtaFinal() {
         <div className="flex flex-wrap justify-center gap-4">
           <Link
             href="/cadastro"
-            className="px-8 py-3 bg-[#C9A84C] hover:bg-[#B8973A] text-[#1A1A2E] font-semibold rounded-lg transition"
+            className="px-8 py-3 bg-[#E3C9A8] hover:bg-[#C9A84C] text-[#1A1A2E] font-semibold rounded-lg transition"
           >
             Criar conta gratuita
           </Link>
           <Link
-            href="/vagas"
+            href="/login"
             className="px-8 py-3 bg-white/10 hover:bg-white/20 text-white font-semibold rounded-lg transition border border-white/20"
           >
             Ver vagas disponíveis
