@@ -1,9 +1,12 @@
 import type { Metadata } from 'next'
+import { Inter } from 'next/font/google'
 import './globals.css'
 
+const inter = Inter({ subsets: ['latin'] })
+
 export const metadata: Metadata = {
-  title: 'ZENTHOS | Plataforma de Recrutamento e Seleção',
-  description: 'Conectando talentos às melhores oportunidades do mercado.',
+  title: 'ZENTHOS - Recrutamento e Seleção',
+  description: 'Plataforma de recrutamento e seleção',
 }
 
 export default function RootLayout({
@@ -13,7 +16,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="pt-BR">
-      <body className="flex flex-col min-h-screen bg-[#F8F4E6] text-[#2D343A] antialiased">
+      <body className={inter.className}>
         {children}
       </body>
     </html>
