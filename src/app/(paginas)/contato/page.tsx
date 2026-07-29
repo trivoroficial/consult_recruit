@@ -37,6 +37,9 @@ export default function ContatoPage() {
     }, 1500)
   }
 
+  const whatsappNumber = "5534991850735"
+  const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent("Olá! Gostaria de falar com um especialista da ZENTHOS.")}`
+
   return (
     <div className="min-h-screen bg-[#F8F4E6]">
       
@@ -259,7 +262,7 @@ export default function ContatoPage() {
                     <Phone className="h-5 w-5 text-[#E3C9A8] flex-shrink-0 mt-0.5" />
                     <div>
                       <p className="font-medium">Telefone</p>
-                      <p className="text-sm text-white/70">+55 37 99117-7058</p>
+                      <p className="text-sm text-white/70">(34) 99185-0735</p>
                     </div>
                   </div>
                   <div className="flex items-start gap-4 p-4 bg-white/5 rounded-xl hover:bg-white/10 transition">
@@ -286,10 +289,10 @@ export default function ContatoPage() {
                 </div>
 
                 <div className="mt-6 pt-6 border-t border-white/10">
-                  <a href="https://wa.me/5537991177058" target="_blank" rel="noopener noreferrer">
+                  <a href={whatsappUrl} target="_blank" rel="noopener noreferrer">
                     <button className="w-full py-3 bg-[#25D366] text-white rounded-lg hover:bg-[#1DA851] transition font-semibold flex items-center justify-center gap-2">
                       <MessageCircle className="h-5 w-5" />
-                      Falar no WhatsApp
+                      Falar com Especialista
                     </button>
                   </a>
                 </div>
