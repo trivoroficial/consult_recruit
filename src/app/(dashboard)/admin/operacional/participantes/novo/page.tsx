@@ -4,9 +4,9 @@ import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { SidebarAdmin } from '@/components/dashboard/SidebarAdmin'
 import { DashboardFooter } from '@/components/dashboard/DashboardFooter'
-import { 
-  UsersRound, ArrowLeft, Save, CheckCircle, 
-  User, Phone, MapPin, Briefcase, FileText, 
+import {
+  UsersRound, ArrowLeft, Save, CheckCircle,
+  User, Phone, MapPin, Briefcase, FileText,
   GraduationCap, Building2, DollarSign, Calendar,
   Upload, Camera, X
 } from 'lucide-react'
