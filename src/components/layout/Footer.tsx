@@ -21,7 +21,6 @@ export function Footer() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           
-          {/* COLUNA 1 - LOGO */}
           <div>
             <img src="/logo.png" alt="ZENTHOS" className="h-[1.5cm] w-auto object-contain" />
             <p className="text-sm text-[#708090] mt-4 max-w-xs">
@@ -29,7 +28,6 @@ export function Footer() {
             </p>
           </div>
 
-          {/* COLUNA 2 - LINKS RÁPIDOS */}
           <div>
             <h4 className="text-sm font-semibold text-[#2D343A] mb-4">Navegação</h4>
             <ul className="space-y-2 text-sm">
@@ -40,7 +38,6 @@ export function Footer() {
             </ul>
           </div>
 
-          {/* COLUNA 3 - CANDIDATO */}
           <div>
             <h4 className="text-sm font-semibold text-[#2D343A] mb-4">Para Candidatos</h4>
             <ul className="space-y-2 text-sm">
@@ -49,7 +46,6 @@ export function Footer() {
             </ul>
           </div>
 
-          {/* COLUNA 4 - EMPRESA */}
           <div>
             <h4 className="text-sm font-semibold text-[#2D343A] mb-4">Para Empresas</h4>
             <ul className="space-y-2 text-sm">
@@ -59,18 +55,20 @@ export function Footer() {
           </div>
         </div>
 
-        {/* RODAPÉ FINAL COM COPYRIGHT VIGORRE */}
         <div className="border-t border-[#E8EAE0] mt-8 pt-6">
           <div className="flex flex-col md:flex-row items-center justify-between gap-4">
             <div className="flex items-center gap-3">
               <img 
-                src="/logo.png" 
+                src="/logo-vigorre.png" 
                 alt="VIGORRE" 
-                className="h-8 w-auto object-contain opacity-60"
+                className="h-10 w-auto object-contain"
+                onError={(e) => {
+                  (e.target as HTMLImageElement).src = '/logo.png'
+                }}
               />
               <div>
                 <p className="text-sm font-semibold text-[#8B0000]">VIGORRE</p>
-                <p className="text-xs text-[#708090]">© 2026 VIGORRE DESIGNER™</p>
+                <p className="text-xs text-[#708090]">© 2026 VIGORRE TECH™. Todos os direitos reservados.</p>
               </div>
             </div>
             <div className="text-center text-xs text-[#708090]">
