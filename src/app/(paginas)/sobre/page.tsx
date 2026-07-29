@@ -13,14 +13,20 @@ export default function SobrePage() {
   return (
     <div className="min-h-screen bg-[#F8F4E6]">
       
-      {/* ===== HERO SOBRE ===== */}
-      <section className="relative overflow-hidden bg-gradient-to-br from-[#4A0E1A] via-[#6B1A2A] to-[#8B1A3A] py-20 md:py-28">
+      {/* ===== HERO SOBRE COM IMAGEM DE FUNDO ===== */}
+      <section className="relative overflow-hidden min-h-[60vh] flex items-center">
+        {/* IMAGEM DE FUNDO */}
         <div className="absolute inset-0">
-          <div className="absolute top-0 right-0 w-1/2 h-1/2 bg-[#E3C9A8]/5 rounded-full blur-3xl"></div>
-          <div className="absolute bottom-0 left-0 w-1/3 h-1/3 bg-[#E3C9A8]/5 rounded-full blur-3xl"></div>
+          <img 
+            src="/sobre.png" 
+            alt="Sobre a ZENTHOS" 
+            className="w-full h-full object-cover"
+          />
+          {/* OVERLAY VINHO */}
+          <div className="absolute inset-0 bg-gradient-to-r from-[#4A0E1A]/85 via-[#6B1A2A]/70 to-[#6B1A2A]/50"></div>
         </div>
 
-        <div className="container mx-auto px-4 relative z-10">
+        <div className="container mx-auto px-4 relative z-10 py-20 md:py-28">
           <div className="max-w-3xl">
             <motion.div 
               className="inline-flex items-center gap-3 px-4 py-2 text-[11px] tracking-[0.34em] text-[#E3C9A8] uppercase font-medium border border-[#E3C9A8]/30 rounded-full bg-white/10 backdrop-blur-sm"
@@ -41,7 +47,7 @@ export default function SobrePage() {
               <span className="text-[#E3C9A8]">através de estratégia e inovação</span>
             </motion.h1>
             <motion.p 
-              className="mt-4 text-lg text-white/70 max-w-2xl"
+              className="mt-4 text-lg text-white/80 max-w-2xl"
               initial={{ opacity: 0, y: 24 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2, duration: 0.85 }}
