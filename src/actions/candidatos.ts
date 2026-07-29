@@ -50,6 +50,55 @@ export async function listarCandidatos() {
   }
 }
 
+// ✅ ADICIONAR ESTA FUNÇÃO
+export async function buscarCandidatoPorId(id: number) {
+  try {
+    const supabaseClient = supabase()
+    
+    const { data, error } = await supabaseClient
+      .from('candidatos')
+      .select('*')
+      .eq('id', id)
+      .single()
+
+    if (error) throw error
+
+    return { success: true, data }
+  } catch (error: any) {
+    return { success: false, error: error.message }
+  }
+}
+
+export async function atualizarCandidato(id: number, data: any) {
+  try {
+    const supabaseClient = supabase()
+    
+    const { data: candidato, error } = await supabaseClient
+      .from('candidatos')
+      .update({
+        nome: data.nome,
+        telefone: data.telefone,
+        whatsapp: data.whatsapp,
+        cidade: data.cidade,
+        estado: data.estado,
+        cargo: data.cargo,
+        experiencia: data.experiencia,
+        competencias: data.competencias,
+        resumo: data.resumo,
+        status: data.status || 'Disponível'
+      })
+      .eq('id', id)
+      .select()
+      .single()
+
+    if (error) throw error
+
+    return { success: true, data: candidato }
+  } catch (error: any) {
+    return { success: false, error: error.message }
+  }
+}
+
 export async function excluirCandidato(id: number) {
   try {
     const supabaseClient = supabase()
