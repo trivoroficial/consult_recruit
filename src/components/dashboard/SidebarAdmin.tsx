@@ -6,18 +6,17 @@ import { usePathname, useRouter } from 'next/navigation'
 import { 
   Home, Building2, Users, Briefcase, BarChart3, 
   CreditCard, Settings, LogOut, QrCode, FileText, 
-  Calendar, Database, Shield, UsersRound, ClipboardList,
-  MessageCircle, TrendingUp, UserCheck, Award,
-  ChevronDown, ChevronRight, ChevronLeft, Menu, X,
-  Sun, Moon, User, LogIn, HelpCircle
+  Calendar, Database, Shield, UsersRound,
+  ChevronDown, ChevronRight, ChevronLeft, Menu,
+  User, TrendingUp
 } from 'lucide-react'
 import { supabase } from '@/lib/supabase/client'
 
 export function SidebarAdmin() {
   const pathname = usePathname()
   const router = useRouter()
-  const [userName, setUserName] = useState('Administrador')
-  const [userRole, setUserRole] = useState('Master')
+  const [userName, setUserName] = useState('Emerson Divino')
+  const [userRole, setUserRole] = useState('Administrador Master')
   const [collapsed, setCollapsed] = useState(false)
   const [expandedMenus, setExpandedMenus] = useState<string[]>(['gestao', 'financas', 'suporte'])
 
@@ -26,11 +25,16 @@ export function SidebarAdmin() {
     if (userData) {
       try {
         const parsed = JSON.parse(userData)
-        setUserName(parsed.name || 'Administrador')
-        setUserRole(parsed.role || 'Master')
+        // Formatar nome com primeira letra maiúscula
+        const name = parsed.name || 'Emerson Divino'
+        const formattedName = name.split(' ').map((n: string) => 
+          n.charAt(0).toUpperCase() + n.slice(1).toLowerCase()
+        ).join(' ')
+        setUserName(formattedName)
+        setUserRole(parsed.role === 'admin' ? 'Administrador Master' : 'Master')
       } catch {
-        setUserName('Administrador')
-        setUserRole('Master')
+        setUserName('Emerson Divino')
+        setUserRole('Administrador Master')
       }
     }
   }, [])
@@ -84,6 +88,7 @@ export function SidebarAdmin() {
         { icon: Calendar, label: 'Agenda', href: '/admin/agenda' },
         { icon: QrCode, label: 'QR Code Center', href: '/admin/qrcode' },
         { icon: Settings, label: 'Configurações', href: '/admin/configuracoes' },
+        // Acessos e Backup DENTRO de Configurações (subitens)
         { icon: Shield, label: 'Controle de Acessos', href: '/admin/acessos' },
         { icon: Database, label: 'Backup', href: '/admin/backup' },
       ]
