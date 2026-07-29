@@ -1,6 +1,7 @@
 import { ReactNode } from 'react'
 import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
+import { WhatsAppFloat } from '@/components/layout/WhatsAppFloat'
 
 export default function PaginasLayout({
   children,
@@ -14,6 +15,7 @@ export default function PaginasLayout({
         {children}
       </main>
       <Footer />
+      <WhatsAppFloat />
     </div>
   )
 }
