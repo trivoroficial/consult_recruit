@@ -50,6 +50,10 @@ export default function AdminEmpresas() {
     }
   }
 
+  const handleRefresh = async () => {
+    await carregarEmpresas()
+  }
+
   const filtered = empresas.filter(e =>
     e.nome?.toLowerCase().includes(search.toLowerCase()) ||
     e.cnpj?.includes(search) ||
@@ -82,7 +86,7 @@ export default function AdminEmpresas() {
           </div>
           <div className="flex gap-3">
             <button 
-              onClick={carregarEmpresas}
+              onClick={handleRefresh}
               className="px-4 py-2 border border-[#E8EAE0] rounded-lg hover:bg-[#F8F4E6] transition flex items-center gap-2 text-[#708090]"
             >
               <RefreshCw className="h-4 w-4" />
