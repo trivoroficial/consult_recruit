@@ -1,38 +1,68 @@
 'use server'
 
-import { createClient } from '@/lib/supabase/server'
-import { revalidatePath } from 'next/cache'
+import { supabase } from '@/lib/supabase/server'
 
-export async function salvarCandidatoNoBanco(dados: any) {
-  const supabase = createClient()
+export async function criarCandidato(data: any) {
+  try {
+    const supabaseClient = supabase()
+    
+    const { data: candidato, error } = await supabaseClient
+      .from('candidatos')
+      .insert([{
+        nome: data.nome,
+        email: data.email,
+        telefone: data.telefone,
+        whatsapp: data.whatsapp,
+        cidade: data.cidade,
+        estado: data.estado,
+        cargo: data.cargo,
+        experiencia: data.experiencia,
+        competencias: data.competencias,
+        resumo: data.resumo,
+        status: data.status || 'Disponível',
+        score: 0
+      }])
+      .select()
+      .single()
 
-  const candidatoParaSalvar = {
-    nome: dados.nome,
-    email: dados.email,
-    telefone: dados.telefone,
-    whatsapp: dados.whatsapp,
-    cidade: dados.cidade,
-    estado: dados.estado,
-    cargo: dados.cargo,
-    experiencia: dados.experiencia,
-    competencias: dados.competencias,
-    resumo: dados.resumo,
-    status: dados.status,
-    score: Math.floor(Math.random() * 30) + 70,
-    created_at: new Date().toISOString()
+    if (error) throw error
+
+    return { success: true, data: candidato }
+  } catch (error: any) {
+    return { success: false, error: error.message }
   }
+}
 
-  const { error } = await supabase
-    .from('candidatos')
-    .insert([candidatoParaSalvar])
+export async function listarCandidatos() {
+  try {
+    const supabaseClient = supabase()
+    
+    const { data, error } = await supabaseClient
+      .from('candidatos')
+      .select('*')
+      .order('id', { ascending: false })
 
-  if (error) {
-    console.error('Erro ao salvar candidato:', error)
-    return { success: false, message: error.message }
+    if (error) throw error
+
+    return { success: true, data }
+  } catch (error: any) {
+    return { success: false, error: error.message }
   }
+}
 
-  // Opcional: Força o Next.js a atualizar a lista de candidatos se você estiver nela
-  revalidatePath('/admin/candidatos')
+export async function excluirCandidato(id: number) {
+  try {
+    const supabaseClient = supabase()
+    
+    const { error } = await supabaseClient
+      .from('candidatos')
+      .delete()
+      .eq('id', id)
 
-  return { success: true, message: 'Candidato salvo com sucesso!' }
+    if (error) throw error
+
+    return { success: true }
+  } catch (error: any) {
+    return { success: false, error: error.message }
+  }
 }
