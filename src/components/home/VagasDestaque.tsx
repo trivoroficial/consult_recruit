@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
-import { Building2, MapPin, Briefcase, Clock, ChevronRight } from 'lucide-react'
+import { Building2, MapPin, Briefcase, Clock } from 'lucide-react'
 
 export function VagasDestaque() {
   const [vagas, setVagas] = useState<any[]>([])
