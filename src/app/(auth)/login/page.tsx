@@ -8,12 +8,12 @@ import { supabase } from '@/lib/supabase/client'
 
 export default function Login() {
   const router = useRouter()
-  const [email, setEmail] = useState('admin@zenthos.com')
-  const [password, setPassword] = useState('admin@2026')
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
   const [showPassword, setShowPassword] = useState(false)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
-  const [aceitouLGPD, setAceitouLGPD] = useState(true)
+  const [aceitouLGPD, setAceitouLGPD] = useState(false)
   const [mostrarLGPD, setMostrarLGPD] = useState(false)
 
   useEffect(() => {
@@ -38,23 +38,14 @@ export default function Login() {
     setError('')
 
     try {
-      console.log('🔐 Tentando login com:', email)
-
       const { data, error } = await supabase.auth.signInWithPassword({
         email,
         password,
       })
 
-      console.log('📩 Resposta do Supabase:', { data, error })
-
-      if (error) {
-        console.error('❌ Erro do Supabase:', error)
-        throw error
-      }
+      if (error) throw error
 
       if (data?.user) {
-        console.log('✅ Usuário logado:', data.user.email)
-
         localStorage.setItem('zenthos_user', JSON.stringify({
           email: data.user.email,
           name: data.user.email?.split('@')[0] || 'Usuário',
@@ -62,13 +53,9 @@ export default function Login() {
           id: data.user.id
         }))
 
-        // Usar window.location com um pequeno delay para garantir que o localStorage foi salvo
-        setTimeout(() => {
-          window.location.href = '/admin/dashboard'
-        }, 100)
+        window.location.href = '/admin/dashboard'
       }
     } catch (err: any) {
-      console.error('❌ Erro capturado:', err)
       setError(err.message || 'Erro ao fazer login. Verifique suas credenciais.')
     } finally {
       setLoading(false)
@@ -186,15 +173,6 @@ export default function Login() {
           <Link href="/cadastro" className="text-[#8B0000] hover:underline text-sm font-medium">
             Não tem uma conta? Cadastre-se
           </Link>
-        </div>
-
-        <div className="mt-4 p-3 bg-[#F8F4E6] rounded-lg text-center text-xs">
-          <p className="font-medium text-[#2D343A]">🔑 Credenciais:</p>
-          <p className="mt-1">
-            <span className="text-[#8B0000] font-mono">admin@zenthos.com</span>
-            {' / '}
-            <span className="font-mono">admin@2026</span>
-          </p>
         </div>
       </div>
     </div>
