@@ -10,9 +10,9 @@ export async function criarProcesso(data: any) {
       .from('processos')
       .insert([{
         vaga: data.vaga,
-        vaga_id: data.vaga_id,
+        vaga_id: data.vaga_id || null,
         empresa: data.empresa,
-        empresa_id: data.empresa_id,
+        empresa_id: data.empresa_id || null,
         responsavel: data.responsavel,
         candidatos: parseInt(data.candidatos) || 0,
         status: data.status || 'triagem',
@@ -43,6 +43,24 @@ export async function listarProcessos() {
     if (error) throw error
 
     return { success: true, data }
+  } catch (error: any) {
+    return { success: false, error: error.message }
+  }
+}
+
+// ✅ ADICIONAR ESTA FUNÇÃO
+export async function excluirProcesso(id: number) {
+  try {
+    const supabaseClient = supabase()
+    
+    const { error } = await supabaseClient
+      .from('processos')
+      .delete()
+      .eq('id', id)
+
+    if (error) throw error
+
+    return { success: true }
   } catch (error: any) {
     return { success: false, error: error.message }
   }
