@@ -346,4 +346,97 @@ export default function ConstrutorEntrevista() {
                       'texto_longo': 'Texto Longo',
                       'multipla_escolha': 'Múltipla Escolha',
                       'checkbox': 'Checkbox',
-                     
+                      'escala': 'Escala',
+                      'sim_nao': 'Sim/Não'
+                    }[p.tipo] || p.tipo
+
+                    return (
+                      <div
+                        key={p.id}
+                        className="flex items-center gap-3 p-3 bg-[#F8F4E6] rounded-lg hover:bg-[#F8F4E6]/70 transition group"
+                      >
+                        <div className="cursor-grab text-[#708090]">
+                          <GripVertical className="h-5 w-5" />
+                        </div>
+                        <div className="flex-1">
+                          <p className="text-sm font-medium text-[#2D343A]">{p.pergunta}</p>
+                          <div className="flex items-center gap-2 text-xs text-[#708090]">
+                            <span className="px-1.5 py-0.5 bg-white rounded-full">{tipoLabel}</span>
+                            {p.obrigatoria && (
+                              <span className="text-[#6B1A2A]">* Obrigatória</span>
+                            )}
+                          </div>
+                        </div>
+                        <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition">
+                          <button
+                            type="button"
+                            onClick={() => removerPergunta(p.id)}
+                            className="p-1 hover:bg-red-50 rounded"
+                          >
+                            <Trash2 className="h-4 w-4 text-red-500" />
+                          </button>
+                        </div>
+                      </div>
+                    )
+                  })
+                )}
+              </div>
+            </div>
+
+            {/* COMPETÊNCIAS */}
+            <div className="bg-white rounded-2xl shadow-sm border border-[#E8EAE0] p-6">
+              <h3 className="font-semibold text-[#2D343A] mb-4 flex items-center gap-2">
+                <Award className="h-5 w-5 text-[#6B1A2A]" />
+                Competências Avaliadas ({form.competencias.length})
+              </h3>
+
+              <div className="flex gap-3 mb-4">
+                <input
+                  type="text"
+                  className="flex-1 px-4 py-2 border border-[#E8EAE0] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#6B1A2A] text-sm"
+                  placeholder="Digite uma competência..."
+                  value={novaCompetencia}
+                  onChange={(e) => setNovaCompetencia(e.target.value)}
+                />
+                <button
+                  type="button"
+                  onClick={adicionarCompetencia}
+                  className="px-4 py-2 bg-[#6B1A2A] text-white rounded-lg hover:bg-[#4A0E1A] transition flex items-center gap-2 text-sm"
+                >
+                  <Plus className="h-4 w-4" />
+                  Adicionar
+                </button>
+              </div>
+
+              <div className="flex flex-wrap gap-2">
+                {form.competencias.length === 0 ? (
+                  <p className="text-center text-[#708090] w-full py-2 text-sm">
+                    Nenhuma competência adicionada.
+                  </p>
+                ) : (
+                  form.competencias.map((comp, index) => (
+                    <span
+                      key={index}
+                      className="inline-flex items-center gap-1 px-3 py-1 bg-[#F8F4E6] rounded-full text-sm"
+                    >
+                      {comp}
+                      <button
+                        type="button"
+                        onClick={() => removerCompetencia(index)}
+                        className="p-0.5 hover:bg-red-100 rounded-full"
+                      >
+                        <X className="h-3 w-3 text-[#708090]" />
+                      </button>
+                    </span>
+                  ))
+                )}
+              </div>
+            </div>
+          </form>
+        </div>
+
+        <DashboardFooter />
+      </div>
+    </div>
+  )
+}
