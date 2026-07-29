@@ -20,11 +20,12 @@ export default function Login() {
     const checkUser = async () => {
       const { data: { user } } = await supabase.auth.getUser()
       if (user) {
-        router.push('/admin/dashboard')
+        // Usar window.location para forçar o redirecionamento
+        window.location.href = '/admin/dashboard'
       }
     }
     checkUser()
-  }, [router])
+  }, [])
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -46,6 +47,7 @@ export default function Login() {
       if (error) throw error
 
       if (data?.user) {
+        // Salvar no localStorage
         localStorage.setItem('zenthos_user', JSON.stringify({
           email: data.user.email,
           name: data.user.email?.split('@')[0] || 'Usuário',
@@ -53,7 +55,15 @@ export default function Login() {
           id: data.user.id
         }))
 
-        router.push('/admin/dashboard')
+        // Salvar cookie para o middleware
+        document.cookie = `zenthos_user=${JSON.stringify({
+          email: data.user.email,
+          role: 'admin',
+          id: data.user.id
+        })}; path=/; max-age=86400`
+
+        // Forçar redirecionamento
+        window.location.href = '/admin/dashboard'
       }
     } catch (err: any) {
       setError(err.message || 'Erro ao fazer login. Verifique suas credenciais.')
