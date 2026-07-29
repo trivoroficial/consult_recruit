@@ -4,72 +4,77 @@ import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { SidebarAdmin } from '@/components/dashboard/SidebarAdmin'
 import { DashboardFooter } from '@/components/dashboard/DashboardFooter'
-import { Building2, Plus, Search, Edit, Trash2, Eye, X, Save } from 'lucide-react'
+import { Building2, Plus, Search, Edit, Trash2, Eye } from 'lucide-react'
+import { supabase } from '@/lib/supabase/client'
 
 export default function AdminEmpresas() {
   const router = useRouter()
   const [empresas, setEmpresas] = useState<any[]>([])
   const [search, setSearch] = useState('')
-  const [editando, setEditando] = useState<number | null>(null)
-  const [editForm, setEditForm] = useState({ nome: '', cnpj: '', cidade: '', status: 'Ativo' })
   const [loading, setLoading] = useState(true)
 
-  // CARREGAR EMPRESAS DO LOCALSTORAGE
   useEffect(() => {
-    const saved = localStorage.getItem('zenthos_empresas')
-    if (saved) {
-      setEmpresas(JSON.parse(saved))
-    } else {
-      // Dados iniciais se não houver nada
-      const initialEmpresas = [
-        { id: 1, nome: 'Empresa XPTO', cnpj: '12.345.678/0001-99', cidade: 'Uberlândia/MG', status: 'Ativo' },
-        { id: 2, nome: 'Indústria ABC', cnpj: '98.765.432/0001-11', cidade: 'Uberlândia/MG', status: 'Ativo' },
-      ]
-      setEmpresas(initialEmpresas)
-      localStorage.setItem('zenthos_empresas', JSON.stringify(initialEmpresas))
-    }
-    setLoading(false)
+    carregarEmpresas()
   }, [])
 
-  const saveEmpresas = (data: typeof empresas) => {
-    setEmpresas(data)
-    localStorage.setItem('zenthos_empresas', JSON.stringify(data))
-  }
+  const carregarEmpresas = async () => {
+    setLoading(true)
+    try {
+      // BUSCAR DO SUPABASE
+      const { data, error } = await supabase
+        .from('empresas')
+        .select('*')
+        .order('id', { ascending: false })
 
-  const handleEdit = (id: number) => {
-    const empresa = empresas.find(e => e.id === id)
-    if (empresa) {
-      setEditForm(empresa)
-      setEditando(id)
+      if (error) throw error
+
+      if (data && data.length > 0) {
+        setEmpresas(data)
+        // Salvar no localStorage como fallback
+        localStorage.setItem('zenthos_empresas', JSON.stringify(data))
+      } else {
+        // Fallback: buscar do localStorage
+        const saved = localStorage.getItem('zenthos_empresas')
+        if (saved) {
+          setEmpresas(JSON.parse(saved))
+        }
+      }
+    } catch (error) {
+      console.error('Erro ao carregar empresas:', error)
+      // Fallback: buscar do localStorage
+      const saved = localStorage.getItem('zenthos_empresas')
+      if (saved) {
+        setEmpresas(JSON.parse(saved))
+      }
+    } finally {
+      setLoading(false)
     }
   }
 
-  const handleSaveEdit = () => {
-    if (editando === null) return
-    const updated = empresas.map(e => 
-      e.id === editando ? { ...e, ...editForm } : e
-    )
-    saveEmpresas(updated)
-    setEditando(null)
-    setEditForm({ nome: '', cnpj: '', cidade: '', status: 'Ativo' })
-  }
+  const handleDelete = async (id: number) => {
+    if (!confirm('Tem certeza que deseja excluir esta empresa?')) return
 
-  const handleCancelEdit = () => {
-    setEditando(null)
-    setEditForm({ nome: '', cnpj: '', cidade: '', status: 'Ativo' })
-  }
+    try {
+      // DELETAR DO SUPABASE
+      const { error } = await supabase
+        .from('empresas')
+        .delete()
+        .eq('id', id)
 
-  const handleDelete = (id: number) => {
-    if (confirm('Tem certeza que deseja excluir esta empresa?')) {
-      const updated = empresas.filter(e => e.id !== id)
-      saveEmpresas(updated)
+      if (error) throw error
+
+      // Atualizar lista
+      await carregarEmpresas()
+    } catch (error) {
+      console.error('Erro ao excluir empresa:', error)
+      alert('Erro ao excluir empresa. Tente novamente.')
     }
   }
 
   const filtered = empresas.filter(e =>
-    e.nome.toLowerCase().includes(search.toLowerCase()) ||
-    e.cnpj.includes(search) ||
-    e.cidade.toLowerCase().includes(search.toLowerCase())
+    e.nome?.toLowerCase().includes(search.toLowerCase()) ||
+    e.cnpj?.includes(search) ||
+    e.cidade?.toLowerCase().includes(search.toLowerCase())
   )
 
   if (loading) {
@@ -77,7 +82,7 @@ export default function AdminEmpresas() {
       <div className="min-h-screen bg-[#F8F4E6] flex flex-col">
         <SidebarAdmin />
         <div className="flex-1 ml-64 flex items-center justify-center">
-          <div className="text-[#8B0000] text-xl">Carregando...</div>
+          <div className="text-[#6B1A2A] text-xl">Carregando...</div>
         </div>
       </div>
     )
@@ -95,7 +100,7 @@ export default function AdminEmpresas() {
           </div>
           <button 
             onClick={() => router.push('/admin/empresas/nova')}
-            className="px-4 py-2 bg-[#8B0000] text-white rounded-lg hover:bg-[#700000] transition font-medium flex items-center gap-2"
+            className="px-4 py-2 bg-[#6B1A2A] text-white rounded-lg hover:bg-[#4A0E1A] transition font-medium flex items-center gap-2"
           >
             <Plus className="h-4 w-4" />
             Nova Empresa
@@ -110,123 +115,77 @@ export default function AdminEmpresas() {
                 <input 
                   type="text" 
                   placeholder="Buscar empresas..." 
-                  className="w-full pl-10 pr-4 py-2 border border-[#E8EAE0] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#8B0000]"
+                  className="w-full pl-10 pr-4 py-2 border border-[#E8EAE0] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#6B1A2A]"
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
                 />
               </div>
             </div>
 
-            <div className="overflow-x-auto">
-              <table className="w-full">
-                <thead className="bg-[#F8F4E6]">
-                  <tr>
-                    <th className="text-left py-3 px-4 text-sm font-semibold text-[#2D343A]">Empresa</th>
-                    <th className="text-left py-3 px-4 text-sm font-semibold text-[#2D343A]">CNPJ</th>
-                    <th className="text-left py-3 px-4 text-sm font-semibold text-[#2D343A]">Cidade</th>
-                    <th className="text-left py-3 px-4 text-sm font-semibold text-[#2D343A]">Status</th>
-                    <th className="text-left py-3 px-4 text-sm font-semibold text-[#2D343A]">Ações</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {filtered.map((item) => (
-                    <tr key={item.id} className="border-b border-[#E8EAE0] hover:bg-[#F8F4E6] transition">
-                      {editando === item.id ? (
-                        <td className="py-3 px-4" colSpan={5}>
-                          <div className="grid grid-cols-1 md:grid-cols-4 gap-3">
-                            <input 
-                              type="text" 
-                              className="px-3 py-2 border border-[#E8EAE0] rounded-lg"
-                              value={editForm.nome}
-                              onChange={(e) => setEditForm({...editForm, nome: e.target.value})}
-                              placeholder="Nome"
-                            />
-                            <input 
-                              type="text" 
-                              className="px-3 py-2 border border-[#E8EAE0] rounded-lg"
-                              value={editForm.cnpj}
-                              onChange={(e) => setEditForm({...editForm, cnpj: e.target.value})}
-                              placeholder="CNPJ"
-                            />
-                            <input 
-                              type="text" 
-                              className="px-3 py-2 border border-[#E8EAE0] rounded-lg"
-                              value={editForm.cidade}
-                              onChange={(e) => setEditForm({...editForm, cidade: e.target.value})}
-                              placeholder="Cidade"
-                            />
-                            <select 
-                              className="px-3 py-2 border border-[#E8EAE0] rounded-lg"
-                              value={editForm.status}
-                              onChange={(e) => setEditForm({...editForm, status: e.target.value})}
-                            >
-                              <option value="Ativo">Ativo</option>
-                              <option value="Inativo">Inativo</option>
-                              <option value="Pendente">Pendente</option>
-                            </select>
-                          </div>
-                          <div className="flex gap-2 mt-3">
+            {empresas.length === 0 ? (
+              <div className="text-center py-12">
+                <Building2 className="h-12 w-12 text-[#708090] mx-auto mb-4" />
+                <p className="text-[#708090]">Nenhuma empresa cadastrada.</p>
+                <button 
+                  onClick={() => router.push('/admin/empresas/nova')}
+                  className="mt-4 px-4 py-2 bg-[#6B1A2A] text-white rounded-lg hover:bg-[#4A0E1A] transition"
+                >
+                  Cadastrar primeira empresa
+                </button>
+              </div>
+            ) : (
+              <div className="overflow-x-auto">
+                <table className="w-full">
+                  <thead className="bg-[#F8F4E6]">
+                    <tr>
+                      <th className="text-left py-3 px-4 text-sm font-semibold text-[#2D343A]">Empresa</th>
+                      <th className="text-left py-3 px-4 text-sm font-semibold text-[#2D343A]">CNPJ</th>
+                      <th className="text-left py-3 px-4 text-sm font-semibold text-[#2D343A]">Cidade</th>
+                      <th className="text-left py-3 px-4 text-sm font-semibold text-[#2D343A]">Status</th>
+                      <th className="text-left py-3 px-4 text-sm font-semibold text-[#2D343A]">Ações</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {filtered.map((item) => (
+                      <tr key={item.id} className="border-b border-[#E8EAE0] hover:bg-[#F8F4E6] transition">
+                        <td className="py-3 px-4 font-medium text-[#2D343A]">{item.nome}</td>
+                        <td className="py-3 px-4 text-[#708090]">{item.cnpj || '-'}</td>
+                        <td className="py-3 px-4 text-[#708090]">{item.cidade || '-'}</td>
+                        <td className="py-3 px-4">
+                          <span className={`px-2 py-1 rounded-full text-xs font-medium ${
+                            item.status === 'Ativo' ? 'bg-green-100 text-green-700' :
+                            item.status === 'Inativo' ? 'bg-red-100 text-red-700' :
+                            'bg-yellow-100 text-yellow-700'
+                          }`}>
+                            {item.status || 'Ativo'}
+                          </span>
+                        </td>
+                        <td className="py-3 px-4">
+                          <div className="flex gap-2">
                             <button 
-                              onClick={handleSaveEdit}
-                              className="px-4 py-1.5 bg-green-600 text-white rounded-lg hover:bg-green-700 transition flex items-center gap-1"
+                              onClick={() => router.push(`/admin/empresas/${item.id}`)}
+                              className="p-1 hover:bg-[#F8F4E6] rounded" title="Visualizar"
                             >
-                              <Save className="h-4 w-4" /> Salvar
+                              <Eye className="h-4 w-4 text-[#708090]" />
                             </button>
                             <button 
-                              onClick={handleCancelEdit}
-                              className="px-4 py-1.5 border border-[#E8EAE0] rounded-lg hover:bg-[#F8F4E6] transition flex items-center gap-1"
+                              onClick={() => router.push(`/admin/empresas/${item.id}/editar`)}
+                              className="p-1 hover:bg-[#F8F4E6] rounded" title="Editar"
                             >
-                              <X className="h-4 w-4" /> Cancelar
+                              <Edit className="h-4 w-4 text-[#708090]" />
+                            </button>
+                            <button 
+                              onClick={() => handleDelete(item.id)}
+                              className="p-1 hover:bg-[#F8F4E6] rounded" title="Excluir"
+                            >
+                              <Trash2 className="h-4 w-4 text-red-500" />
                             </button>
                           </div>
                         </td>
-                      ) : (
-                        <>
-                          <td className="py-3 px-4 font-medium text-[#2D343A]">{item.nome}</td>
-                          <td className="py-3 px-4 text-[#708090]">{item.cnpj}</td>
-                          <td className="py-3 px-4 text-[#708090]">{item.cidade}</td>
-                          <td className="py-3 px-4">
-                            <span className={`px-2 py-1 rounded-full text-xs font-medium ${
-                              item.status === 'Ativo' ? 'bg-green-100 text-green-700' :
-                              item.status === 'Inativo' ? 'bg-red-100 text-red-700' :
-                              'bg-yellow-100 text-yellow-700'
-                            }`}>
-                              {item.status}
-                            </span>
-                          </td>
-                          <td className="py-3 px-4">
-                            <div className="flex gap-2">
-                              <button 
-                                onClick={() => router.push(`/admin/empresas/${item.id}`)}
-                                className="p-1 hover:bg-[#F8F4E6] rounded" title="Visualizar"
-                              >
-                                <Eye className="h-4 w-4 text-[#708090]" />
-                              </button>
-                              <button 
-                                onClick={() => handleEdit(item.id)}
-                                className="p-1 hover:bg-[#F8F4E6] rounded" title="Editar"
-                              >
-                                <Edit className="h-4 w-4 text-[#708090]" />
-                              </button>
-                              <button 
-                                onClick={() => handleDelete(item.id)}
-                                className="p-1 hover:bg-[#F8F4E6] rounded" title="Excluir"
-                              >
-                                <Trash2 className="h-4 w-4 text-red-500" />
-                              </button>
-                            </div>
-                          </td>
-                        </>
-                      )}
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-
-            {filtered.length === 0 && (
-              <div className="text-center py-8 text-[#708090]">
-                Nenhuma empresa encontrada.
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
               </div>
             )}
           </div>
