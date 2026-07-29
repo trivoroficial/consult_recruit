@@ -44,8 +44,8 @@ export function Header() {
                 href={item.href}
                 className={`text-sm font-medium transition ${
                   pathname === item.href
-                    ? 'text-[#8B0000]'
-                    : 'text-[#708090] hover:text-[#8B0000]'
+                    ? 'text-[#6B1A2A]'
+                    : 'text-[#708090] hover:text-[#6B1A2A]'
                 }`}
               >
                 {item.label}
@@ -62,7 +62,7 @@ export function Header() {
             </a>
             <Link
               href="/login"
-              className="px-5 py-2.5 bg-[#8B0000] text-white rounded-lg hover:bg-[#700000] transition text-sm font-medium flex items-center gap-2"
+              className="px-5 py-2.5 bg-[#6B1A2A] text-white rounded-lg hover:bg-[#4A0E1A] transition text-sm font-medium flex items-center gap-2"
             >
               <LogIn className="h-4 w-4" />
               Entrar
@@ -87,8 +87,8 @@ export function Header() {
                   onClick={() => setMobileMenuOpen(false)}
                   className={`text-sm font-medium transition px-3 py-2 rounded-lg ${
                     pathname === item.href
-                      ? 'text-[#8B0000] bg-[#8B0000]/5'
-                      : 'text-[#708090] hover:text-[#8B0000] hover:bg-[#F8F4E6]'
+                      ? 'text-[#6B1A2A] bg-[#6B1A2A]/5'
+                      : 'text-[#708090] hover:text-[#6B1A2A] hover:bg-[#F8F4E6]'
                   }`}
                 >
                   {item.label}
@@ -106,7 +106,7 @@ export function Header() {
               <Link
                 href="/login"
                 onClick={() => setMobileMenuOpen(false)}
-                className="px-4 py-2.5 bg-[#8B0000] text-white rounded-lg hover:bg-[#700000] transition text-sm font-medium text-center flex items-center justify-center gap-2"
+                className="px-4 py-2.5 bg-[#6B1A2A] text-white rounded-lg hover:bg-[#4A0E1A] transition text-sm font-medium text-center flex items-center justify-center gap-2"
               >
                 <LogIn className="h-4 w-4" />
                 Entrar
