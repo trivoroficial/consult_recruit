@@ -103,7 +103,7 @@ export function SidebarAdmin() {
         <img 
           src="/logo.png" 
           alt="ZENTHOS" 
-          className="h-[2cm] w-auto object-contain brightness-0 invert"
+          className="h-[2cm] w-auto object-contain"
         />
       </div>
 
