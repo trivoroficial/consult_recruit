@@ -16,9 +16,9 @@ export function VagasDestaque() {
       setVagas(destaques.slice(0, 6))
     } else {
       const exemplo = [
-        { id: 1, titulo: 'Analista Administrativo', empresa: 'Empresa XPTO', local: 'Uberlândia/MG', tipo: 'CLT', status: 'Aberta', exibirCarrossel: true, badge: 'Destaque', corBadge: 'bg-purple-500' },
-        { id: 2, titulo: 'Auxiliar de RH', empresa: 'Indústria ABC', local: 'Uberlândia/MG', tipo: 'CLT', status: 'Aberta', exibirCarrossel: true, badge: 'Novo', corBadge: 'bg-green-500' },
-        { id: 3, titulo: 'Assistente Financeiro', empresa: 'Grupo Financeiro', local: 'Uberlândia/MG', tipo: 'PJ', status: 'Aberta', exibirCarrossel: true, badge: 'Urgente', corBadge: 'bg-red-500' },
+        { id: 1, titulo: 'Analista Administrativo', empresa: 'Empresa XPTO', local: 'Uberlândia/MG', tipo: 'CLT', status: 'Aberta', exibirCarrossel: true, badge: 'Destaque', corBadge: 'bg-[#6B1A2A]' },
+        { id: 2, titulo: 'Auxiliar de RH', empresa: 'Indústria ABC', local: 'Uberlândia/MG', tipo: 'CLT', status: 'Aberta', exibirCarrossel: true, badge: 'Novo', corBadge: 'bg-[#8B1A3A]' },
+        { id: 3, titulo: 'Assistente Financeiro', empresa: 'Grupo Financeiro', local: 'Uberlândia/MG', tipo: 'PJ', status: 'Aberta', exibirCarrossel: true, badge: 'Urgente', corBadge: 'bg-[#6B1A2A]' },
       ]
       setVagas(exemplo)
     }
@@ -52,7 +52,7 @@ export function VagasDestaque() {
             <h2 className="text-3xl font-bold text-[#2D343A]">Vagas em Destaque</h2>
             <p className="text-[#708090] mt-1">Oportunidades que podem transformar sua carreira</p>
           </div>
-          <Link href="/login" className="text-[#8B0000] hover:underline font-medium flex items-center gap-1">
+          <Link href="/login" className="text-[#6B1A2A] hover:underline font-medium flex items-center gap-1">
             Ver todas <span className="text-xl">→</span>
           </Link>
         </div>
@@ -65,11 +65,11 @@ export function VagasDestaque() {
               className="group bg-white border border-[#E8EAE0] rounded-xl p-6 hover:shadow-lg transition-all duration-300 hover:-translate-y-1 block"
             >
               {vaga.badge && (
-                <span className={`inline-block px-2 py-0.5 rounded-full text-xs text-white ${vaga.corBadge || 'bg-purple-500'} mb-3`}>
+                <span className={`inline-block px-2 py-0.5 rounded-full text-xs text-white ${vaga.corBadge || 'bg-[#6B1A2A]'} mb-3`}>
                   {vaga.badge}
                 </span>
               )}
-              <h3 className="text-lg font-bold text-[#2D343A] group-hover:text-[#8B0000] transition">{vaga.titulo}</h3>
+              <h3 className="text-lg font-bold text-[#2D343A] group-hover:text-[#6B1A2A] transition">{vaga.titulo}</h3>
               <div className="flex items-center gap-2 text-sm text-[#708090] mt-2">
                 <Building2 className="h-4 w-4" />
                 <span>{vaga.empresa}</span>
@@ -90,19 +90,10 @@ export function VagasDestaque() {
               </div>
               <div className="flex items-center justify-between mt-4 pt-4 border-t border-[#E8EAE0]">
                 <span className="text-xs text-[#708090]">📍 {vaga.local || 'Remoto'}</span>
-                <span className="text-[#8B0000] text-sm font-medium group-hover:underline">Candidatar-se →</span>
+                <span className="text-[#6B1A2A] text-sm font-medium group-hover:underline">Candidatar-se →</span>
               </div>
             </Link>
           ))}
-        </div>
-
-        <div className="text-center mt-8">
-          <p className="text-sm text-[#708090]">
-            Já possui uma conta?{' '}
-            <Link href="/login" className="text-[#8B0000] font-semibold hover:underline">
-              Faça login para acessar suas candidaturas
-            </Link>
-          </p>
         </div>
       </div>
     </section>
