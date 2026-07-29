@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { Eye, EyeOff, LogIn, CheckSquare, Square, Key, Mail, X } from 'lucide-react'
@@ -20,16 +20,6 @@ export default function Login() {
   const [recuperarLoading, setRecuperarLoading] = useState(false)
   const [recuperarStatus, setRecuperarStatus] = useState<'idle' | 'success' | 'error'>('idle')
   const [recuperarMensagem, setRecuperarMensagem] = useState('')
-
-  useEffect(() => {
-    const checkUser = async () => {
-      const { data: { user } } = await supabase.auth.getUser()
-      if (user) {
-        window.location.href = '/admin/dashboard'
-      }
-    }
-    checkUser()
-  }, [])
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -51,6 +41,7 @@ export default function Login() {
       if (error) throw error
 
       if (data?.user) {
+        // Salvar no localStorage
         localStorage.setItem('zenthos_user', JSON.stringify({
           email: data.user.email,
           name: data.user.email?.split('@')[0] || 'Usuário',
@@ -58,6 +49,14 @@ export default function Login() {
           id: data.user.id
         }))
 
+        // Salvar cookie para o middleware
+        document.cookie = `zenthos_user=${JSON.stringify({
+          email: data.user.email,
+          role: 'admin',
+          id: data.user.id
+        })}; path=/; max-age=86400`
+
+        // Redirecionar
         window.location.href = '/admin/dashboard'
       }
     } catch (err: any) {
@@ -87,7 +86,7 @@ export default function Login() {
       if (error) throw error
 
       setRecuperarStatus('success')
-      setRecuperarMensagem(`✅ Link de recuperação enviado para ${emailRecuperar}. Verifique seu email.`)
+      setRecuperarMensagem(`✅ Link de recuperação enviado para ${emailRecuperar}.`)
       setTimeout(() => {
         setMostrarRecuperar(false)
         setEmailRecuperar('')
@@ -96,7 +95,7 @@ export default function Login() {
       }, 5000)
     } catch (err: any) {
       setRecuperarStatus('error')
-      setRecuperarMensagem(err.message || 'Erro ao enviar email de recuperação. Tente novamente.')
+      setRecuperarMensagem(err.message || 'Erro ao enviar email.')
     } finally {
       setRecuperarLoading(false)
     }
@@ -225,9 +224,9 @@ export default function Login() {
         </div>
       </div>
 
-      {/* MODAL DE RECUPERAÇÃO DE SENHA - PREMIUM */}
+      {/* MODAL DE RECUPERAÇÃO DE SENHA */}
       {mostrarRecuperar && (
-        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4 animate-in fade-in duration-200">
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
           <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full p-8 relative border border-[#E8EAE0]">
             <button
               onClick={() => {
@@ -246,9 +245,7 @@ export default function Login() {
                 <Key className="h-8 w-8 text-[#8B0000]" />
               </div>
               <h2 className="text-2xl font-bold text-[#2D343A]">Recuperar Senha</h2>
-              <p className="text-sm text-[#708090] mt-1">
-                Digite seu email para receber o link de recuperação
-              </p>
+              <p className="text-sm text-[#708090] mt-1">Digite seu email para receber o link</p>
             </div>
 
             {recuperarMensagem && (
@@ -306,10 +303,6 @@ export default function Login() {
                 </button>
               </div>
             </form>
-
-            <div className="mt-4 text-center text-xs text-[#708090]">
-              <p>Você receberá um email com o link para redefinir sua senha.</p>
-            </div>
           </div>
         </div>
       )}
