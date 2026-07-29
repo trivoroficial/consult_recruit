@@ -8,9 +8,10 @@ import {
   CreditCard, Settings, LogOut, QrCode, FileText, 
   Calendar, Database, Shield, UsersRound, ClipboardList,
   MessageCircle, TrendingUp, UserCheck, Award,
-  ChevronDown, ChevronRight, Menu, X,
+  ChevronDown, ChevronRight, ChevronLeft, Menu, X,
   Sun, Moon, User, LogIn, HelpCircle
 } from 'lucide-react'
+import { supabase } from '@/lib/supabase/client'
 
 export function SidebarAdmin() {
   const pathname = usePathname()
@@ -21,7 +22,6 @@ export function SidebarAdmin() {
   const [expandedMenus, setExpandedMenus] = useState<string[]>(['gestao', 'financas', 'suporte'])
 
   useEffect(() => {
-    // Buscar dados do usuário logado
     const userData = localStorage.getItem('zenthos_user')
     if (userData) {
       try {
@@ -35,12 +35,10 @@ export function SidebarAdmin() {
     }
   }, [])
 
-  const handleLogout = () => {
-    // Limpar todos os dados de sessão
+  const handleLogout = async () => {
     localStorage.removeItem('zenthos_user')
     document.cookie = 'zenthos_user=; path=/; max-age=0'
-    // Limpar sessão do Supabase
-    supabase.auth.signOut()
+    await supabase.auth.signOut()
     router.push('/login')
   }
 
@@ -86,7 +84,6 @@ export function SidebarAdmin() {
         { icon: Calendar, label: 'Agenda', href: '/admin/agenda' },
         { icon: QrCode, label: 'QR Code Center', href: '/admin/qrcode' },
         { icon: Settings, label: 'Configurações', href: '/admin/configuracoes' },
-        // Acessos e Backup dentro de Configurações
         { icon: Shield, label: 'Controle de Acessos', href: '/admin/acessos' },
         { icon: Database, label: 'Backup', href: '/admin/backup' },
       ]
@@ -98,7 +95,6 @@ export function SidebarAdmin() {
       collapsed ? 'w-20' : 'w-64'
     }`}>
       
-      {/* LOGO */}
       <div className={`p-4 border-b border-white/10 flex items-center ${collapsed ? 'justify-center' : 'justify-between'}`}>
         {!collapsed ? (
           <img src="/logo.png" alt="ZENTHOS" className="h-[1.5cm] w-auto object-contain brightness-0 invert" />
@@ -113,7 +109,6 @@ export function SidebarAdmin() {
         </button>
       </div>
 
-      {/* PERFIL DO USUÁRIO */}
       <div className={`p-4 border-b border-white/10 ${collapsed ? 'text-center' : ''}`}>
         <div className={`flex items-center ${collapsed ? 'justify-center' : 'gap-3'}`}>
           <div className="w-10 h-10 bg-[#8B0000] rounded-full flex items-center justify-center text-white font-bold text-sm flex-shrink-0">
@@ -128,9 +123,7 @@ export function SidebarAdmin() {
         </div>
       </div>
 
-      {/* MENU */}
       <nav className="flex-1 p-3 overflow-y-auto">
-        {/* Dashboard - sempre visível */}
         <Link
           href="/admin/dashboard"
           className={`flex items-center gap-3 px-3 py-2.5 rounded-lg transition mb-1 ${
@@ -143,14 +136,12 @@ export function SidebarAdmin() {
           {!collapsed && <span className="text-sm">Dashboard</span>}
         </Link>
 
-        {/* Grupos de Menu */}
         {menuGroups.map((group) => {
           const Icon = group.icon
           const isExpanded = expandedMenus.includes(group.id)
           
           return (
             <div key={group.id} className="mt-2">
-              {/* Título do Grupo */}
               <button
                 onClick={() => toggleMenu(group.id)}
                 className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg transition text-left ${
@@ -172,7 +163,6 @@ export function SidebarAdmin() {
                 )}
               </button>
 
-              {/* Itens do Grupo */}
               {isExpanded && !collapsed && (
                 <div className="ml-4 mt-1 space-y-0.5 border-l border-white/10 pl-2">
                   {group.items.map((item) => {
@@ -199,7 +189,6 @@ export function SidebarAdmin() {
         })}
       </nav>
 
-      {/* SAIR */}
       <div className="p-4 border-t border-white/10">
         <button
           onClick={handleLogout}
