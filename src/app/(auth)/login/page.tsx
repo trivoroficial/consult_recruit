@@ -1,8 +1,8 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { useRouter } from 'next/navigation'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import { Eye, EyeOff, LogIn, CheckSquare, Square } from 'lucide-react'
 import { supabase } from '@/lib/supabase/client'
 
@@ -20,11 +20,11 @@ export default function Login() {
     const checkUser = async () => {
       const { data: { user } } = await supabase.auth.getUser()
       if (user) {
-        window.location.href = '/admin/dashboard'
+        router.push('/admin/dashboard')
       }
     }
     checkUser()
-  }, [])
+  }, [router])
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -53,7 +53,7 @@ export default function Login() {
           id: data.user.id
         }))
 
-        window.location.href = '/admin/dashboard'
+        router.push('/admin/dashboard')
       }
     } catch (err: any) {
       setError(err.message || 'Erro ao fazer login. Verifique suas credenciais.')
