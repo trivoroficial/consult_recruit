@@ -7,7 +7,7 @@ import { DashboardFooter } from '@/components/dashboard/DashboardFooter'
 import {
   BarChart3, FileText, Download, Calendar, Filter,
   TrendingUp, TrendingDown, Users, Building2,
-  Briefcase, DollarSign, FileSpreadsheet, FilePdf,
+  Briefcase, DollarSign, FileSpreadsheet,
   RefreshCw, Clock, CheckCircle, XCircle,
   ArrowUpRight, ArrowDownRight, PieChart
 } from 'lucide-react'
@@ -272,7 +272,7 @@ export default function AdminRelatorios() {
                         onClick={handleExportarPDF}
                         className="px-3 py-1.5 border border-[#E8EAE0] rounded-lg hover:bg-[#F8F4E6] transition text-sm flex items-center gap-1 text-[#708090]"
                       >
-                        <FilePdf className="h-4 w-4" />
+                        <FileText className="h-4 w-4" />
                         PDF
                       </button>
                     </div>
