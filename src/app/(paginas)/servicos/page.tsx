@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import { motion } from 'framer-motion'
-import { Users, DollarSign, Shield, Building2, CheckCircle, ArrowRight, TrendingUp, Rocket, Zap, Award } from 'lucide-react'
+import { Users, DollarSign, Shield, Building2, CheckCircle, ArrowRight, TrendingUp, Rocket, Zap, Award, Globe } from 'lucide-react'
 
 const servicosList = [
   {
@@ -11,8 +11,6 @@ const servicosList = [
     subtitle: "People & Culture",
     description: "Soluções completas para gestão de pessoas, cultura e desenvolvimento organizacional.",
     features: ["Recrutamento e Seleção Estratégico", "Treinamentos e Desenvolvimento", "Avaliação de desempenho 360°", "Plano de cargos e salários", "Clima organizacional e engajamento"],
-    color: "from-blue-500 to-indigo-600",
-    iconColor: "text-blue-600",
     badge: "Top 1%"
   },
   {
@@ -21,8 +19,6 @@ const servicosList = [
     subtitle: "Financial Advisory",
     description: "Organização financeira para aumentar a lucratividade e sustentabilidade do negócio.",
     features: ["Fluxo de caixa e capital de giro", "Formação de preço e margem", "Controle de custos e despesas", "Indicadores financeiros (KPIs)", "Planejamento tributário"],
-    color: "from-green-500 to-emerald-600",
-    iconColor: "text-green-600",
     badge: "Premium"
   },
   {
@@ -31,8 +27,6 @@ const servicosList = [
     subtitle: "Food Safety & Quality",
     description: "Adequação às normas sanitárias e implantação de Boas Práticas de Fabricação.",
     features: ["Manual de Boas Práticas (BPF)", "Procedimentos Operacionais Padrão (POPs)", "Treinamentos e capacitação", "Auditorias internas e externas", "Consultoria para MAPA e ANVISA"],
-    color: "from-red-500 to-rose-600",
-    iconColor: "text-red-600",
     badge: "Certificado"
   },
   {
@@ -41,8 +35,6 @@ const servicosList = [
     subtitle: "Business Management",
     description: "Diagnóstico e planejamento estratégico para crescimento sustentável.",
     features: ["Diagnóstico empresarial completo", "Planejamento estratégico", "Definição de metas e OKRs", "Indicadores de desempenho (KPIs)", "Governança corporativa"],
-    color: "from-purple-500 to-violet-600",
-    iconColor: "text-purple-600",
     badge: "Estratégico"
   },
   {
@@ -51,8 +43,6 @@ const servicosList = [
     subtitle: "Strategic Marketing",
     description: "Estratégias de marketing para posicionamento de marca, captação de clientes e crescimento sustentável.",
     features: ["Posicionamento de marca", "Estratégia digital", "Marketing de conteúdo", "Branding e identidade", "Gestão de redes sociais"],
-    color: "from-orange-500 to-amber-600",
-    iconColor: "text-orange-600",
     badge: "Digital"
   },
   {
@@ -61,8 +51,6 @@ const servicosList = [
     subtitle: "Innovation & Transformation",
     description: "Acelere a inovação e transforme sua organização com metodologias ágeis e cultura de experimentação.",
     features: ["Metodologias ágeis", "Design Thinking", "Cultura de inovação", "Digitalização de processos", "Novos modelos de negócio"],
-    color: "from-cyan-500 to-sky-600",
-    iconColor: "text-cyan-600",
     badge: "Future Ready"
   }
 ]
@@ -163,15 +151,13 @@ export default function ServicosPage() {
                   variants={fadeUp}
                   transition={{ delay: index * 0.1 }}
                 >
-                  <div className={`absolute top-0 right-0 w-32 h-32 ${servico.color.replace('from-', 'bg-').replace('to-', '')}/10 rounded-full blur-2xl opacity-30 group-hover:opacity-50 transition-opacity duration-500`}></div>
-
                   <div className="absolute top-4 right-4">
                     <span className="px-3 py-1 bg-[#6B1A2A] text-white text-xs font-semibold rounded-full shadow-lg">
                       {servico.badge}
                     </span>
                   </div>
 
-                  <div className={`w-16 h-16 rounded-2xl flex items-center justify-center mb-6 bg-gradient-to-br ${servico.color} text-white shadow-lg group-hover:scale-110 transition-transform duration-300`}>
+                  <div className="w-16 h-16 rounded-2xl flex items-center justify-center mb-6 bg-[#F8F4E6] text-[#6B1A2A] group-hover:bg-[#6B1A2A] group-hover:text-white transition-colors duration-300">
                     <Icon className="h-8 w-8" />
                   </div>
 
