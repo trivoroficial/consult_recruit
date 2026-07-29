@@ -20,7 +20,7 @@ export default function Login() {
     const checkUser = async () => {
       const { data: { user } } = await supabase.auth.getUser()
       if (user) {
-        router.push('/admin/dashboard')
+        router.replace('/admin/dashboard')
       }
     }
     checkUser()
@@ -62,8 +62,8 @@ export default function Login() {
           id: data.user.id
         }))
 
-        router.push('/admin/dashboard')
-        router.refresh()
+        // Usar replace para não permitir voltar
+        router.replace('/admin/dashboard')
       }
     } catch (err: any) {
       console.error('❌ Erro capturado:', err)
