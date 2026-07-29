@@ -6,7 +6,7 @@ import { SidebarAdmin } from '@/components/dashboard/SidebarAdmin'
 import { DashboardFooter } from '@/components/dashboard/DashboardFooter'
 import {
   BarChart3, Download, Filter, Calendar, RefreshCw,
-  FileText, FileSpreadsheet, FilePdf, Printer,
+  FileText, FileSpreadsheet, Printer,
   TrendingUp, TrendingDown, Users, Award,
   CheckCircle, XCircle, Clock, Eye, ChevronDown
 } from 'lucide-react'
@@ -38,7 +38,6 @@ export default function AdminRelatoriosOperacionais() {
     setLoading(true)
     setError(null)
     try {
-      // Estatísticas gerais
       const [
         { count: participantes },
         { count: entrevistas },
@@ -67,7 +66,6 @@ export default function AdminRelatoriosOperacionais() {
         taxaReprovacao: totalAvaliados > 0 ? Math.round((reprovados / totalAvaliados) * 100) : 0
       })
 
-      // Últimas entrevistas
       const { data: ultimas } = await supabase
         .from('entrevistas_operacionais')
         .select('*, participantes(nome, cargo_pretendido)')
@@ -76,7 +74,6 @@ export default function AdminRelatoriosOperacionais() {
 
       setUltimasEntrevistas(ultimas || [])
 
-      // Resultados por cargo
       const cargos = resultados?.reduce((acc: any, r: any) => {
         const cargo = r.participantes?.cargo_pretendido || 'Não informado'
         if (!acc[cargo]) {
@@ -150,7 +147,7 @@ export default function AdminRelatoriosOperacionais() {
               onClick={() => handleExportar('pdf')}
               className="px-4 py-2 border border-[#6B1A2A] text-[#6B1A2A] rounded-lg hover:bg-[#6B1A2A] hover:text-white transition flex items-center gap-2"
             >
-              <FilePdf className="h-4 w-4" />
+              <FileText className="h-4 w-4" />
               PDF
             </button>
           </div>
