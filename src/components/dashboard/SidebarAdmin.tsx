@@ -8,7 +8,7 @@ import {
   CreditCard, Settings, LogOut, QrCode, FileText, 
   Calendar, Database, Shield, UsersRound,
   ChevronDown, ChevronRight, ChevronLeft, Menu,
-  User, TrendingUp, CircleDollarSign
+  User
 } from 'lucide-react'
 import { supabase } from '@/lib/supabase/client'
 
@@ -94,29 +94,23 @@ export function SidebarAdmin() {
   ]
 
   return (
-    <aside className={`bg-[#1A1A2E] text-white/70 flex flex-col h-screen fixed left-0 top-0 z-50 transition-all duration-300 ${
+    <aside className={`bg-[#6B1A2A] text-white/80 flex flex-col h-screen fixed left-0 top-0 z-50 transition-all duration-300 ${
       collapsed ? 'w-20' : 'w-64'
     }`}>
       
-      {/* LOGO */}
-      <div className={`p-4 border-b border-white/10 flex items-center ${collapsed ? 'justify-center' : 'justify-between'}`}>
-        {!collapsed ? (
-          <img src="/logo.png" alt="ZENTHOS" className="h-[1.5cm] w-auto object-contain brightness-0 invert" />
-        ) : (
-          <img src="/logo.png" alt="ZENTHOS" className="h-8 w-auto object-contain brightness-0 invert" />
-        )}
-        <button 
-          onClick={() => setCollapsed(!collapsed)}
-          className="p-1.5 hover:bg-white/10 rounded-lg transition"
-        >
-          {collapsed ? <Menu className="h-4 w-4" /> : <ChevronLeft className="h-4 w-4" />}
-        </button>
+      {/* LOGO CENTRALIZADA - 2cm de altura */}
+      <div className={`p-4 border-b border-white/10 flex items-center justify-center ${collapsed ? 'h-20' : 'h-24'}`}>
+        <img 
+          src="/logo.png" 
+          alt="ZENTHOS" 
+          className="h-[2cm] w-auto object-contain brightness-0 invert"
+        />
       </div>
 
-      {/* PERFIL DO USUÁRIO - VISÍVEL NO MENU */}
+      {/* PERFIL DO USUÁRIO */}
       <div className={`p-4 border-b border-white/10 ${collapsed ? 'text-center' : ''}`}>
         <div className={`flex items-center ${collapsed ? 'justify-center' : 'gap-3'}`}>
-          <div className="w-10 h-10 bg-[#6B1A2A] rounded-full flex items-center justify-center text-white font-bold text-sm flex-shrink-0">
+          <div className="w-10 h-10 bg-[#E3C9A8] rounded-full flex items-center justify-center text-[#6B1A2A] font-bold text-sm flex-shrink-0">
             {userName.charAt(0)}
           </div>
           {!collapsed && (
@@ -134,8 +128,8 @@ export function SidebarAdmin() {
           href="/admin/dashboard"
           className={`flex items-center gap-3 px-3 py-2.5 rounded-lg transition mb-1 ${
             isActive('/admin/dashboard')
-              ? 'bg-[#6B1A2A]/20 text-white'
-              : 'text-white/60 hover:bg-white/5 hover:text-white'
+              ? 'bg-white/20 text-white'
+              : 'text-white/60 hover:bg-white/10 hover:text-white'
           }`}
         >
           <Home className="h-5 w-5 flex-shrink-0" />
@@ -152,7 +146,7 @@ export function SidebarAdmin() {
                 onClick={() => toggleMenu(group.id)}
                 className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg transition text-left ${
                   isExpanded ? 'text-white' : 'text-white/50'
-                } hover:bg-white/5 hover:text-white`}
+                } hover:bg-white/10 hover:text-white`}
               >
                 <Icon className="h-5 w-5 flex-shrink-0" />
                 {!collapsed && (
@@ -179,8 +173,8 @@ export function SidebarAdmin() {
                         href={item.href}
                         className={`flex items-center gap-3 px-3 py-2 rounded-lg transition text-sm ${
                           isActive(item.href)
-                            ? 'bg-[#6B1A2A]/20 text-white'
-                            : 'text-white/50 hover:bg-white/5 hover:text-white'
+                            ? 'bg-white/20 text-white'
+                            : 'text-white/50 hover:bg-white/10 hover:text-white'
                         }`}
                       >
                         <ItemIcon className="h-4 w-4 flex-shrink-0" />
@@ -198,7 +192,7 @@ export function SidebarAdmin() {
       {/* RODAPÉ DO MENU - USUÁRIO E PERFIL */}
       <div className="p-4 border-t border-white/10">
         <div className="flex items-center gap-3 px-3 py-2 mb-2 bg-white/5 rounded-lg">
-          <div className="w-8 h-8 bg-[#6B1A2A] rounded-full flex items-center justify-center text-white font-bold text-xs flex-shrink-0">
+          <div className="w-8 h-8 bg-[#E3C9A8] rounded-full flex items-center justify-center text-[#6B1A2A] font-bold text-xs flex-shrink-0">
             {userName.charAt(0)}
           </div>
           {!collapsed && (
@@ -210,7 +204,7 @@ export function SidebarAdmin() {
         </div>
         <button
           onClick={handleLogout}
-          className={`flex items-center gap-3 px-3 py-2.5 text-red-400 hover:bg-red-500/10 hover:text-red-300 rounded-lg transition w-full ${collapsed ? 'justify-center' : ''}`}
+          className={`flex items-center gap-3 px-3 py-2.5 text-red-300 hover:bg-red-500/20 hover:text-red-200 rounded-lg transition w-full ${collapsed ? 'justify-center' : ''}`}
         >
           <LogOut className="h-5 w-5 flex-shrink-0" />
           {!collapsed && <span className="text-sm font-medium">Sair</span>}
