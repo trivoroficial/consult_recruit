@@ -98,12 +98,12 @@ export function SidebarAdmin() {
       collapsed ? 'w-20' : 'w-64'
     }`}>
       
-      {/* LOGO CENTRALIZADA - 2cm de altura */}
+      {/* LOGO CENTRALIZADA COM PONTAS ARREDONDADAS - 2cm de altura */}
       <div className={`p-4 border-b border-white/10 flex items-center justify-center ${collapsed ? 'h-20' : 'h-24'}`}>
         <img 
           src="/logo.png" 
           alt="ZENTHOS" 
-          className="h-[2cm] w-auto object-contain"
+          className="h-[2cm] w-auto object-contain rounded-2xl shadow-lg"
         />
       </div>
 
