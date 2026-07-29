@@ -1,76 +1,68 @@
 'use server'
 
-import { createClient } from '@/lib/supabase/server'
-import { revalidatePath } from 'next/cache'
+import { supabase } from '@/lib/supabase/server'
 
-export async function salvarEmpresaNoBanco(dados: any) {
-  const supabase = createClient()
+export async function criarEmpresa(data: any) {
+  try {
+    const supabaseClient = supabase()
+    
+    const { data: empresa, error } = await supabaseClient
+      .from('empresas')
+      .insert([{
+        nome: data.nome,
+        cnpj: data.cnpj,
+        telefone: data.telefone,
+        email: data.email,
+        cidade: data.cidade,
+        estado: data.estado,
+        funcionarios: parseInt(data.funcionarios) || 0,
+        plano: data.plano || 'Básico',
+        status: data.status || 'Ativo',
+        descricao: data.descricao,
+        responsavel: data.responsavel,
+        vagas_ativas: 0
+      }])
+      .select()
+      .single()
 
-  const { error } = await supabase
-    .from('empresas')
-    .insert([{
-      nome: dados.nome,
-      cnpj: dados.cnpj,
-      cidade: dados.cidade,
-      estado: dados.estado || '',
-      status: dados.status || 'Ativo',
-      created_at: new Date().toISOString()
-    }])
+    if (error) throw error
 
-  if (error) {
-    console.error('Erro ao salvar empresa:', error)
-    return { success: false, message: error.message }
+    return { success: true, data: empresa }
+  } catch (error: any) {
+    return { success: false, error: error.message }
   }
-
-  revalidatePath('/admin/empresas')
-  return { success: true, message: 'Empresa salva com sucesso!' }
 }
 
-export async function buscarTodasEmpresas() {
-  const supabase = createClient()
-  const { data, error } = await supabase
-    .from('empresas')
-    .select('*')
-    .order('created_at', { ascending: false })
+export async function listarEmpresas() {
+  try {
+    const supabaseClient = supabase()
+    
+    const { data, error } = await supabaseClient
+      .from('empresas')
+      .select('*')
+      .order('id', { ascending: false })
 
-  if (error) {
-    console.error('Erro ao buscar empresas:', error)
-    return { success: false, data: [], message: error.message }
+    if (error) throw error
+
+    return { success: true, data }
+  } catch (error: any) {
+    return { success: false, error: error.message }
   }
-
-  return { success: true, data: data || [] }
 }
 
-export async function atualizarEmpresa(id: string, dados: any) {
-  const supabase = createClient()
+export async function excluirEmpresa(id: number) {
+  try {
+    const supabaseClient = supabase()
+    
+    const { error } = await supabaseClient
+      .from('empresas')
+      .delete()
+      .eq('id', id)
 
-  const { error } = await supabase
-    .from('empresas')
-    .update(dados)
-    .eq('id', id)
+    if (error) throw error
 
-  if (error) {
-    console.error('Erro ao atualizar empresa:', error)
-    return { success: false, message: error.message }
+    return { success: true }
+  } catch (error: any) {
+    return { success: false, error: error.message }
   }
-
-  revalidatePath('/admin/empresas')
-  return { success: true, message: 'Empresa atualizada com sucesso!' }
-}
-
-export async function excluirEmpresa(id: string) {
-  const supabase = createClient()
-
-  const { error } = await supabase
-    .from('empresas')
-    .delete()
-    .eq('id', id)
-
-  if (error) {
-    console.error('Erro ao excluir empresa:', error)
-    return { success: false, message: error.message }
-  }
-
-  revalidatePath('/admin/empresas')
-  return { success: true, message: 'Empresa excluída com sucesso!' }
 }
