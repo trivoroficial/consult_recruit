@@ -1,8 +1,7 @@
 'use client'
 
-import { motion } from "framer-motion";
 import Link from 'next/link'
-import { ArrowRight, Phone, CheckCircle, Users, Building2, Briefcase } from 'lucide-react'
+import { ArrowRight, Phone, CheckCircle, Users, Building2, Briefcase, Shield, TrendingUp } from 'lucide-react'
 
 const whatsappNumber = "5534991850735";
 const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent("Olá! Gostaria de conhecer as soluções da ZENTHOS.")}`;
@@ -10,21 +9,21 @@ const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent("
 export function Hero() {
   return (
     <section className="relative bg-gradient-to-br from-[#8B0000] to-[#5C0000] text-white overflow-hidden min-h-[90vh] flex items-center">
-      {/* IMAGEM DE FUNDO COM TRANSPARÊNCIA */}
+      {/* IMAGEM DE FUNDO */}
       <div className="absolute inset-0">
         <img 
           src="/recrutamento.png" 
           alt="ZENTHOS" 
-          className="w-full h-full object-cover opacity-20"
+          className="w-full h-full object-cover opacity-15"
         />
-        <div className="absolute inset-0 bg-gradient-to-r from-[#8B0000]/80 via-[#8B0000]/60 to-transparent"></div>
+        <div className="absolute inset-0 bg-gradient-to-r from-[#8B0000]/70 via-[#8B0000]/50 to-transparent"></div>
       </div>
       
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 lg:py-28 w-full z-10">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           <div>
             <div className="flex items-center gap-2 mb-4">
-              <span className="px-3 py-1 bg-white/10 rounded-full text-sm font-medium backdrop-blur-sm">
+              <span className="px-3 py-1 bg-white/10 rounded-full text-sm font-medium backdrop-blur-sm border border-white/10">
                 🚀 Plataforma de Recrutamento Enterprise
               </span>
             </div>
@@ -38,7 +37,7 @@ export function Hero() {
             </p>
             <div className="flex flex-wrap gap-4 mt-8">
               <Link href="/login">
-                <button className="px-6 py-3 bg-[#E3C9A8] hover:bg-[#C9A84C] text-[#1A1A2E] font-semibold rounded-lg transition flex items-center gap-2">
+                <button className="px-6 py-3 bg-[#E3C9A8] hover:bg-[#C9A84C] text-[#1A1A2E] font-semibold rounded-lg transition flex items-center gap-2 shadow-lg shadow-[#8B0000]/20">
                   Ver Vagas
                   <ArrowRight className="h-4 w-4" />
                 </button>
@@ -69,7 +68,7 @@ export function Hero() {
               <p className="text-sm text-white/60">Contratações</p>
             </div>
             <div className="bg-white/5 backdrop-blur-sm rounded-2xl p-6 border border-white/10 text-center hover:bg-white/10 transition">
-              <CheckCircle className="h-8 w-8 text-[#E3C9A8] mx-auto mb-2" />
+              <Shield className="h-8 w-8 text-[#E3C9A8] mx-auto mb-2" />
               <p className="text-2xl font-bold">96%</p>
               <p className="text-sm text-white/60">Satisfação</p>
             </div>
