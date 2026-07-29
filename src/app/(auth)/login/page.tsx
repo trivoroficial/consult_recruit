@@ -20,11 +20,11 @@ export default function Login() {
     const checkUser = async () => {
       const { data: { user } } = await supabase.auth.getUser()
       if (user) {
-        router.replace('/admin/dashboard')
+        window.location.href = '/admin/dashboard'
       }
     }
     checkUser()
-  }, [router])
+  }, [])
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -62,8 +62,10 @@ export default function Login() {
           id: data.user.id
         }))
 
-        // Usar replace para não permitir voltar
-        router.replace('/admin/dashboard')
+        // Usar window.location com um pequeno delay para garantir que o localStorage foi salvo
+        setTimeout(() => {
+          window.location.href = '/admin/dashboard'
+        }, 100)
       }
     } catch (err: any) {
       console.error('❌ Erro capturado:', err)
