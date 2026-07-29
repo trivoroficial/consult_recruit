@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import { Eye, EyeOff, LogIn, CheckSquare, Square } from 'lucide-react'
+import { Eye, EyeOff, LogIn, CheckSquare, Square, Key, Mail, X } from 'lucide-react'
 import { supabase } from '@/lib/supabase/client'
 
 export default function Login() {
@@ -15,12 +15,16 @@ export default function Login() {
   const [error, setError] = useState('')
   const [aceitouLGPD, setAceitouLGPD] = useState(false)
   const [mostrarLGPD, setMostrarLGPD] = useState(false)
+  const [mostrarRecuperar, setMostrarRecuperar] = useState(false)
+  const [emailRecuperar, setEmailRecuperar] = useState('')
+  const [recuperarLoading, setRecuperarLoading] = useState(false)
+  const [recuperarStatus, setRecuperarStatus] = useState<'idle' | 'success' | 'error'>('idle')
+  const [recuperarMensagem, setRecuperarMensagem] = useState('')
 
   useEffect(() => {
     const checkUser = async () => {
       const { data: { user } } = await supabase.auth.getUser()
       if (user) {
-        // Usar window.location para forçar o redirecionamento
         window.location.href = '/admin/dashboard'
       }
     }
@@ -47,7 +51,6 @@ export default function Login() {
       if (error) throw error
 
       if (data?.user) {
-        // Salvar no localStorage
         localStorage.setItem('zenthos_user', JSON.stringify({
           email: data.user.email,
           name: data.user.email?.split('@')[0] || 'Usuário',
@@ -55,14 +58,6 @@ export default function Login() {
           id: data.user.id
         }))
 
-        // Salvar cookie para o middleware
-        document.cookie = `zenthos_user=${JSON.stringify({
-          email: data.user.email,
-          role: 'admin',
-          id: data.user.id
-        })}; path=/; max-age=86400`
-
-        // Forçar redirecionamento
         window.location.href = '/admin/dashboard'
       }
     } catch (err: any) {
@@ -72,8 +67,43 @@ export default function Login() {
     }
   }
 
+  const handleRecuperarSenha = async (e: React.FormEvent) => {
+    e.preventDefault()
+    if (!emailRecuperar) {
+      setRecuperarStatus('error')
+      setRecuperarMensagem('Por favor, informe seu email.')
+      return
+    }
+
+    setRecuperarLoading(true)
+    setRecuperarStatus('idle')
+    setRecuperarMensagem('')
+
+    try {
+      const { error } = await supabase.auth.resetPasswordForEmail(emailRecuperar, {
+        redirectTo: `${window.location.origin}/recuperar-senha`,
+      })
+
+      if (error) throw error
+
+      setRecuperarStatus('success')
+      setRecuperarMensagem(`✅ Link de recuperação enviado para ${emailRecuperar}. Verifique seu email.`)
+      setTimeout(() => {
+        setMostrarRecuperar(false)
+        setEmailRecuperar('')
+        setRecuperarStatus('idle')
+        setRecuperarMensagem('')
+      }, 5000)
+    } catch (err: any) {
+      setRecuperarStatus('error')
+      setRecuperarMensagem(err.message || 'Erro ao enviar email de recuperação. Tente novamente.')
+    } finally {
+      setRecuperarLoading(false)
+    }
+  }
+
   return (
-    <div className="w-full max-w-md">
+    <div className="w-full max-w-md relative">
       <div className="bg-white rounded-2xl shadow-xl p-8 border border-[#E8EAE0]">
         <div className="text-center mb-8">
           <img src="/logo.png" alt="ZENTHOS" className="h-[1.5cm] w-auto mx-auto object-contain" />
@@ -101,7 +131,16 @@ export default function Login() {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-[#2D343A] mb-1.5">Senha</label>
+            <div className="flex items-center justify-between mb-1.5">
+              <label className="block text-sm font-medium text-[#2D343A]">Senha</label>
+              <button
+                type="button"
+                onClick={() => setMostrarRecuperar(true)}
+                className="text-xs text-[#8B0000] hover:underline font-medium"
+              >
+                Esqueci minha senha
+              </button>
+            </div>
             <div className="relative">
               <input
                 type={showPassword ? 'text' : 'password'}
@@ -185,6 +224,95 @@ export default function Login() {
           </Link>
         </div>
       </div>
+
+      {/* MODAL DE RECUPERAÇÃO DE SENHA - PREMIUM */}
+      {mostrarRecuperar && (
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4 animate-in fade-in duration-200">
+          <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full p-8 relative border border-[#E8EAE0]">
+            <button
+              onClick={() => {
+                setMostrarRecuperar(false)
+                setEmailRecuperar('')
+                setRecuperarStatus('idle')
+                setRecuperarMensagem('')
+              }}
+              className="absolute top-4 right-4 p-1 hover:bg-[#F8F4E6] rounded-lg transition"
+            >
+              <X className="h-5 w-5 text-[#708090]" />
+            </button>
+
+            <div className="text-center mb-6">
+              <div className="w-16 h-16 bg-[#8B0000]/10 rounded-full flex items-center justify-center mx-auto mb-4">
+                <Key className="h-8 w-8 text-[#8B0000]" />
+              </div>
+              <h2 className="text-2xl font-bold text-[#2D343A]">Recuperar Senha</h2>
+              <p className="text-sm text-[#708090] mt-1">
+                Digite seu email para receber o link de recuperação
+              </p>
+            </div>
+
+            {recuperarMensagem && (
+              <div className={`p-3 rounded-lg mb-4 text-sm ${
+                recuperarStatus === 'success' 
+                  ? 'bg-green-50 border border-green-200 text-green-700' 
+                  : 'bg-red-50 border border-red-200 text-red-700'
+              }`}>
+                {recuperarMensagem}
+              </div>
+            )}
+
+            <form onSubmit={handleRecuperarSenha} className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-[#2D343A] mb-1.5">Email</label>
+                <div className="relative">
+                  <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#708090]" />
+                  <input
+                    type="email"
+                    required
+                    className="w-full pl-10 pr-4 py-3 border border-[#E8EAE0] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#8B0000] transition"
+                    placeholder="seu@email.com"
+                    value={emailRecuperar}
+                    onChange={(e) => setEmailRecuperar(e.target.value)}
+                  />
+                </div>
+              </div>
+
+              <div className="flex gap-3">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setMostrarRecuperar(false)
+                    setEmailRecuperar('')
+                    setRecuperarStatus('idle')
+                    setRecuperarMensagem('')
+                  }}
+                  className="flex-1 py-3 border border-[#E8EAE0] rounded-lg hover:bg-[#F8F4E6] transition text-[#708090] font-medium"
+                >
+                  Cancelar
+                </button>
+                <button
+                  type="submit"
+                  disabled={recuperarLoading}
+                  className="flex-1 py-3 bg-[#8B0000] text-white rounded-lg hover:bg-[#700000] transition font-medium flex items-center justify-center gap-2 disabled:opacity-50"
+                >
+                  {recuperarLoading ? (
+                    <span className="animate-spin h-4 w-4 border-2 border-white border-t-transparent rounded-full" />
+                  ) : (
+                    <>
+                      <Mail className="h-4 w-4" />
+                      Enviar
+                    </>
+                  )}
+                </button>
+              </div>
+            </form>
+
+            <div className="mt-4 text-center text-xs text-[#708090]">
+              <p>Você receberá um email com o link para redefinir sua senha.</p>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }
