@@ -6,9 +6,8 @@ import Link from 'next/link'
 import { 
   Mail, Phone, MapPin, Send, 
   MessageCircle, Clock, Building2,
-  Users, ChevronRight, CheckCircle,
-  ArrowRight, Globe, Sparkles,
-  Calendar, FileText, Headphones
+  Users, CheckCircle, ArrowRight,
+  Headphones
 } from 'lucide-react'
 
 const fadeUp = {
@@ -44,9 +43,9 @@ export default function ContatoPage() {
     <div className="min-h-screen bg-[#F8F4E6]">
       
       {/* ===== HERO ===== */}
-      <section className="relative overflow-hidden bg-gradient-to-br from-[#2D343A] via-[#1A1A2E] to-[#0F0F1A] py-20 md:py-28">
+      <section className="relative overflow-hidden bg-gradient-to-br from-[#4A0E1A] via-[#6B1A2A] to-[#8B1A3A] py-20 md:py-28">
         <div className="absolute inset-0">
-          <div className="absolute top-0 right-0 w-1/2 h-1/2 bg-[#8B0000]/10 rounded-full blur-3xl"></div>
+          <div className="absolute top-0 right-0 w-1/2 h-1/2 bg-[#E3C9A8]/5 rounded-full blur-3xl"></div>
           <div className="absolute bottom-0 left-0 w-1/3 h-1/3 bg-[#E3C9A8]/5 rounded-full blur-3xl"></div>
         </div>
 
@@ -100,11 +99,11 @@ export default function ContatoPage() {
             >
               <div className="mb-6">
                 <div className="flex items-center gap-2">
-                  <span className="text-xs font-semibold text-[#8B0000] uppercase tracking-wider">Contato</span>
-                  <span className="h-px w-8 bg-[#8B0000]"></span>
+                  <span className="text-xs font-semibold text-[#6B1A2A] uppercase tracking-wider">Contato</span>
+                  <span className="h-px w-8 bg-[#6B1A2A]"></span>
                 </div>
                 <h2 className="text-2xl font-bold text-[#2D343A] mt-1">
-                  Envie sua <span className="text-[#8B0000]">mensagem</span>
+                  Envie sua <span className="text-[#6B1A2A]">mensagem</span>
                 </h2>
                 <p className="text-sm text-[#708090] mt-1">
                   Preencha o formulário e nossa equipe entrará em contato
@@ -115,12 +114,12 @@ export default function ContatoPage() {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
                     <label className="block text-sm font-medium text-[#2D343A] mb-1.5">
-                      Nome completo <span className="text-[#8B0000]">*</span>
+                      Nome completo <span className="text-[#6B1A2A]">*</span>
                     </label>
                     <input
                       type="text"
                       required
-                      className="w-full px-4 py-3 border border-[#E8EAE0] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#8B0000] transition"
+                      className="w-full px-4 py-3 border border-[#E8EAE0] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#6B1A2A] transition"
                       value={form.nome}
                       onChange={(e) => setForm({...form, nome: e.target.value})}
                       placeholder="Seu nome"
@@ -128,12 +127,12 @@ export default function ContatoPage() {
                   </div>
                   <div>
                     <label className="block text-sm font-medium text-[#2D343A] mb-1.5">
-                      Email <span className="text-[#8B0000]">*</span>
+                      Email <span className="text-[#6B1A2A]">*</span>
                     </label>
                     <input
                       type="email"
                       required
-                      className="w-full px-4 py-3 border border-[#E8EAE0] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#8B0000] transition"
+                      className="w-full px-4 py-3 border border-[#E8EAE0] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#6B1A2A] transition"
                       value={form.email}
                       onChange={(e) => setForm({...form, email: e.target.value})}
                       placeholder="seu@email.com"
@@ -144,12 +143,12 @@ export default function ContatoPage() {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
                     <label className="block text-sm font-medium text-[#2D343A] mb-1.5">
-                      Telefone <span className="text-[#8B0000]">*</span>
+                      Telefone <span className="text-[#6B1A2A]">*</span>
                     </label>
                     <input
                       type="tel"
                       required
-                      className="w-full px-4 py-3 border border-[#E8EAE0] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#8B0000] transition"
+                      className="w-full px-4 py-3 border border-[#E8EAE0] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#6B1A2A] transition"
                       value={form.telefone}
                       onChange={(e) => setForm({...form, telefone: e.target.value})}
                       placeholder="(00) 00000-0000"
@@ -161,7 +160,7 @@ export default function ContatoPage() {
                     </label>
                     <input
                       type="text"
-                      className="w-full px-4 py-3 border border-[#E8EAE0] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#8B0000] transition"
+                      className="w-full px-4 py-3 border border-[#E8EAE0] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#6B1A2A] transition"
                       value={form.empresa}
                       onChange={(e) => setForm({...form, empresa: e.target.value})}
                       placeholder="Nome da sua empresa"
@@ -174,7 +173,7 @@ export default function ContatoPage() {
                     Assunto
                   </label>
                   <select
-                    className="w-full px-4 py-3 border border-[#E8EAE0] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#8B0000] transition"
+                    className="w-full px-4 py-3 border border-[#E8EAE0] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#6B1A2A] transition"
                     value={form.assunto}
                     onChange={(e) => setForm({...form, assunto: e.target.value})}
                   >
@@ -189,12 +188,12 @@ export default function ContatoPage() {
 
                 <div>
                   <label className="block text-sm font-medium text-[#2D343A] mb-1.5">
-                    Mensagem <span className="text-[#8B0000]">*</span>
+                    Mensagem <span className="text-[#6B1A2A]">*</span>
                   </label>
                   <textarea
                     rows={5}
                     required
-                    className="w-full px-4 py-3 border border-[#E8EAE0] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#8B0000] transition resize-none"
+                    className="w-full px-4 py-3 border border-[#E8EAE0] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#6B1A2A] transition resize-none"
                     value={form.mensagem}
                     onChange={(e) => setForm({...form, mensagem: e.target.value})}
                     placeholder="Conte sobre sua empresa e o que precisa..."
@@ -204,7 +203,7 @@ export default function ContatoPage() {
                 <button
                   type="submit"
                   disabled={status === 'sending'}
-                  className="w-full py-3.5 bg-[#8B0000] text-white rounded-lg hover:bg-[#700000] transition font-semibold flex items-center justify-center gap-2 disabled:opacity-50 shadow-lg shadow-[#8B0000]/20 hover:shadow-xl hover:-translate-y-0.5 transition-all duration-300"
+                  className="w-full py-3.5 bg-[#6B1A2A] text-white rounded-lg hover:bg-[#4A0E1A] transition font-semibold flex items-center justify-center gap-2 disabled:opacity-50 shadow-lg shadow-[#6B1A2A]/20 hover:shadow-xl hover:-translate-y-0.5 transition-all duration-300"
                 >
                   {status === 'sending' ? (
                     <span className="flex items-center gap-2">
@@ -246,7 +245,7 @@ export default function ContatoPage() {
               transition={{ delay: 0.2 }}
             >
               {/* CARD PRINCIPAL */}
-              <div className="bg-gradient-to-br from-[#8B0000] to-[#5C0000] rounded-2xl p-8 text-white">
+              <div className="bg-gradient-to-br from-[#6B1A2A] to-[#4A0E1A] rounded-2xl p-8 text-white">
                 <div className="flex items-center gap-3 mb-6">
                   <div className="p-2 bg-white/10 rounded-lg">
                     <Headphones className="h-6 w-6" />
@@ -301,11 +300,11 @@ export default function ContatoPage() {
               {/* STATS */}
               <div className="grid grid-cols-2 gap-4">
                 <div className="bg-white rounded-2xl p-6 border border-[#E8EAE0] text-center">
-                  <p className="text-2xl font-bold text-[#8B0000]">500+</p>
+                  <p className="text-2xl font-bold text-[#6B1A2A]">500+</p>
                   <p className="text-sm text-[#708090]">Empresas Atendidas</p>
                 </div>
                 <div className="bg-white rounded-2xl p-6 border border-[#E8EAE0] text-center">
-                  <p className="text-2xl font-bold text-[#8B0000]">96%</p>
+                  <p className="text-2xl font-bold text-[#6B1A2A]">96%</p>
                   <p className="text-sm text-[#708090]">Satisfação</p>
                 </div>
               </div>
