@@ -4,14 +4,15 @@ import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { SidebarAdmin } from '@/components/dashboard/SidebarAdmin'
 import { DashboardFooter } from '@/components/dashboard/DashboardFooter'
-import { Building2, Plus, Search, Edit, Trash2, Eye } from 'lucide-react'
-import { supabase } from '@/lib/supabase/client'
+import { Building2, Plus, Search, Edit, Trash2, Eye, RefreshCw } from 'lucide-react'
+import { listarEmpresas, excluirEmpresa } from '@/actions/empresas'
 
 export default function AdminEmpresas() {
   const router = useRouter()
   const [empresas, setEmpresas] = useState<any[]>([])
   const [search, setSearch] = useState('')
   const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
     carregarEmpresas()
@@ -19,33 +20,16 @@ export default function AdminEmpresas() {
 
   const carregarEmpresas = async () => {
     setLoading(true)
+    setError(null)
     try {
-      // BUSCAR DO SUPABASE
-      const { data, error } = await supabase
-        .from('empresas')
-        .select('*')
-        .order('id', { ascending: false })
-
-      if (error) throw error
-
-      if (data && data.length > 0) {
-        setEmpresas(data)
-        // Salvar no localStorage como fallback
-        localStorage.setItem('zenthos_empresas', JSON.stringify(data))
+      const result = await listarEmpresas()
+      if (result.success) {
+        setEmpresas(result.data || [])
       } else {
-        // Fallback: buscar do localStorage
-        const saved = localStorage.getItem('zenthos_empresas')
-        if (saved) {
-          setEmpresas(JSON.parse(saved))
-        }
+        setError(result.error || 'Erro ao carregar empresas')
       }
-    } catch (error) {
-      console.error('Erro ao carregar empresas:', error)
-      // Fallback: buscar do localStorage
-      const saved = localStorage.getItem('zenthos_empresas')
-      if (saved) {
-        setEmpresas(JSON.parse(saved))
-      }
+    } catch (err) {
+      setError('Erro ao carregar empresas')
     } finally {
       setLoading(false)
     }
@@ -55,19 +39,14 @@ export default function AdminEmpresas() {
     if (!confirm('Tem certeza que deseja excluir esta empresa?')) return
 
     try {
-      // DELETAR DO SUPABASE
-      const { error } = await supabase
-        .from('empresas')
-        .delete()
-        .eq('id', id)
-
-      if (error) throw error
-
-      // Atualizar lista
-      await carregarEmpresas()
+      const result = await excluirEmpresa(id)
+      if (result.success) {
+        await carregarEmpresas()
+      } else {
+        alert(result.error || 'Erro ao excluir empresa')
+      }
     } catch (error) {
-      console.error('Erro ao excluir empresa:', error)
-      alert('Erro ao excluir empresa. Tente novamente.')
+      alert('Erro ao excluir empresa')
     }
   }
 
@@ -82,7 +61,10 @@ export default function AdminEmpresas() {
       <div className="min-h-screen bg-[#F8F4E6] flex flex-col">
         <SidebarAdmin />
         <div className="flex-1 ml-64 flex items-center justify-center">
-          <div className="text-[#6B1A2A] text-xl">Carregando...</div>
+          <div className="text-center">
+            <Building2 className="h-12 w-12 text-[#6B1A2A] animate-pulse mx-auto mb-4" />
+            <p className="text-[#708090]">Carregando empresas...</p>
+          </div>
         </div>
       </div>
     )
@@ -98,13 +80,22 @@ export default function AdminEmpresas() {
             <h1 className="text-2xl font-bold text-[#2D343A]">Empresas</h1>
             <p className="text-sm text-[#708090]">{empresas.length} empresas cadastradas</p>
           </div>
-          <button 
-            onClick={() => router.push('/admin/empresas/nova')}
-            className="px-4 py-2 bg-[#6B1A2A] text-white rounded-lg hover:bg-[#4A0E1A] transition font-medium flex items-center gap-2"
-          >
-            <Plus className="h-4 w-4" />
-            Nova Empresa
-          </button>
+          <div className="flex gap-3">
+            <button 
+              onClick={carregarEmpresas}
+              className="px-4 py-2 border border-[#E8EAE0] rounded-lg hover:bg-[#F8F4E6] transition flex items-center gap-2 text-[#708090]"
+            >
+              <RefreshCw className="h-4 w-4" />
+              Atualizar
+            </button>
+            <button 
+              onClick={() => router.push('/admin/empresas/nova')}
+              className="px-4 py-2 bg-[#6B1A2A] text-white rounded-lg hover:bg-[#4A0E1A] transition font-medium flex items-center gap-2"
+            >
+              <Plus className="h-4 w-4" />
+              Nova Empresa
+            </button>
+          </div>
         </header>
 
         <div className="flex-1 p-8">
@@ -121,6 +112,12 @@ export default function AdminEmpresas() {
                 />
               </div>
             </div>
+
+            {error && (
+              <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg mb-4 text-sm">
+                {error}
+              </div>
+            )}
 
             {empresas.length === 0 ? (
               <div className="text-center py-12">
