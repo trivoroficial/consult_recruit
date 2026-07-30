@@ -100,10 +100,9 @@ export default function NovaTransacao() {
 
       console.log('📤 Chamando criarTransacao com:', dados)
 
-      // CHAMAR A ACTION
       const result = await criarTransacao(dados)
       
-      console.log('📤 Resultado da Action:', result)
+      console.log('📤 Resultado COMPLETO:', JSON.stringify(result, null, 2))
 
       if (result.success) {
         setSuccess(true)
@@ -111,11 +110,15 @@ export default function NovaTransacao() {
           router.push('/admin/financeiro')
         }, 2000)
       } else {
+        // Mostrar o erro completo
+        console.error('❌ Erro retornado pela Action:', result.error)
         setError(result.error || 'Erro ao criar transação')
         setLoading(false)
       }
     } catch (err: any) {
       console.error('❌ Erro no catch:', err)
+      console.error('❌ Mensagem:', err.message)
+      console.error('❌ Stack:', err.stack)
       setError(err.message || 'Erro ao criar transação')
       setLoading(false)
     }
