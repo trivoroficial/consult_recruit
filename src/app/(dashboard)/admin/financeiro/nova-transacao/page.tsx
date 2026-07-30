@@ -1,4 +1,3 @@
-// src/app/(dashboard)/admin/financeiro/nova-transacao/page.tsx
 'use client'
 
 import { useState } from 'react'
@@ -7,7 +6,7 @@ import { SidebarAdmin } from '@/components/dashboard/SidebarAdmin'
 import { DashboardFooter } from '@/components/dashboard/DashboardFooter'
 import { 
   CreditCard, ArrowLeft, Save, CheckCircle, XCircle,
-  Plus, Calendar, DollarSign, Calculator 
+  Calculator 
 } from 'lucide-react'
 import { criarTransacao } from '@/actions/financeiro'
 
@@ -27,7 +26,6 @@ export default function NovaTransacao() {
     data: new Date().toISOString().split('T')[0],
     status: 'pendente',
     observacoes: '',
-    // Campos de parcelamento
     valor_entrada: '',
     parcelas_total: '1',
     parcelas_pagas: '0',
@@ -49,6 +47,11 @@ export default function NovaTransacao() {
         ...prev,
         valor_parcela: valorParcela.toFixed(2)
       }))
+    } else {
+      setForm(prev => ({
+        ...prev,
+        valor_parcela: ''
+      }))
     }
   }
 
@@ -58,6 +61,8 @@ export default function NovaTransacao() {
     setError(null)
 
     try {
+      console.log('📤 Enviando dados:', form)
+
       if (!form.descricao.trim()) {
         setError('A descrição é obrigatória')
         setLoading(false)
@@ -70,18 +75,34 @@ export default function NovaTransacao() {
         return
       }
 
-      const dados = {
-        ...form,
-        valor: parseFloat(form.valor),
-        valor_entrada: form.valor_entrada ? parseFloat(form.valor_entrada) : null,
-        valor_parcela: form.valor_parcela ? parseFloat(form.valor_parcela) : null,
-        parcelas_total: parseInt(form.parcelas_total) || 1,
-        parcelas_pagas: parseInt(form.parcelas_pagas) || 0
+      if (!form.categoria) {
+        setError('A categoria é obrigatória')
+        setLoading(false)
+        return
       }
 
-      console.log('Enviando dados:', dados)
+      const dados = {
+        tipo: form.tipo,
+        categoria: form.categoria,
+        categoria_detalhada: form.categoria_detalhada || null,
+        descricao: form.descricao,
+        cliente: form.cliente || null,
+        valor: parseFloat(form.valor),
+        data: form.data,
+        status: form.status,
+        observacoes: form.observacoes || null,
+        valor_entrada: form.valor_entrada ? parseFloat(form.valor_entrada) : null,
+        parcelas_total: parseInt(form.parcelas_total) || 1,
+        parcelas_pagas: parseInt(form.parcelas_pagas) || 0,
+        valor_parcela: form.valor_parcela ? parseFloat(form.valor_parcela) : null,
+        data_proxima_parcela: form.data_proxima_parcela || null,
+        data_ultima_parcela: form.data_ultima_parcela || null
+      }
+
+      console.log('📤 Dados processados:', dados)
 
       const result = await criarTransacao(dados)
+      console.log('📤 Resultado:', result)
 
       if (result.success) {
         setSuccess(true)
@@ -93,7 +114,7 @@ export default function NovaTransacao() {
         setLoading(false)
       }
     } catch (err: any) {
-      console.error('Erro:', err)
+      console.error('❌ Erro:', err)
       setError(err.message || 'Erro ao criar transação')
       setLoading(false)
     }
@@ -260,7 +281,10 @@ export default function NovaTransacao() {
                   required
                   className="w-full px-4 py-3 border border-[#E8EAE0] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#6B1A2A] transition"
                   value={form.valor}
-                  onChange={(e) => setForm({...form, valor: e.target.value})}
+                  onChange={(e) => {
+                    setForm({...form, valor: e.target.value})
+                    setTimeout(calcularParcela, 100)
+                  }}
                   placeholder="0,00"
                 />
               </div>
@@ -316,8 +340,8 @@ export default function NovaTransacao() {
                   value={form.valor_entrada}
                   onChange={(e) => {
                     setForm({...form, valor_entrada: e.target.value})
+                    setTimeout(calcularParcela, 100)
                   }}
-                  onBlur={calcularParcela}
                   placeholder="0,00"
                 />
               </div>
@@ -421,7 +445,7 @@ export default function NovaTransacao() {
               <button
                 type="submit"
                 disabled={loading}
-                className="px-8 py-3 bg-[#6B1A2A] text-white rounded-lg hover:bg-[#4A0E1A] transition font-medium flex items-center gap-2 disabled:opacity-50"
+                className="px-8 py-3 bg-[#6B1A2A] text-white rounded-lg hover:bg-[#4A0E1A] transition font-medium flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {loading ? (
                   <>
