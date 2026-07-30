@@ -1,6 +1,5 @@
 'use server'
-
-import { supabase } from '@/lib/supabase/server'
+import { createClient } from '@/lib/supabase/server'
 
 // ============================================
 // PARTICIPANTES
@@ -8,9 +7,9 @@ import { supabase } from '@/lib/supabase/server'
 
 export async function criarParticipante(data: any) {
   try {
-    const supabaseClient = supabase()
+    const supabase = createClient()
     
-    const { data: participante, error } = await supabaseClient
+    const { data: participante, error } = await supabase
       .from('participantes')
       .insert([{
         nome: data.nome,
@@ -31,53 +30,53 @@ export async function criarParticipante(data: any) {
       .single()
 
     if (error) throw error
-
     return { success: true, data: participante }
   } catch (error: any) {
+    console.error('Erro ao criar participante:', error)
     return { success: false, error: error.message }
   }
 }
 
 export async function listarParticipantes() {
   try {
-    const supabaseClient = supabase()
+    const supabase = createClient()
     
-    const { data, error } = await supabaseClient
+    const { data, error } = await supabase
       .from('participantes')
       .select('*')
       .order('created_at', { ascending: false })
 
     if (error) throw error
-
     return { success: true, data }
   } catch (error: any) {
+    console.error('Erro ao listar participantes:', error)
     return { success: false, error: error.message }
   }
 }
 
 export async function buscarParticipantePorId(id: number) {
   try {
-    const supabaseClient = supabase()
+    const supabase = createClient()
     
-    const { data, error } = await supabaseClient
+    const { data, error } = await supabase
       .from('participantes')
       .select('*')
       .eq('id', id)
       .single()
 
     if (error) throw error
-
     return { success: true, data }
   } catch (error: any) {
+    console.error('Erro ao buscar participante:', error)
     return { success: false, error: error.message }
   }
 }
 
 export async function atualizarParticipante(id: number, data: any) {
   try {
-    const supabaseClient = supabase()
+    const supabase = createClient()
     
-    const { data: participante, error } = await supabaseClient
+    const { data: participante, error } = await supabase
       .from('participantes')
       .update({
         nome: data.nome,
@@ -98,26 +97,26 @@ export async function atualizarParticipante(id: number, data: any) {
       .single()
 
     if (error) throw error
-
     return { success: true, data: participante }
   } catch (error: any) {
+    console.error('Erro ao atualizar participante:', error)
     return { success: false, error: error.message }
   }
 }
 
 export async function excluirParticipante(id: number) {
   try {
-    const supabaseClient = supabase()
+    const supabase = createClient()
     
-    const { error } = await supabaseClient
+    const { error } = await supabase
       .from('participantes')
       .delete()
       .eq('id', id)
 
     if (error) throw error
-
     return { success: true }
   } catch (error: any) {
+    console.error('Erro ao excluir participante:', error)
     return { success: false, error: error.message }
   }
 }
@@ -128,9 +127,9 @@ export async function excluirParticipante(id: number) {
 
 export async function criarEntrevistaOperacional(data: any) {
   try {
-    const supabaseClient = supabase()
+    const supabase = createClient()
     
-    const { data: entrevista, error } = await supabaseClient
+    const { data: entrevista, error } = await supabase
       .from('entrevistas_operacionais')
       .insert([{
         participante_id: data.participanteId,
@@ -152,53 +151,53 @@ export async function criarEntrevistaOperacional(data: any) {
       .single()
 
     if (error) throw error
-
     return { success: true, data: entrevista }
   } catch (error: any) {
+    console.error('Erro ao criar entrevista operacional:', error)
     return { success: false, error: error.message }
   }
 }
 
 export async function listarEntrevistasOperacionais() {
   try {
-    const supabaseClient = supabase()
+    const supabase = createClient()
     
-    const { data, error } = await supabaseClient
+    const { data, error } = await supabase
       .from('entrevistas_operacionais')
       .select('*, participantes(*)')
       .order('data', { ascending: false })
 
     if (error) throw error
-
     return { success: true, data }
   } catch (error: any) {
+    console.error('Erro ao listar entrevistas operacionais:', error)
     return { success: false, error: error.message }
   }
 }
 
 export async function buscarEntrevistaOperacionalPorId(id: number) {
   try {
-    const supabaseClient = supabase()
+    const supabase = createClient()
     
-    const { data, error } = await supabaseClient
+    const { data, error } = await supabase
       .from('entrevistas_operacionais')
       .select('*, participantes(*)')
       .eq('id', id)
       .single()
 
     if (error) throw error
-
     return { success: true, data }
   } catch (error: any) {
+    console.error('Erro ao buscar entrevista operacional:', error)
     return { success: false, error: error.message }
   }
 }
 
 export async function atualizarEntrevistaOperacional(id: number, data: any) {
   try {
-    const supabaseClient = supabase()
+    const supabase = createClient()
     
-    const { data: entrevista, error } = await supabaseClient
+    const { data: entrevista, error } = await supabase
       .from('entrevistas_operacionais')
       .update({
         data: data.data,
@@ -217,26 +216,26 @@ export async function atualizarEntrevistaOperacional(id: number, data: any) {
       .single()
 
     if (error) throw error
-
     return { success: true, data: entrevista }
   } catch (error: any) {
+    console.error('Erro ao atualizar entrevista operacional:', error)
     return { success: false, error: error.message }
   }
 }
 
 export async function excluirEntrevistaOperacional(id: number) {
   try {
-    const supabaseClient = supabase()
+    const supabase = createClient()
     
-    const { error } = await supabaseClient
+    const { error } = await supabase
       .from('entrevistas_operacionais')
       .delete()
       .eq('id', id)
 
     if (error) throw error
-
     return { success: true }
   } catch (error: any) {
+    console.error('Erro ao excluir entrevista operacional:', error)
     return { success: false, error: error.message }
   }
 }
@@ -247,9 +246,9 @@ export async function excluirEntrevistaOperacional(id: number) {
 
 export async function criarProcessoOperacional(data: any) {
   try {
-    const supabaseClient = supabase()
+    const supabase = createClient()
     
-    const { data: processo, error } = await supabaseClient
+    const { data: processo, error } = await supabase
       .from('processos_operacionais')
       .insert([{
         nome: data.nome,
@@ -269,53 +268,53 @@ export async function criarProcessoOperacional(data: any) {
       .single()
 
     if (error) throw error
-
     return { success: true, data: processo }
   } catch (error: any) {
+    console.error('Erro ao criar processo operacional:', error)
     return { success: false, error: error.message }
   }
 }
 
 export async function listarProcessosOperacionais() {
   try {
-    const supabaseClient = supabase()
+    const supabase = createClient()
     
-    const { data, error } = await supabaseClient
+    const { data, error } = await supabase
       .from('processos_operacionais')
       .select('*')
       .order('created_at', { ascending: false })
 
     if (error) throw error
-
     return { success: true, data }
   } catch (error: any) {
+    console.error('Erro ao listar processos operacionais:', error)
     return { success: false, error: error.message }
   }
 }
 
 export async function buscarProcessoOperacionalPorId(id: number) {
   try {
-    const supabaseClient = supabase()
+    const supabase = createClient()
     
-    const { data, error } = await supabaseClient
+    const { data, error } = await supabase
       .from('processos_operacionais')
       .select('*')
       .eq('id', id)
       .single()
 
     if (error) throw error
-
     return { success: true, data }
   } catch (error: any) {
+    console.error('Erro ao buscar processo operacional:', error)
     return { success: false, error: error.message }
   }
 }
 
 export async function atualizarProcessoOperacional(id: number, data: any) {
   try {
-    const supabaseClient = supabase()
+    const supabase = createClient()
     
-    const { data: processo, error } = await supabaseClient
+    const { data: processo, error } = await supabase
       .from('processos_operacionais')
       .update({
         nome: data.nome,
@@ -336,37 +335,37 @@ export async function atualizarProcessoOperacional(id: number, data: any) {
       .single()
 
     if (error) throw error
-
     return { success: true, data: processo }
   } catch (error: any) {
+    console.error('Erro ao atualizar processo operacional:', error)
     return { success: false, error: error.message }
   }
 }
 
 export async function excluirProcessoOperacional(id: number) {
   try {
-    const supabaseClient = supabase()
+    const supabase = createClient()
     
-    const { error } = await supabaseClient
+    const { error } = await supabase
       .from('processos_operacionais')
       .delete()
       .eq('id', id)
 
     if (error) throw error
-
     return { success: true }
   } catch (error: any) {
+    console.error('Erro ao excluir processo operacional:', error)
     return { success: false, error: error.message }
   }
 }
 
 // ============================================
-// RELATÓRIOS OPERACIONAIS
+// DASHBOARD OPERACIONAL
 // ============================================
 
 export async function getDashboardOperacional() {
   try {
-    const supabaseClient = supabase()
+    const supabase = createClient()
     
     const [
       { count: participantes },
@@ -374,10 +373,10 @@ export async function getDashboardOperacional() {
       { count: processos },
       { data: resultados }
     ] = await Promise.all([
-      supabaseClient.from('participantes').select('*', { count: 'exact', head: true }),
-      supabaseClient.from('entrevistas_operacionais').select('*', { count: 'exact', head: true }),
-      supabaseClient.from('processos_operacionais').select('*', { count: 'exact', head: true }),
-      supabaseClient.from('entrevistas_operacionais').select('resultado')
+      supabase.from('participantes').select('*', { count: 'exact', head: true }),
+      supabase.from('entrevistas_operacionais').select('*', { count: 'exact', head: true }),
+      supabase.from('processos_operacionais').select('*', { count: 'exact', head: true }),
+      supabase.from('entrevistas_operacionais').select('resultado')
     ])
 
     const aprovados = resultados?.filter(r => r.resultado === 'aprovado').length || 0
@@ -396,6 +395,7 @@ export async function getDashboardOperacional() {
       }
     }
   } catch (error: any) {
+    console.error('Erro ao buscar dashboard operacional:', error)
     return { success: false, error: error.message }
   }
 }
