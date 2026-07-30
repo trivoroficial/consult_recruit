@@ -21,8 +21,19 @@ export function Footer() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           
+          {/* COLUNA 1 - LOGO */}
           <div>
-            <img src="/logo.png" alt="ZENTHOS" className="h-[1.5cm] w-auto object-contain" />
+            {/* LOGO - 2cm de largura com altura proporcional */}
+            <img 
+              src="/logo.png" 
+              alt="ZENTHOS" 
+              className="object-contain"
+              style={{
+                width: '2cm',      // 2cm de largura
+                height: 'auto',    // altura proporcional
+                maxHeight: '2cm',  // limite máximo
+              }}
+            />
             <p className="text-sm text-[#708090] mt-4 max-w-xs">
               Plataforma de recrutamento e seleção conectando talentos às melhores oportunidades.
             </p>
