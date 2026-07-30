@@ -16,7 +16,6 @@ export default function AdminRelatoriosOperacionais() {
   const router = useRouter()
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
-  const [periodo, setPeriodo] = useState({ inicio: '', fim: '' })
   const [stats, setStats] = useState({
     participantes: 0,
     entrevistas: 0,
