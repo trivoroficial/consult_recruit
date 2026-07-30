@@ -1,15 +1,14 @@
 'use server'
-
-import { supabase } from '@/lib/supabase/server'
+import { createClient } from '@/lib/supabase/server'
 
 export async function gerarRelatorioFinanceiro(data: any) {
   try {
-    const supabaseClient = supabase()
+    const supabase = createClient()
     
-    let query = supabaseClient
+    let query = supabase
       .from('transacoes')
       .select('*')
-    
+
     if (data.dataInicio) {
       query = query.gte('data', data.dataInicio)
     }
@@ -19,9 +18,8 @@ export async function gerarRelatorioFinanceiro(data: any) {
     if (data.tipo) {
       query = query.eq('tipo', data.tipo)
     }
-    
-    const { data: transacoes, error } = await query.order('data', { ascending: false })
 
+    const { data: transacoes, error } = await query.order('data', { ascending: false })
     if (error) throw error
 
     const totalReceitas = transacoes?.filter((t: any) => t.tipo === 'receita').reduce((acc: number, t: any) => acc + t.valor, 0) || 0
@@ -39,27 +37,27 @@ export async function gerarRelatorioFinanceiro(data: any) {
       } 
     }
   } catch (error: any) {
+    console.error('Erro ao gerar relatório financeiro:', error)
     return { success: false, error: error.message }
   }
 }
 
 export async function gerarRelatorioProcessos(data: any) {
   try {
-    const supabaseClient = supabase()
+    const supabase = createClient()
     
-    let query = supabaseClient
+    let query = supabase
       .from('processos')
       .select('*')
-    
+
     if (data.status) {
       query = query.eq('status', data.status)
     }
     if (data.dataInicio) {
       query = query.gte('inicio', data.dataInicio)
     }
-    
-    const { data: processos, error } = await query.order('id', { ascending: false })
 
+    const { data: processos, error } = await query.order('id', { ascending: false })
     if (error) throw error
 
     const statusCount = {
@@ -78,27 +76,27 @@ export async function gerarRelatorioProcessos(data: any) {
       } 
     }
   } catch (error: any) {
+    console.error('Erro ao gerar relatório de processos:', error)
     return { success: false, error: error.message }
   }
 }
 
 export async function gerarRelatorioCandidatos(data: any) {
   try {
-    const supabaseClient = supabase()
+    const supabase = createClient()
     
-    let query = supabaseClient
+    let query = supabase
       .from('candidatos')
       .select('*')
-    
+
     if (data.status) {
       query = query.eq('status', data.status)
     }
     if (data.cidade) {
       query = query.eq('cidade', data.cidade)
     }
-    
-    const { data: candidatos, error } = await query.order('id', { ascending: false })
 
+    const { data: candidatos, error } = await query.order('id', { ascending: false })
     if (error) throw error
 
     const statusCount = {
@@ -117,27 +115,27 @@ export async function gerarRelatorioCandidatos(data: any) {
       } 
     }
   } catch (error: any) {
+    console.error('Erro ao gerar relatório de candidatos:', error)
     return { success: false, error: error.message }
   }
 }
 
 export async function gerarRelatorioVagas(data: any) {
   try {
-    const supabaseClient = supabase()
+    const supabase = createClient()
     
-    let query = supabaseClient
+    let query = supabase
       .from('vagas')
       .select('*')
-    
+
     if (data.status) {
       query = query.eq('status', data.status)
     }
     if (data.tipo) {
       query = query.eq('tipo', data.tipo)
     }
-    
-    const { data: vagas, error } = await query.order('id', { ascending: false })
 
+    const { data: vagas, error } = await query.order('id', { ascending: false })
     if (error) throw error
 
     const statusCount = {
@@ -159,26 +157,25 @@ export async function gerarRelatorioVagas(data: any) {
       } 
     }
   } catch (error: any) {
+    console.error('Erro ao gerar relatório de vagas:', error)
     return { success: false, error: error.message }
   }
 }
 
 export async function exportarRelatorioExcel(data: any, tipo: string) {
   try {
-    // Esta função prepara os dados para exportação
-    // O frontend vai gerar o Excel com os dados
     return { success: true, data }
   } catch (error: any) {
+    console.error('Erro ao exportar Excel:', error)
     return { success: false, error: error.message }
   }
 }
 
 export async function exportarRelatorioPDF(data: any, tipo: string) {
   try {
-    // Esta função prepara os dados para exportação
-    // O frontend vai gerar o PDF com os dados
     return { success: true, data }
   } catch (error: any) {
+    console.error('Erro ao exportar PDF:', error)
     return { success: false, error: error.message }
   }
 }
