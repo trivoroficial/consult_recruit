@@ -1,8 +1,10 @@
 'use server'
-import { supabase } from '@/lib/supabase/server'
+import { createClient } from '@/lib/supabase/server'
 
 export async function listarEmpresas() {
   try {
+    const supabase = createClient()
+    
     const { data, error } = await supabase
       .from('empresas')
       .select('*')
@@ -18,6 +20,8 @@ export async function listarEmpresas() {
 
 export async function excluirEmpresa(id: number) {
   try {
+    const supabase = createClient()
+    
     const { error } = await supabase
       .from('empresas')
       .delete()
@@ -33,6 +37,8 @@ export async function excluirEmpresa(id: number) {
 
 export async function criarEmpresa(data: any) {
   try {
+    const supabase = createClient()
+    
     const { data: empresa, error } = await supabase
       .from('empresas')
       .insert([{
@@ -62,6 +68,8 @@ export async function criarEmpresa(data: any) {
 
 export async function buscarEmpresaPorId(id: number) {
   try {
+    const supabase = createClient()
+    
     const { data, error } = await supabase
       .from('empresas')
       .select('*')
@@ -78,6 +86,8 @@ export async function buscarEmpresaPorId(id: number) {
 
 export async function atualizarEmpresa(id: number, data: any) {
   try {
+    const supabase = createClient()
+    
     const { data: empresa, error } = await supabase
       .from('empresas')
       .update({
