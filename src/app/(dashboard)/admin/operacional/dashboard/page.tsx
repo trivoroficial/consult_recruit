@@ -7,9 +7,9 @@ import {
  UsersRound, ClipboardList, Calendar, FileText,
  TrendingUp, UserCheck, UserX, Clock,
  ArrowRight, Plus, Eye, BarChart3,
- UserPlus // <-- ADICIONADO
+ UserPlus
 } from 'lucide-react'
-import { supabase } from '@/lib/supabase/client' // <-- VERIFICAR IMPORT
+import { supabase } from '@/lib/supabase/client' // ✅ NAMED IMPORT CORRETO
 
 export default function OperacionalDashboard() {
  const router = useRouter()
