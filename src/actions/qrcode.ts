@@ -1,13 +1,11 @@
 'use server'
-
-import { supabase } from '@/lib/supabase/server'
+import { createClient } from '@/lib/supabase/server'
 import QRCode from 'qrcode'
 
 export async function gerarQRCode(data: any) {
   try {
-    const supabaseClient = supabase()
+    const supabase = createClient()
     
-    // Gerar QR Code em PNG
     const qrCodeDataURL = await QRCode.toDataURL(data.conteudo, {
       width: data.tamanho || 300,
       margin: 2,
@@ -17,8 +15,7 @@ export async function gerarQRCode(data: any) {
       }
     })
 
-    // Salvar no banco
-    const { data: qrCode, error } = await supabaseClient
+    const { data: qrCode, error } = await supabase
       .from('qrcodes')
       .insert([{
         tipo: data.tipo || 'link',
@@ -32,79 +29,79 @@ export async function gerarQRCode(data: any) {
       .single()
 
     if (error) throw error
-
     return { success: true, data: qrCode, qrCodeDataURL }
   } catch (error: any) {
+    console.error('Erro ao gerar QR Code:', error)
     return { success: false, error: error.message }
   }
 }
 
 export async function listarQRCodes() {
   try {
-    const supabaseClient = supabase()
+    const supabase = createClient()
     
-    const { data, error } = await supabaseClient
+    const { data, error } = await supabase
       .from('qrcodes')
       .select('*')
       .order('id', { ascending: false })
 
     if (error) throw error
-
     return { success: true, data }
   } catch (error: any) {
+    console.error('Erro ao listar QR Codes:', error)
     return { success: false, error: error.message }
   }
 }
 
 export async function buscarQRCodePorId(id: number) {
   try {
-    const supabaseClient = supabase()
+    const supabase = createClient()
     
-    const { data, error } = await supabaseClient
+    const { data, error } = await supabase
       .from('qrcodes')
       .select('*')
       .eq('id', id)
       .single()
 
     if (error) throw error
-
     return { success: true, data }
   } catch (error: any) {
+    console.error('Erro ao buscar QR Code:', error)
     return { success: false, error: error.message }
   }
 }
 
 export async function excluirQRCode(id: number) {
   try {
-    const supabaseClient = supabase()
+    const supabase = createClient()
     
-    const { error } = await supabaseClient
+    const { error } = await supabase
       .from('qrcodes')
       .delete()
       .eq('id', id)
 
     if (error) throw error
-
     return { success: true }
   } catch (error: any) {
+    console.error('Erro ao excluir QR Code:', error)
     return { success: false, error: error.message }
   }
 }
 
 export async function baixarQRCode(id: number) {
   try {
-    const supabaseClient = supabase()
+    const supabase = createClient()
     
-    const { data, error } = await supabaseClient
+    const { data, error } = await supabase
       .from('qrcodes')
       .select('imagem, nome')
       .eq('id', id)
       .single()
 
     if (error) throw error
-
     return { success: true, data }
   } catch (error: any) {
+    console.error('Erro ao baixar QR Code:', error)
     return { success: false, error: error.message }
   }
 }
