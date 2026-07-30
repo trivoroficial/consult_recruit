@@ -61,8 +61,7 @@ export default function NovaTransacao() {
     setError(null)
 
     try {
-      console.log('📤 Enviando dados:', form)
-
+      // Validações
       if (!form.descricao.trim()) {
         setError('A descrição é obrigatória')
         setLoading(false)
@@ -99,10 +98,12 @@ export default function NovaTransacao() {
         data_ultima_parcela: form.data_ultima_parcela || null
       }
 
-      console.log('📤 Dados processados:', dados)
+      console.log('📤 Chamando criarTransacao com:', dados)
 
+      // CHAMAR A ACTION
       const result = await criarTransacao(dados)
-      console.log('📤 Resultado:', result)
+      
+      console.log('📤 Resultado da Action:', result)
 
       if (result.success) {
         setSuccess(true)
@@ -114,7 +115,7 @@ export default function NovaTransacao() {
         setLoading(false)
       }
     } catch (err: any) {
-      console.error('❌ Erro:', err)
+      console.error('❌ Erro no catch:', err)
       setError(err.message || 'Erro ao criar transação')
       setLoading(false)
     }
