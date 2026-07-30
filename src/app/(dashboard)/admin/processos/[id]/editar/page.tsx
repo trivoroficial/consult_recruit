@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react'
 import { useRouter, useParams } from 'next/navigation'
 import { SidebarAdmin } from '@/components/dashboard/SidebarAdmin'
 import { DashboardFooter } from '@/components/dashboard/DashboardFooter'
-import { FileText, ArrowLeft, Save, CheckCircle } from 'lucide-react'
+import { FileText, ArrowLeft, Save, CheckCircle, XCircle } from 'lucide-react'
 import { buscarProcessoPorId, atualizarProcesso } from '@/actions/processos'
 
 export default function EditarProcesso() {
@@ -77,8 +77,8 @@ export default function EditarProcesso() {
         setError(result.error || 'Erro ao atualizar processo')
         setLoading(false)
       }
-    } catch (err) {
-      setError('Erro ao atualizar processo')
+    } catch (err: any) {
+      setError(err.message || 'Erro ao atualizar processo')
       setLoading(false)
     }
   }
@@ -133,7 +133,8 @@ export default function EditarProcesso() {
         <div className="flex-1 p-8">
           <form onSubmit={handleSubmit} className="bg-white rounded-2xl shadow-sm border border-[#E8EAE0] p-8">
             {error && (
-              <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg mb-4 text-sm">
+              <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg mb-4 text-sm flex items-center gap-2">
+                <XCircle className="h-4 w-4 flex-shrink-0" />
                 {error}
               </div>
             )}
@@ -149,7 +150,7 @@ export default function EditarProcesso() {
                   className="w-full px-4 py-3 border border-[#E8EAE0] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#6B1A2A] transition"
                   value={form.vaga}
                   onChange={(e) => setForm({...form, vaga: e.target.value})}
-                  placeholder="Desenvolvedor Full Stack"
+                  placeholder="Nome da vaga"
                 />
               </div>
 
