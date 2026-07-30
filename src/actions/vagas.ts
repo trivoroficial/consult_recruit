@@ -51,7 +51,6 @@ export async function listarVagas() {
   }
 }
 
-// ✅ ADICIONAR ESTA FUNÇÃO
 export async function buscarVagaPorId(id: number) {
   try {
     const supabaseClient = supabase()
@@ -70,7 +69,6 @@ export async function buscarVagaPorId(id: number) {
   }
 }
 
-// ✅ ADICIONAR ESTA FUNÇÃO
 export async function buscarTodasVagas() {
   try {
     const supabaseClient = supabase()
