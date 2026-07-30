@@ -68,7 +68,7 @@ export function Footer() {
         <div className="border-t border-[#E8EAE0] mt-8 pt-6">
           <div className="flex flex-col md:flex-row items-center justify-between gap-4">
             <div className="flex items-center gap-3">
-              {/* LOGO VIGORRE - CORRIGIDO */}
+              {/* LOGO VIGORRE - CORRIGIDO: logo-vigorre.png */}
               <img 
                 src="/logo-vigorre.png" 
                 alt="VIGORRE" 
