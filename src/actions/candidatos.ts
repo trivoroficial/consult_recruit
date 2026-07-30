@@ -1,12 +1,39 @@
 'use server'
-
 import { supabase } from '@/lib/supabase/server'
+
+export async function listarCandidatos() {
+  try {
+    const { data, error } = await supabase
+      .from('candidatos')
+      .select('*')
+      .order('id', { ascending: false })
+
+    if (error) throw error
+    return { success: true, data }
+  } catch (error: any) {
+    console.error('Erro ao listar candidatos:', error)
+    return { success: false, error: error.message }
+  }
+}
+
+export async function excluirCandidato(id: number) {
+  try {
+    const { error } = await supabase
+      .from('candidatos')
+      .delete()
+      .eq('id', id)
+
+    if (error) throw error
+    return { success: true }
+  } catch (error: any) {
+    console.error('Erro ao excluir candidato:', error)
+    return { success: false, error: error.message }
+  }
+}
 
 export async function criarCandidato(data: any) {
   try {
-    const supabaseClient = supabase()
-    
-    const { data: candidato, error } = await supabaseClient
+    const { data: candidato, error } = await supabase
       .from('candidatos')
       .insert([{
         nome: data.nome,
@@ -26,53 +53,32 @@ export async function criarCandidato(data: any) {
       .single()
 
     if (error) throw error
-
     return { success: true, data: candidato }
   } catch (error: any) {
-    return { success: false, error: error.message }
-  }
-}
-
-export async function listarCandidatos() {
-  try {
-    const supabaseClient = supabase()
-    
-    const { data, error } = await supabaseClient
-      .from('candidatos')
-      .select('*')
-      .order('id', { ascending: false })
-
-    if (error) throw error
-
-    return { success: true, data }
-  } catch (error: any) {
+    console.error('Erro ao criar candidato:', error)
     return { success: false, error: error.message }
   }
 }
 
 export async function buscarCandidatoPorId(id: number) {
   try {
-    const supabaseClient = supabase()
-    
-    const { data, error } = await supabaseClient
+    const { data, error } = await supabase
       .from('candidatos')
       .select('*')
       .eq('id', id)
       .single()
 
     if (error) throw error
-
     return { success: true, data }
   } catch (error: any) {
+    console.error('Erro ao buscar candidato:', error)
     return { success: false, error: error.message }
   }
 }
 
 export async function atualizarCandidato(id: number, data: any) {
   try {
-    const supabaseClient = supabase()
-    
-    const { data: candidato, error } = await supabaseClient
+    const { data: candidato, error } = await supabase
       .from('candidatos')
       .update({
         nome: data.nome,
@@ -91,26 +97,9 @@ export async function atualizarCandidato(id: number, data: any) {
       .single()
 
     if (error) throw error
-
     return { success: true, data: candidato }
   } catch (error: any) {
-    return { success: false, error: error.message }
-  }
-}
-
-export async function excluirCandidato(id: number) {
-  try {
-    const supabaseClient = supabase()
-    
-    const { error } = await supabaseClient
-      .from('candidatos')
-      .delete()
-      .eq('id', id)
-
-    if (error) throw error
-
-    return { success: true }
-  } catch (error: any) {
+    console.error('Erro ao atualizar candidato:', error)
     return { success: false, error: error.message }
   }
 }
