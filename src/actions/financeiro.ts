@@ -1,16 +1,11 @@
 'use server'
-
-import { supabase } from '@/lib/supabase/server'
-
-// ============================================
-// TRANSAÇÕES
-// ============================================
+import { createClient } from '@/lib/supabase/server'
 
 export async function criarTransacao(data: any) {
   try {
-    const supabaseClient = supabase()
+    const supabase = createClient()
     
-    const { data: transacao, error } = await supabaseClient
+    const { data: transacao, error } = await supabase
       .from('transacoes')
       .insert([{
         tipo: data.tipo,
@@ -28,21 +23,21 @@ export async function criarTransacao(data: any) {
       .single()
 
     if (error) throw error
-
     return { success: true, data: transacao }
   } catch (error: any) {
+    console.error('Erro ao criar transação:', error)
     return { success: false, error: error.message }
   }
 }
 
 export async function listarTransacoes(filtros?: any) {
   try {
-    const supabaseClient = supabase()
+    const supabase = createClient()
     
-    let query = supabaseClient
+    let query = supabase
       .from('transacoes')
       .select('*')
-    
+
     if (filtros?.tipo) {
       query = query.eq('tipo', filtros.tipo)
     }
@@ -58,40 +53,39 @@ export async function listarTransacoes(filtros?: any) {
     if (filtros?.dataFim) {
       query = query.lte('data', filtros.dataFim)
     }
-    
+
     const { data, error } = await query.order('id', { ascending: false })
-
     if (error) throw error
-
     return { success: true, data }
   } catch (error: any) {
+    console.error('Erro ao listar transações:', error)
     return { success: false, error: error.message }
   }
 }
 
 export async function buscarTransacaoPorId(id: number) {
   try {
-    const supabaseClient = supabase()
+    const supabase = createClient()
     
-    const { data, error } = await supabaseClient
+    const { data, error } = await supabase
       .from('transacoes')
       .select('*')
       .eq('id', id)
       .single()
 
     if (error) throw error
-
     return { success: true, data }
   } catch (error: any) {
+    console.error('Erro ao buscar transação:', error)
     return { success: false, error: error.message }
   }
 }
 
 export async function atualizarTransacao(id: number, data: any) {
   try {
-    const supabaseClient = supabase()
+    const supabase = createClient()
     
-    const { data: transacao, error } = await supabaseClient
+    const { data: transacao, error } = await supabase
       .from('transacoes')
       .update({
         tipo: data.tipo,
@@ -110,35 +104,35 @@ export async function atualizarTransacao(id: number, data: any) {
       .single()
 
     if (error) throw error
-
     return { success: true, data: transacao }
   } catch (error: any) {
+    console.error('Erro ao atualizar transação:', error)
     return { success: false, error: error.message }
   }
 }
 
 export async function excluirTransacao(id: number) {
   try {
-    const supabaseClient = supabase()
+    const supabase = createClient()
     
-    const { error } = await supabaseClient
+    const { error } = await supabase
       .from('transacoes')
       .delete()
       .eq('id', id)
 
     if (error) throw error
-
     return { success: true }
   } catch (error: any) {
+    console.error('Erro ao excluir transação:', error)
     return { success: false, error: error.message }
   }
 }
 
 export async function atualizarStatusTransacao(id: number, status: string) {
   try {
-    const supabaseClient = supabase()
+    const supabase = createClient()
     
-    const { data: transacao, error } = await supabaseClient
+    const { data: transacao, error } = await supabase
       .from('transacoes')
       .update({ status })
       .eq('id', id)
@@ -146,25 +140,21 @@ export async function atualizarStatusTransacao(id: number, status: string) {
       .single()
 
     if (error) throw error
-
     return { success: true, data: transacao }
   } catch (error: any) {
+    console.error('Erro ao atualizar status:', error)
     return { success: false, error: error.message }
   }
 }
 
-// ============================================
-// RESUMOS E ESTATÍSTICAS
-// ============================================
-
 export async function getResumoFinanceiro(ano?: number, mes?: number) {
   try {
-    const supabaseClient = supabase()
+    const supabase = createClient()
     
     const anoAtual = ano || new Date().getFullYear()
     const mesAtual = mes !== undefined ? mes : new Date().getMonth() + 1
-    
-    const { data: transacoes, error } = await supabaseClient
+
+    const { data: transacoes, error } = await supabase
       .from('transacoes')
       .select('*')
       .gte('data', `${anoAtual}-${String(mesAtual).padStart(2, '0')}-01`)
@@ -174,12 +164,11 @@ export async function getResumoFinanceiro(ano?: number, mes?: number) {
 
     const receitas = transacoes?.filter((t: any) => t.tipo === 'receita') || []
     const despesas = transacoes?.filter((t: any) => t.tipo === 'despesa') || []
-    
+
     const totalReceitas = receitas.reduce((acc: number, t: any) => acc + t.valor, 0)
     const totalDespesas = despesas.reduce((acc: number, t: any) => acc + t.valor, 0)
     const saldo = totalReceitas - totalDespesas
 
-    // Agrupar por categoria
     const categorias = transacoes?.reduce((acc: any, t: any) => {
       if (!acc[t.categoria]) {
         acc[t.categoria] = { receita: 0, despesa: 0 }
@@ -205,141 +194,20 @@ export async function getResumoFinanceiro(ano?: number, mes?: number) {
       }
     }
   } catch (error: any) {
+    console.error('Erro ao buscar resumo financeiro:', error)
     return { success: false, error: error.message }
   }
 }
-
-export async function getResumoFinanceiroPorPeriodo(dataInicio: string, dataFim: string) {
-  try {
-    const supabaseClient = supabase()
-    
-    const { data: transacoes, error } = await supabaseClient
-      .from('transacoes')
-      .select('*')
-      .gte('data', dataInicio)
-      .lte('data', dataFim)
-
-    if (error) throw error
-
-    const receitas = transacoes?.filter((t: any) => t.tipo === 'receita') || []
-    const despesas = transacoes?.filter((t: any) => t.tipo === 'despesa') || []
-    
-    const totalReceitas = receitas.reduce((acc: number, t: any) => acc + t.valor, 0)
-    const totalDespesas = despesas.reduce((acc: number, t: any) => acc + t.valor, 0)
-    const saldo = totalReceitas - totalDespesas
-
-    return {
-      success: true,
-      data: {
-        totalReceitas,
-        totalDespesas,
-        saldo,
-        totalTransacoes: transacoes?.length || 0,
-        receitas: receitas.length,
-        despesas: despesas.length
-      }
-    }
-  } catch (error: any) {
-    return { success: false, error: error.message }
-  }
-}
-
-// ============================================
-// PAGAMENTOS E FATURAS
-// ============================================
-
-export async function getFaturasPendentes() {
-  try {
-    const supabaseClient = supabase()
-    
-    const { data, error } = await supabaseClient
-      .from('transacoes')
-      .select('*')
-      .eq('status', 'pendente')
-      .or('tipo.eq.despesa')
-      .order('data', { ascending: true })
-
-    if (error) throw error
-
-    return { success: true, data }
-  } catch (error: any) {
-    return { success: false, error: error.message }
-  }
-}
-
-export async function getFaturasVencidas() {
-  try {
-    const supabaseClient = supabase()
-    
-    const hoje = new Date().toISOString().split('T')[0]
-    
-    const { data, error } = await supabaseClient
-      .from('transacoes')
-      .select('*')
-      .eq('status', 'pendente')
-      .eq('tipo', 'despesa')
-      .lt('data', hoje)
-      .order('data', { ascending: true })
-
-    if (error) throw error
-
-    return { success: true, data }
-  } catch (error: any) {
-    return { success: false, error: error.message }
-  }
-}
-
-export async function getFluxoCaixaDiario() {
-  try {
-    const supabaseClient = supabase()
-    
-    const hoje = new Date().toISOString().split('T')[0]
-    
-    const { data: transacoes, error } = await supabaseClient
-      .from('transacoes')
-      .select('*')
-      .eq('data', hoje)
-
-    if (error) throw error
-
-    const receitas = transacoes?.filter((t: any) => t.tipo === 'receita') || []
-    const despesas = transacoes?.filter((t: any) => t.tipo === 'despesa') || []
-    
-    const totalReceitas = receitas.reduce((acc: number, t: any) => acc + t.valor, 0)
-    const totalDespesas = despesas.reduce((acc: number, t: any) => acc + t.valor, 0)
-    const saldo = totalReceitas - totalDespesas
-
-    return {
-      success: true,
-      data: {
-        data: hoje,
-        totalReceitas,
-        totalDespesas,
-        saldo,
-        receitas: receitas.length,
-        despesas: despesas.length,
-        transacoes
-      }
-    }
-  } catch (error: any) {
-    return { success: false, error: error.message }
-  }
-}
-
-// ============================================
-// DASHBOARD FINANCEIRO
-// ============================================
 
 export async function getDashboardFinanceiro() {
   try {
-    const supabaseClient = supabase()
+    const supabase = createClient()
     
     const hoje = new Date()
     const inicioMes = new Date(hoje.getFullYear(), hoje.getMonth(), 1).toISOString().split('T')[0]
     const fimMes = new Date(hoje.getFullYear(), hoje.getMonth() + 1, 0).toISOString().split('T')[0]
-    
-    // Buscar transações do mês atual
-    const { data: transacoesMes, error: error1 } = await supabaseClient
+
+    const { data: transacoesMes, error: error1 } = await supabase
       .from('transacoes')
       .select('*')
       .gte('data', inicioMes)
@@ -347,8 +215,7 @@ export async function getDashboardFinanceiro() {
 
     if (error1) throw error1
 
-    // Buscar total de transações
-    const { count: totalTransacoes, error: error2 } = await supabaseClient
+    const { count: totalTransacoes, error: error2 } = await supabase
       .from('transacoes')
       .select('*', { count: 'exact', head: true })
 
@@ -356,12 +223,11 @@ export async function getDashboardFinanceiro() {
 
     const receitasMes = transacoesMes?.filter((t: any) => t.tipo === 'receita') || []
     const despesasMes = transacoesMes?.filter((t: any) => t.tipo === 'despesa') || []
-    
+
     const totalReceitas = receitasMes.reduce((acc: number, t: any) => acc + t.valor, 0)
     const totalDespesas = despesasMes.reduce((acc: number, t: any) => acc + t.valor, 0)
 
-    // Pendencias
-    const { data: pendentes, error: error3 } = await supabaseClient
+    const { data: pendentes, error: error3 } = await supabase
       .from('transacoes')
       .select('*')
       .eq('status', 'pendente')
@@ -381,6 +247,26 @@ export async function getDashboardFinanceiro() {
       }
     }
   } catch (error: any) {
+    console.error('Erro ao buscar dashboard financeiro:', error)
+    return { success: false, error: error.message }
+  }
+}
+
+export async function getFaturasPendentes() {
+  try {
+    const supabase = createClient()
+    
+    const { data, error } = await supabase
+      .from('transacoes')
+      .select('*')
+      .eq('status', 'pendente')
+      .or('tipo.eq.despesa')
+      .order('data', { ascending: true })
+
+    if (error) throw error
+    return { success: true, data }
+  } catch (error: any) {
+    console.error('Erro ao buscar faturas pendentes:', error)
     return { success: false, error: error.message }
   }
 }
