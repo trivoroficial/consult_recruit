@@ -7,7 +7,7 @@ import { DashboardFooter } from '@/components/dashboard/DashboardFooter'
 import {
   ArrowLeft, FileText, Building2, User, Calendar,
   Users, Clock, Edit, Trash2, CheckCircle,
-  XCircle, AlertCircle, BarChart3
+  XCircle, AlertCircle
 } from 'lucide-react'
 import { buscarProcessoPorId, excluirProcesso } from '@/actions/processos'
 
@@ -55,14 +55,14 @@ export default function VisualizarProcesso() {
     }
   }
 
-  const getStatusLabel = (status: string) => {
-    const labels: Record<string, { label: string; color: string }> = {
-      'triagem': { label: 'Triagem', color: 'bg-yellow-100 text-yellow-700' },
-      'entrevista': { label: 'Entrevista', color: 'bg-blue-100 text-blue-700' },
-      'aprovado': { label: 'Aprovado', color: 'bg-green-100 text-green-700' },
-      'encerrado': { label: 'Encerrado', color: 'bg-gray-100 text-gray-700' }
+  const getStatusInfo = (status: string) => {
+    const labels: Record<string, { label: string; color: string; icon: any }> = {
+      'triagem': { label: 'Triagem', color: 'bg-yellow-100 text-yellow-700', icon: AlertCircle },
+      'entrevista': { label: 'Entrevista', color: 'bg-blue-100 text-blue-700', icon: Users },
+      'aprovado': { label: 'Aprovado', color: 'bg-green-100 text-green-700', icon: CheckCircle },
+      'encerrado': { label: 'Encerrado', color: 'bg-gray-100 text-gray-700', icon: XCircle }
     }
-    return labels[status] || { label: status, color: 'bg-gray-100 text-gray-700' }
+    return labels[status] || { label: status, color: 'bg-gray-100 text-gray-700', icon: FileText }
   }
 
   if (loading) {
@@ -96,7 +96,8 @@ export default function VisualizarProcesso() {
     )
   }
 
-  const statusInfo = getStatusLabel(processo.status)
+  const statusInfo = getStatusInfo(processo.status)
+  const StatusIcon = statusInfo.icon
 
   return (
     <div className="min-h-screen bg-[#F8F4E6] flex flex-col">
@@ -138,11 +139,12 @@ export default function VisualizarProcesso() {
           <div className="bg-white rounded-2xl shadow-sm border border-[#E8EAE0] p-6">
             {/* Status */}
             <div className="flex items-center gap-3 mb-6">
-              <span className={`px-3 py-1 rounded-full text-sm font-medium ${statusInfo.color}`}>
+              <span className={`px-3 py-1 rounded-full text-sm font-medium ${statusInfo.color} flex items-center gap-1`}>
+                <StatusIcon className="h-4 w-4" />
                 {statusInfo.label}
               </span>
               <span className="text-sm text-[#708090]">
-                {new Date(processo.created_at || Date.now()).toLocaleDateString('pt-BR')}
+                ID: #{processo.id}
               </span>
             </div>
 
@@ -172,9 +174,18 @@ export default function VisualizarProcesso() {
               <div className="flex items-center gap-3 p-3 bg-[#F8F4E6] rounded-lg">
                 <Calendar className="h-5 w-5 text-[#6B1A2A]" />
                 <div>
-                  <p className="text-sm text-[#708090]">Previsão de Fim</p>
+                  <p className="text-sm text-[#708090]">Previsão de Término</p>
                   <p className="font-medium text-[#2D343A]">
                     {processo.previsao_fim ? new Date(processo.previsao_fim).toLocaleDateString('pt-BR') : 'Não definida'}
+                  </p>
+                </div>
+              </div>
+              <div className="flex items-center gap-3 p-3 bg-[#F8F4E6] rounded-lg md:col-span-2">
+                <Clock className="h-5 w-5 text-[#6B1A2A]" />
+                <div>
+                  <p className="text-sm text-[#708090]">Data de Criação</p>
+                  <p className="font-medium text-[#2D343A]">
+                    {new Date(processo.created_at || Date.now()).toLocaleDateString('pt-BR')}
                   </p>
                 </div>
               </div>
