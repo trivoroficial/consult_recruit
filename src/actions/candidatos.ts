@@ -1,8 +1,10 @@
 'use server'
-import { supabase } from '@/lib/supabase/server'
+import { createClient } from '@/lib/supabase/server'
 
 export async function listarCandidatos() {
   try {
+    const supabase = createClient()
+    
     const { data, error } = await supabase
       .from('candidatos')
       .select('*')
@@ -18,6 +20,8 @@ export async function listarCandidatos() {
 
 export async function excluirCandidato(id: number) {
   try {
+    const supabase = createClient()
+    
     const { error } = await supabase
       .from('candidatos')
       .delete()
@@ -33,6 +37,8 @@ export async function excluirCandidato(id: number) {
 
 export async function criarCandidato(data: any) {
   try {
+    const supabase = createClient()
+    
     const { data: candidato, error } = await supabase
       .from('candidatos')
       .insert([{
@@ -62,6 +68,8 @@ export async function criarCandidato(data: any) {
 
 export async function buscarCandidatoPorId(id: number) {
   try {
+    const supabase = createClient()
+    
     const { data, error } = await supabase
       .from('candidatos')
       .select('*')
@@ -78,6 +86,8 @@ export async function buscarCandidatoPorId(id: number) {
 
 export async function atualizarCandidato(id: number, data: any) {
   try {
+    const supabase = createClient()
+    
     const { data: candidato, error } = await supabase
       .from('candidatos')
       .update({
