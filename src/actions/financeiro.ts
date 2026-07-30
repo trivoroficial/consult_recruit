@@ -7,36 +7,70 @@ import { createClient } from '@/lib/supabase/server'
 // ============================================
 export async function criarTransacao(data: any) {
   try {
+    console.log('🚀 Iniciando criarTransacao')
+    console.log('📦 Dados recebidos:', JSON.stringify(data, null, 2))
+
     const supabase = createClient()
+    console.log('✅ Supabase cliente criado')
+
+    // Validar dados obrigatórios
+    if (!data.descricao || !data.descricao.trim()) {
+      console.error('❌ Descrição é obrigatória')
+      return { success: false, error: 'Descrição é obrigatória' }
+    }
+
+    if (!data.valor || parseFloat(data.valor) <= 0) {
+      console.error('❌ Valor é obrigatório')
+      return { success: false, error: 'Valor é obrigatório e deve ser maior que zero' }
+    }
+
+    if (!data.categoria) {
+      console.error('❌ Categoria é obrigatória')
+      return { success: false, error: 'Categoria é obrigatória' }
+    }
+
+    // Montar objeto para inserir
+    const insertData = {
+      tipo: data.tipo || 'receita',
+      categoria: data.categoria,
+      categoria_detalhada: data.categoria_detalhada || null,
+      descricao: data.descricao.trim(),
+      cliente: data.cliente || null,
+      valor: parseFloat(data.valor) || 0,
+      data: data.data || new Date().toISOString().split('T')[0],
+      status: data.status || 'pendente',
+      observacoes: data.observacoes || null,
+      // Campos de parcelamento
+      valor_entrada: data.valor_entrada ? parseFloat(data.valor_entrada) : null,
+      parcelas_total: data.parcelas_total ? parseInt(data.parcelas_total) : 1,
+      parcelas_pagas: data.parcelas_pagas ? parseInt(data.parcelas_pagas) : 0,
+      valor_parcela: data.valor_parcela ? parseFloat(data.valor_parcela) : null,
+      data_proxima_parcela: data.data_proxima_parcela || null,
+      data_ultima_parcela: data.data_ultima_parcela || null,
+      comprovante_url: data.comprovanteUrl || null
+    }
+
+    console.log('📤 Dados para inserir:', JSON.stringify(insertData, null, 2))
 
     const { data: transacao, error } = await supabase
       .from('transacoes')
-      .insert([{
-        tipo: data.tipo,
-        categoria: data.categoria,
-        categoria_detalhada: data.categoria_detalhada || null,
-        descricao: data.descricao,
-        cliente: data.cliente || null,
-        valor: parseFloat(data.valor) || 0,
-        data: data.data || new Date().toISOString().split('T')[0],
-        status: data.status || 'pendente',
-        observacoes: data.observacoes || null,
-        // Campos de parcelamento
-        valor_entrada: data.valor_entrada ? parseFloat(data.valor_entrada) : null,
-        parcelas_total: data.parcelas_total ? parseInt(data.parcelas_total) : 1,
-        parcelas_pagas: data.parcelas_pagas ? parseInt(data.parcelas_pagas) : 0,
-        valor_parcela: data.valor_parcela ? parseFloat(data.valor_parcela) : null,
-        data_proxima_parcela: data.data_proxima_parcela || null,
-        data_ultima_parcela: data.data_ultima_parcela || null,
-        comprovante_url: data.comprovanteUrl || null
-      }])
+      .insert([insertData])
       .select()
       .single()
 
-    if (error) throw error
+    if (error) {
+      console.error('❌ Erro Supabase:', error)
+      console.error('❌ Mensagem:', error.message)
+      console.error('❌ Detalhes:', error.details)
+      console.error('❌ Código:', error.code)
+      return { success: false, error: error.message }
+    }
+
+    console.log('✅ Transação criada com sucesso:', transacao)
     return { success: true, data: transacao }
   } catch (error: any) {
-    console.error('Erro ao criar transacao:', error)
+    console.error('❌ Erro geral:', error)
+    console.error('❌ Mensagem:', error.message)
     return { success: false, error: error.message }
   }
 }
@@ -46,6 +80,7 @@ export async function criarTransacao(data: any) {
 // ============================================
 export async function listarTransacoes(filtros?: any) {
   try {
+    console.log('🚀 listarTransacoes - Iniciando...')
     const supabase = createClient()
 
     let query = supabase.from('transacoes').select('*')
@@ -68,10 +103,15 @@ export async function listarTransacoes(filtros?: any) {
 
     const { data, error } = await query.order('id', { ascending: false })
 
-    if (error) throw error
+    if (error) {
+      console.error('❌ Erro ao listar transacoes:', error)
+      return { success: false, error: error.message }
+    }
+
+    console.log('✅ Transações carregadas:', data?.length || 0)
     return { success: true, data: data || [] }
   } catch (error: any) {
-    console.error('Erro ao listar transacoes:', error)
+    console.error('❌ Erro listarTransacoes:', error)
     return { success: false, error: error.message }
   }
 }
@@ -89,10 +129,14 @@ export async function buscarTransacaoPorId(id: number) {
       .eq('id', id)
       .single()
 
-    if (error) throw error
+    if (error) {
+      console.error('❌ Erro buscarTransacaoPorId:', error)
+      return { success: false, error: error.message }
+    }
+
     return { success: true, data }
   } catch (error: any) {
-    console.error('Erro ao buscar transacao:', error)
+    console.error('❌ Erro buscarTransacaoPorId:', error)
     return { success: false, error: error.message }
   }
 }
@@ -104,34 +148,49 @@ export async function atualizarTransacao(id: number, data: any) {
   try {
     const supabase = createClient()
 
+    // Validar dados obrigatórios
+    if (!data.descricao || !data.descricao.trim()) {
+      return { success: false, error: 'Descrição é obrigatória' }
+    }
+
+    if (!data.valor || parseFloat(data.valor) <= 0) {
+      return { success: false, error: 'Valor é obrigatório e deve ser maior que zero' }
+    }
+
+    const updateData = {
+      tipo: data.tipo || 'receita',
+      categoria: data.categoria,
+      categoria_detalhada: data.categoria_detalhada || null,
+      descricao: data.descricao.trim(),
+      cliente: data.cliente || null,
+      valor: parseFloat(data.valor) || 0,
+      data: data.data || new Date().toISOString().split('T')[0],
+      status: data.status || 'pendente',
+      observacoes: data.observacoes || null,
+      valor_entrada: data.valor_entrada ? parseFloat(data.valor_entrada) : null,
+      parcelas_total: data.parcelas_total ? parseInt(data.parcelas_total) : 1,
+      parcelas_pagas: data.parcelas_pagas ? parseInt(data.parcelas_pagas) : 0,
+      valor_parcela: data.valor_parcela ? parseFloat(data.valor_parcela) : null,
+      data_proxima_parcela: data.data_proxima_parcela || null,
+      data_ultima_parcela: data.data_ultima_parcela || null,
+      comprovante_url: data.comprovanteUrl || null
+    }
+
     const { data: transacao, error } = await supabase
       .from('transacoes')
-      .update({
-        tipo: data.tipo,
-        categoria: data.categoria,
-        categoria_detalhada: data.categoria_detalhada || null,
-        descricao: data.descricao,
-        cliente: data.cliente || null,
-        valor: parseFloat(data.valor) || 0,
-        data: data.data,
-        status: data.status || 'pendente',
-        observacoes: data.observacoes || null,
-        valor_entrada: data.valor_entrada ? parseFloat(data.valor_entrada) : null,
-        parcelas_total: data.parcelas_total ? parseInt(data.parcelas_total) : 1,
-        parcelas_pagas: data.parcelas_pagas ? parseInt(data.parcelas_pagas) : 0,
-        valor_parcela: data.valor_parcela ? parseFloat(data.valor_parcela) : null,
-        data_proxima_parcela: data.data_proxima_parcela || null,
-        data_ultima_parcela: data.data_ultima_parcela || null,
-        comprovante_url: data.comprovanteUrl || null
-      })
+      .update(updateData)
       .eq('id', id)
       .select()
       .single()
 
-    if (error) throw error
+    if (error) {
+      console.error('❌ Erro atualizarTransacao:', error)
+      return { success: false, error: error.message }
+    }
+
     return { success: true, data: transacao }
   } catch (error: any) {
-    console.error('Erro ao atualizar transacao:', error)
+    console.error('❌ Erro atualizarTransacao:', error)
     return { success: false, error: error.message }
   }
 }
@@ -148,10 +207,14 @@ export async function excluirTransacao(id: number) {
       .delete()
       .eq('id', id)
 
-    if (error) throw error
+    if (error) {
+      console.error('❌ Erro excluirTransacao:', error)
+      return { success: false, error: error.message }
+    }
+
     return { success: true }
   } catch (error: any) {
-    console.error('Erro ao excluir transacao:', error)
+    console.error('❌ Erro excluirTransacao:', error)
     return { success: false, error: error.message }
   }
 }
@@ -170,10 +233,14 @@ export async function atualizarStatusTransacao(id: number, status: string) {
       .select()
       .single()
 
-    if (error) throw error
+    if (error) {
+      console.error('❌ Erro atualizarStatusTransacao:', error)
+      return { success: false, error: error.message }
+    }
+
     return { success: true, data: transacao }
   } catch (error: any) {
-    console.error('Erro ao atualizar status:', error)
+    console.error('❌ Erro atualizarStatusTransacao:', error)
     return { success: false, error: error.message }
   }
 }
@@ -192,10 +259,14 @@ export async function atualizarParcelasPagas(id: number, parcelasPagas: number) 
       .select()
       .single()
 
-    if (error) throw error
+    if (error) {
+      console.error('❌ Erro atualizarParcelasPagas:', error)
+      return { success: false, error: error.message }
+    }
+
     return { success: true, data: transacao }
   } catch (error: any) {
-    console.error('Erro ao atualizar parcelas pagas:', error)
+    console.error('❌ Erro atualizarParcelasPagas:', error)
     return { success: false, error: error.message }
   }
 }
@@ -210,13 +281,20 @@ export async function getResumoFinanceiro(ano?: number, mes?: number) {
     const anoAtual = ano || new Date().getFullYear()
     const mesAtual = mes !== undefined ? mes : new Date().getMonth() + 1
 
+    const dataInicio = `${anoAtual}-${String(mesAtual).padStart(2, '0')}-01`
+    const ultimoDia = new Date(anoAtual, mesAtual, 0).getDate()
+    const dataFim = `${anoAtual}-${String(mesAtual).padStart(2, '0')}-${String(ultimoDia).padStart(2, '0')}`
+
     const { data: transacoes, error } = await supabase
       .from('transacoes')
       .select('*')
-      .gte('data', `${anoAtual}-${String(mesAtual).padStart(2, '0')}-01`)
-      .lte('data', `${anoAtual}-${String(mesAtual).padStart(2, '0')}-31`)
+      .gte('data', dataInicio)
+      .lte('data', dataFim)
 
-    if (error) throw error
+    if (error) {
+      console.error('❌ Erro getResumoFinanceiro:', error)
+      return { success: false, error: error.message }
+    }
 
     const receitas = transacoes?.filter((t: any) => t.tipo === 'receita') || []
     const despesas = transacoes?.filter((t: any) => t.tipo === 'despesa') || []
@@ -242,6 +320,11 @@ export async function getResumoFinanceiro(ano?: number, mes?: number) {
       t.parcelas_total > 1 && t.parcelas_pagas < t.parcelas_total
     ) || []
 
+    const totalParcelasPendentes = parcelasPendentes.reduce((acc: number, t: any) => {
+      const restante = t.parcelas_total - t.parcelas_pagas
+      return acc + (t.valor_parcela || 0) * restante
+    }, 0)
+
     return {
       success: true,
       data: {
@@ -252,11 +335,12 @@ export async function getResumoFinanceiro(ano?: number, mes?: number) {
         categorias,
         receitas: receitas.length,
         despesas: despesas.length,
-        parcelasPendentes: parcelasPendentes.length
+        parcelasPendentes: parcelasPendentes.length,
+        totalParcelasPendentes
       }
     }
   } catch (error: any) {
-    console.error('Erro ao buscar resumo financeiro:', error)
+    console.error('❌ Erro getResumoFinanceiro:', error)
     return { success: false, error: error.message }
   }
 }
@@ -281,13 +365,19 @@ export async function getDashboardFinanceiro() {
       .gte('data', inicioStr)
       .lte('data', fimStr)
 
-    if (error1) throw error1
+    if (error1) {
+      console.error('❌ Erro getDashboardFinanceiro - transacoesMes:', error1)
+      return { success: false, error: error1.message }
+    }
 
     const { count: totalTransacoes, error: error2 } = await supabase
       .from('transacoes')
       .select('*', { count: 'exact', head: true })
 
-    if (error2) throw error2
+    if (error2) {
+      console.error('❌ Erro getDashboardFinanceiro - totalTransacoes:', error2)
+      return { success: false, error: error2.message }
+    }
 
     const receitasMes = transacoesMes?.filter((t: any) => t.tipo === 'receita') || []
     const despesasMes = transacoesMes?.filter((t: any) => t.tipo === 'despesa') || []
@@ -300,7 +390,10 @@ export async function getDashboardFinanceiro() {
       .select('*')
       .eq('status', 'pendente')
 
-    if (error3) throw error3
+    if (error3) {
+      console.error('❌ Erro getDashboardFinanceiro - pendentes:', error3)
+      return { success: false, error: error3.message }
+    }
 
     // Calcular total a receber (parcelas pendentes)
     const parcelasPendentes = transacoesMes?.filter((t: any) => 
@@ -327,7 +420,7 @@ export async function getDashboardFinanceiro() {
       }
     }
   } catch (error: any) {
-    console.error('Erro ao buscar dashboard financeiro:', error)
+    console.error('❌ Erro getDashboardFinanceiro:', error)
     return { success: false, error: error.message }
   }
 }
@@ -346,10 +439,14 @@ export async function getFaturasPendentes() {
       .or('tipo.eq.despesa')
       .order('data', { ascending: true })
 
-    if (error) throw error
+    if (error) {
+      console.error('❌ Erro getFaturasPendentes:', error)
+      return { success: false, error: error.message }
+    }
+
     return { success: true, data }
   } catch (error: any) {
-    console.error('Erro ao buscar faturas pendentes:', error)
+    console.error('❌ Erro getFaturasPendentes:', error)
     return { success: false, error: error.message }
   }
 }
@@ -369,10 +466,41 @@ export async function getParcelasAReceber() {
       .lt('parcelas_pagas', 'parcelas_total')
       .order('data_proxima_parcela', { ascending: true })
 
-    if (error) throw error
+    if (error) {
+      console.error('❌ Erro getParcelasAReceber:', error)
+      return { success: false, error: error.message }
+    }
+
     return { success: true, data }
   } catch (error: any) {
-    console.error('Erro ao buscar parcelas a receber:', error)
+    console.error('❌ Erro getParcelasAReceber:', error)
+    return { success: false, error: error.message }
+  }
+}
+
+// ============================================
+// PARCELAS A PAGAR
+// ============================================
+export async function getParcelasAPagar() {
+  try {
+    const supabase = createClient()
+
+    const { data, error } = await supabase
+      .from('transacoes')
+      .select('*')
+      .eq('tipo', 'despesa')
+      .gt('parcelas_total', 1)
+      .lt('parcelas_pagas', 'parcelas_total')
+      .order('data_proxima_parcela', { ascending: true })
+
+    if (error) {
+      console.error('❌ Erro getParcelasAPagar:', error)
+      return { success: false, error: error.message }
+    }
+
+    return { success: true, data }
+  } catch (error: any) {
+    console.error('❌ Erro getParcelasAPagar:', error)
     return { success: false, error: error.message }
   }
 }
