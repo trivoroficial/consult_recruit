@@ -1,5 +1,4 @@
 'use client'
-
 import { useState } from 'react'
 import { motion } from 'framer-motion'
 import Link from 'next/link'
@@ -7,7 +6,7 @@ import {
   Mail, Phone, MapPin, Send, 
   MessageCircle, Clock, Building2,
   Users, CheckCircle, ArrowRight,
-  Headphones, ArrowLeft
+  Headphones
 } from 'lucide-react'
 
 const fadeUp = {
@@ -42,13 +41,19 @@ export default function ContatoPage() {
   return (
     <div className="min-h-screen bg-[#F8F4E6]">
       
-      {/* ===== HERO ===== */}
-      <section className="relative overflow-hidden bg-gradient-to-br from-[#4A0E1A] via-[#6B1A2A] to-[#8B1A3A] py-20 md:py-28">
+      {/* ===== HERO COM IMAGEM ===== */}
+      <section className="relative overflow-hidden py-20 md:py-28 min-h-[60vh] flex items-center">
+        {/* IMAGEM DE FUNDO */}
         <div className="absolute inset-0">
-          <div className="absolute top-0 right-0 w-1/2 h-1/2 bg-[#E3C9A8]/5 rounded-full blur-3xl"></div>
-          <div className="absolute bottom-0 left-0 w-1/3 h-1/3 bg-[#E3C9A8]/5 rounded-full blur-3xl"></div>
+          <img 
+            src="/contato.png" 
+            alt="Fale Conosco" 
+            className="w-full h-full object-cover"
+          />
+          {/* GRADIENTE SOBRE A IMAGEM */}
+          <div className="absolute inset-0 bg-gradient-to-r from-[#4A0E1A]/90 via-[#6B1A2A]/70 to-[#6B1A2A]/40"></div>
         </div>
-
+        
         <div className="container mx-auto px-4 relative z-10">
           <div className="max-w-4xl mx-auto text-center">
             <motion.div 
@@ -60,7 +65,6 @@ export default function ContatoPage() {
               <span className="h-2 w-2 rounded-full bg-[#E3C9A8]" />
               Fale Conosco
             </motion.div>
-
             <motion.h1 
               className="mt-6 font-serif text-4xl md:text-5xl lg:text-6xl font-bold text-white leading-tight"
               initial={{ opacity: 0, y: 22 }}
@@ -70,7 +74,6 @@ export default function ContatoPage() {
               Vamos <br />
               <span className="text-[#E3C9A8]">transformar sua empresa</span>
             </motion.h1>
-
             <motion.p 
               className="mt-4 text-lg text-white/70 max-w-2xl mx-auto"
               initial={{ opacity: 0, y: 24 }}
@@ -244,6 +247,7 @@ export default function ContatoPage() {
               variants={fadeUp}
               transition={{ delay: 0.2 }}
             >
+              {/* CARD PRINCIPAL */}
               <div className="bg-gradient-to-br from-[#6B1A2A] to-[#4A0E1A] rounded-2xl p-8 text-white">
                 <div className="flex items-center gap-3 mb-6">
                   <div className="p-2 bg-white/10 rounded-lg">
@@ -296,6 +300,7 @@ export default function ContatoPage() {
                 </div>
               </div>
 
+              {/* STATS */}
               <div className="grid grid-cols-2 gap-4">
                 <div className="bg-white rounded-2xl p-6 border border-[#E8EAE0] text-center">
                   <p className="text-2xl font-bold text-[#6B1A2A]">500+</p>
@@ -307,6 +312,7 @@ export default function ContatoPage() {
                 </div>
               </div>
 
+              {/* DEPOIMENTO */}
               <div className="bg-white rounded-2xl p-6 border border-[#E8EAE0]">
                 <div className="flex items-center gap-2 mb-3">
                   <span className="text-yellow-400">★★★★★</span>
