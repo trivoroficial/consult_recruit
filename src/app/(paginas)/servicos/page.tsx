@@ -1,8 +1,10 @@
 'use client'
-
 import Link from 'next/link'
 import { motion } from 'framer-motion'
-import { Users, DollarSign, Shield, Building2, CheckCircle, ArrowRight, TrendingUp, Rocket, Zap, Award, Globe } from 'lucide-react'
+import { 
+  Users, DollarSign, Shield, Building2, CheckCircle, 
+  ArrowRight, TrendingUp, Rocket, Zap, Award, Globe
+} from 'lucide-react'
 
 const servicosList = [
   {
@@ -10,7 +12,13 @@ const servicosList = [
     title: "Gestão de Pessoas",
     subtitle: "People & Culture",
     description: "Soluções completas para gestão de pessoas, cultura e desenvolvimento organizacional.",
-    features: ["Recrutamento e Seleção Estratégico", "Treinamentos e Desenvolvimento", "Avaliação de desempenho 360°", "Plano de cargos e salários", "Clima organizacional e engajamento"],
+    features: [
+      "Recrutamento e Seleção Estratégico",
+      "Treinamentos e Desenvolvimento",
+      "Avaliação de desempenho 360°",
+      "Plano de cargos e salários",
+      "Clima organizacional e engajamento"
+    ],
     badge: "Top 1%"
   },
   {
@@ -18,7 +26,13 @@ const servicosList = [
     title: "Consultoria Financeira",
     subtitle: "Financial Advisory",
     description: "Organização financeira para aumentar a lucratividade e sustentabilidade do negócio.",
-    features: ["Fluxo de caixa e capital de giro", "Formação de preço e margem", "Controle de custos e despesas", "Indicadores financeiros (KPIs)", "Planejamento tributário"],
+    features: [
+      "Fluxo de caixa e capital de giro",
+      "Formação de preço e margem",
+      "Controle de custos e despesas",
+      "Indicadores financeiros (KPIs)",
+      "Planejamento tributário"
+    ],
     badge: "Premium"
   },
   {
@@ -26,7 +40,13 @@ const servicosList = [
     title: "Segurança dos Alimentos",
     subtitle: "Food Safety & Quality",
     description: "Adequação às normas sanitárias e implantação de Boas Práticas de Fabricação.",
-    features: ["Manual de Boas Práticas (BPF)", "Procedimentos Operacionais Padrão (POPs)", "Treinamentos e capacitação", "Auditorias internas e externas", "Consultoria para MAPA e ANVISA"],
+    features: [
+      "Manual de Boas Práticas (BPF)",
+      "Procedimentos Operacionais Padrão (POPs)",
+      "Treinamentos e capacitação",
+      "Auditorias internas e externas",
+      "Consultoria para MAPA e ANVISA"
+    ],
     badge: "Certificado"
   },
   {
@@ -34,7 +54,13 @@ const servicosList = [
     title: "Gestão Empresarial",
     subtitle: "Business Management",
     description: "Diagnóstico e planejamento estratégico para crescimento sustentável.",
-    features: ["Diagnóstico empresarial completo", "Planejamento estratégico", "Definição de metas e OKRs", "Indicadores de desempenho (KPIs)", "Governança corporativa"],
+    features: [
+      "Diagnóstico empresarial completo",
+      "Planejamento estratégico",
+      "Definição de metas e OKRs",
+      "Indicadores de desempenho (KPIs)",
+      "Governança corporativa"
+    ],
     badge: "Estratégico"
   },
   {
@@ -42,7 +68,13 @@ const servicosList = [
     title: "Marketing Estratégico",
     subtitle: "Strategic Marketing",
     description: "Estratégias de marketing para posicionamento de marca, captação de clientes e crescimento sustentável.",
-    features: ["Posicionamento de marca", "Estratégia digital", "Marketing de conteúdo", "Branding e identidade", "Gestão de redes sociais"],
+    features: [
+      "Posicionamento de marca",
+      "Estratégia digital",
+      "Marketing de conteúdo",
+      "Branding e identidade",
+      "Gestão de redes sociais"
+    ],
     badge: "Digital"
   },
   {
@@ -50,7 +82,13 @@ const servicosList = [
     title: "Inovação e Transformação",
     subtitle: "Innovation & Transformation",
     description: "Acelere a inovação e transforme sua organização com metodologias ágeis e cultura de experimentação.",
-    features: ["Metodologias ágeis", "Design Thinking", "Cultura de inovação", "Digitalização de processos", "Novos modelos de negócio"],
+    features: [
+      "Metodologias ágeis",
+      "Design Thinking",
+      "Cultura de inovação",
+      "Digitalização de processos",
+      "Novos modelos de negócio"
+    ],
     badge: "Future Ready"
   }
 ]
@@ -64,13 +102,19 @@ export default function ServicosPage() {
   return (
     <div className="min-h-screen bg-[#F8F4E6]">
       
-      {/* ===== HERO ===== */}
-      <section className="relative overflow-hidden bg-gradient-to-br from-[#4A0E1A] via-[#6B1A2A] to-[#8B1A3A] py-20 md:py-28">
+      {/* ===== HERO COM IMAGEM ===== */}
+      <section className="relative overflow-hidden py-20 md:py-28 min-h-[60vh] flex items-center">
+        {/* IMAGEM DE FUNDO */}
         <div className="absolute inset-0">
-          <div className="absolute top-0 right-0 w-1/2 h-1/2 bg-[#E3C9A8]/5 rounded-full blur-3xl"></div>
-          <div className="absolute bottom-0 left-0 w-1/3 h-1/3 bg-[#E3C9A8]/5 rounded-full blur-3xl"></div>
+          <img 
+            src="/servicos.png" 
+            alt="Nossos Serviços" 
+            className="w-full h-full object-cover"
+          />
+          {/* GRADIENTE SOBRE A IMAGEM */}
+          <div className="absolute inset-0 bg-gradient-to-r from-[#4A0E1A]/90 via-[#6B1A2A]/70 to-[#6B1A2A]/40"></div>
         </div>
-
+        
         <div className="container mx-auto px-4 relative z-10">
           <div className="max-w-4xl mx-auto text-center">
             <motion.div 
@@ -82,7 +126,6 @@ export default function ServicosPage() {
               <span className="h-2 w-2 rounded-full bg-[#E3C9A8]" />
               Serviços Premium
             </motion.div>
-
             <motion.h1 
               className="mt-6 font-serif text-4xl md:text-5xl lg:text-6xl font-bold text-white leading-tight"
               initial={{ opacity: 0, y: 22 }}
@@ -92,7 +135,6 @@ export default function ServicosPage() {
               Soluções que <br />
               <span className="text-[#E3C9A8]">transformam organizações</span>
             </motion.h1>
-
             <motion.p 
               className="mt-4 text-lg text-white/70 max-w-2xl mx-auto"
               initial={{ opacity: 0, y: 24 }}
@@ -102,7 +144,6 @@ export default function ServicosPage() {
               Combinamos estratégia, tecnologia e inteligência humana para criar 
               soluções que geram resultados extraordinários.
             </motion.p>
-
             <motion.div 
               className="mt-8 flex flex-wrap justify-center gap-4"
               initial={{ opacity: 0, y: 24 }}
@@ -156,11 +197,9 @@ export default function ServicosPage() {
                       {servico.badge}
                     </span>
                   </div>
-
                   <div className="w-16 h-16 rounded-2xl flex items-center justify-center mb-6 bg-[#F8F4E6] text-[#6B1A2A] group-hover:bg-[#6B1A2A] group-hover:text-white transition-colors duration-300">
                     <Icon className="h-8 w-8" />
                   </div>
-
                   <h3 className="text-xl font-bold text-[#2D343A] group-hover:text-[#6B1A2A] transition-colors">
                     {servico.title}
                   </h3>
@@ -170,7 +209,6 @@ export default function ServicosPage() {
                   <p className="mt-3 text-sm text-[#708090] leading-relaxed">
                     {servico.description}
                   </p>
-
                   <ul className="mt-6 space-y-2">
                     {servico.features.slice(0, 4).map((feature, i) => (
                       <li key={i} className="flex items-start gap-2 text-sm text-[#708090]">
@@ -179,13 +217,11 @@ export default function ServicosPage() {
                       </li>
                     ))}
                   </ul>
-
                   <div className="mt-6 pt-6 border-t border-[#E8EAE0]">
                     <Link href="/contato" className="text-[#6B1A2A] font-medium text-sm hover:underline flex items-center gap-1 group">
                       Saiba mais <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
                     </Link>
                   </div>
-
                   <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-[#6B1A2A] via-[#E3C9A8] to-[#6B1A2A] opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
                 </motion.div>
               )
@@ -204,7 +240,6 @@ export default function ServicosPage() {
             </h2>
             <div className="w-16 h-1 bg-[#6B1A2A] rounded-full mx-auto mt-4"></div>
           </div>
-
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
             {[
               { icon: Globe, title: "Visão Global", desc: "Padrões internacionais aplicados à realidade brasileira" },
