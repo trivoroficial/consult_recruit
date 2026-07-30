@@ -1,12 +1,39 @@
 'use server'
-
 import { supabase } from '@/lib/supabase/server'
+
+export async function listarEmpresas() {
+  try {
+    const { data, error } = await supabase
+      .from('empresas')
+      .select('*')
+      .order('id', { ascending: false })
+
+    if (error) throw error
+    return { success: true, data }
+  } catch (error: any) {
+    console.error('Erro ao listar empresas:', error)
+    return { success: false, error: error.message }
+  }
+}
+
+export async function excluirEmpresa(id: number) {
+  try {
+    const { error } = await supabase
+      .from('empresas')
+      .delete()
+      .eq('id', id)
+
+    if (error) throw error
+    return { success: true }
+  } catch (error: any) {
+    console.error('Erro ao excluir empresa:', error)
+    return { success: false, error: error.message }
+  }
+}
 
 export async function criarEmpresa(data: any) {
   try {
-    const supabaseClient = supabase()
-    
-    const { data: empresa, error } = await supabaseClient
+    const { data: empresa, error } = await supabase
       .from('empresas')
       .insert([{
         nome: data.nome,
@@ -26,53 +53,32 @@ export async function criarEmpresa(data: any) {
       .single()
 
     if (error) throw error
-
     return { success: true, data: empresa }
   } catch (error: any) {
-    return { success: false, error: error.message }
-  }
-}
-
-export async function listarEmpresas() {
-  try {
-    const supabaseClient = supabase()
-    
-    const { data, error } = await supabaseClient
-      .from('empresas')
-      .select('*')
-      .order('id', { ascending: false })
-
-    if (error) throw error
-
-    return { success: true, data }
-  } catch (error: any) {
+    console.error('Erro ao criar empresa:', error)
     return { success: false, error: error.message }
   }
 }
 
 export async function buscarEmpresaPorId(id: number) {
   try {
-    const supabaseClient = supabase()
-    
-    const { data, error } = await supabaseClient
+    const { data, error } = await supabase
       .from('empresas')
       .select('*')
       .eq('id', id)
       .single()
 
     if (error) throw error
-
     return { success: true, data }
   } catch (error: any) {
+    console.error('Erro ao buscar empresa:', error)
     return { success: false, error: error.message }
   }
 }
 
 export async function atualizarEmpresa(id: number, data: any) {
   try {
-    const supabaseClient = supabase()
-    
-    const { data: empresa, error } = await supabaseClient
+    const { data: empresa, error } = await supabase
       .from('empresas')
       .update({
         nome: data.nome,
@@ -92,26 +98,9 @@ export async function atualizarEmpresa(id: number, data: any) {
       .single()
 
     if (error) throw error
-
     return { success: true, data: empresa }
   } catch (error: any) {
-    return { success: false, error: error.message }
-  }
-}
-
-export async function excluirEmpresa(id: number) {
-  try {
-    const supabaseClient = supabase()
-    
-    const { error } = await supabaseClient
-      .from('empresas')
-      .delete()
-      .eq('id', id)
-
-    if (error) throw error
-
-    return { success: true }
-  } catch (error: any) {
+    console.error('Erro ao atualizar empresa:', error)
     return { success: false, error: error.message }
   }
 }
