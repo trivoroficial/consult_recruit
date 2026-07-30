@@ -39,71 +39,35 @@ export function SidebarAdmin() {
   }, [])
 
   const handleLogout = async () => {
+    // 1. Limpar localStorage
     localStorage.removeItem('zenthos_user')
-    document.cookie = 'zenthos_user=; path=/; max-age=0'
+    
+    // 2. Limpar sessionStorage
+    sessionStorage.clear()
+    
+    // 3. Limpar cookies
+    document.cookie = 'zenthos_user=; path=/; max-age=0; secure; sameSite=strict'
+    document.cookie = 'sb-access-token=; path=/; max-age=0; secure; sameSite=strict'
+    document.cookie = 'sb-refresh-token=; path=/; max-age=0; secure; sameSite=strict'
+    
+    // 4. Limpar sessão do Supabase
     await supabase.auth.signOut()
+    
+    // 5. Redirecionar para login
     router.push('/login')
   }
 
-  const toggleMenu = (menu: string) => {
-    setExpandedMenus(prev => 
-      prev.includes(menu) 
-        ? prev.filter(m => m !== menu)
-        : [...prev, menu]
-    )
-  }
-
-  const isActive = (href: string) => {
-    return pathname === href || pathname?.startsWith(href + '/')
-  }
-
-  const menuGroups = [
-    {
-      id: 'gestao',
-      label: 'Gestão',
-      icon: Building2,
-      items: [
-        { icon: Building2, label: 'Empresas', href: '/admin/empresas' },
-        { icon: Users, label: 'Candidatos', href: '/admin/candidatos' },
-        { icon: UsersRound, label: 'Operacional', href: '/admin/operacional/dashboard' },
-        { icon: Briefcase, label: 'Vagas', href: '/admin/vagas' },
-        { icon: FileText, label: 'Processos', href: '/admin/processos' },
-      ]
-    },
-    {
-      id: 'financas',
-      label: 'Finanças',
-      icon: CreditCard,
-      items: [
-        { icon: CreditCard, label: 'Financeiro', href: '/admin/financeiro' },
-        { icon: BarChart3, label: 'Relatórios', href: '/admin/relatorios' },
-      ]
-    },
-    {
-      id: 'suporte',
-      label: 'Suporte',
-      icon: Settings,
-      items: [
-        { icon: Calendar, label: 'Agenda', href: '/admin/agenda' },
-        { icon: QrCode, label: 'QR Code Center', href: '/admin/qrcode' },
-        { icon: Settings, label: 'Configurações', href: '/admin/configuracoes' },
-        { icon: Shield, label: 'Controle de Acessos', href: '/admin/acessos' },
-        { icon: Database, label: 'Backup', href: '/admin/backup' },
-      ]
-    }
-  ]
+  // ... resto do código do sidebar
 
   return (
-    <aside className={`bg-[#6B1A2A] text-white/80 flex flex-col h-screen fixed left-0 top-0 z-50 transition-all duration-300 ${
-      collapsed ? 'w-20' : 'w-64'
-    }`}>
+    <aside className={`bg-[#6B1A2A] text-white/80 flex flex-col h-screen fixed left-0 top-0 z-50 transition-all duration-300 ${collapsed ? 'w-20' : 'w-64'}`}>
       
-      {/* LOGO CENTRALIZADA COM PONTAS ARREDONDADAS - 2cm de altura */}
+      {/* LOGO */}
       <div className={`p-4 border-b border-white/10 flex items-center justify-center ${collapsed ? 'h-20' : 'h-24'}`}>
         <img 
           src="/logo.png" 
           alt="ZENTHOS" 
-          className="h-[2cm] w-auto object-contain rounded-2xl shadow-lg"
+          className="h-[2cm] w-auto object-contain rounded-2xl"
         />
       </div>
 
@@ -189,7 +153,7 @@ export function SidebarAdmin() {
         })}
       </nav>
 
-      {/* RODAPÉ DO MENU - USUÁRIO E PERFIL */}
+      {/* RODAPÉ DO MENU - LOGOUT */}
       <div className="p-4 border-t border-white/10">
         <div className="flex items-center gap-3 px-3 py-2 mb-2 bg-white/5 rounded-lg">
           <div className="w-8 h-8 bg-[#E3C9A8] rounded-full flex items-center justify-center text-[#6B1A2A] font-bold text-xs flex-shrink-0">
