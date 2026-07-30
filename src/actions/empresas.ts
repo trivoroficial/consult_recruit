@@ -50,7 +50,6 @@ export async function listarEmpresas() {
   }
 }
 
-// ✅ ADICIONAR ESTA FUNÇÃO
 export async function buscarEmpresaPorId(id: number) {
   try {
     const supabaseClient = supabase()
