@@ -33,8 +33,18 @@ export function Header() {
     <header className="bg-white border-b border-[#E8EAE0] sticky top-0 z-50 shadow-sm">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-20">
-          <Link href="/" className="flex items-center">
-            <img src="/logo.png" alt="ZENTHOS" className="h-[1.5cm] w-auto object-contain" />
+          {/* LOGO - 2cm de largura com altura proporcional */}
+          <Link href="/" className="flex items-center flex-shrink-0">
+            <img 
+              src="/logo.png" 
+              alt="ZENTHOS" 
+              className="object-contain"
+              style={{
+                width: '2cm',      // 2cm de largura
+                height: 'auto',    // altura proporcional
+                maxHeight: '2cm',  // limite máximo
+              }}
+            />
           </Link>
 
           <nav className="hidden md:flex items-center gap-6">
