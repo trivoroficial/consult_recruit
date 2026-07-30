@@ -50,7 +50,6 @@ export async function listarCandidatos() {
   }
 }
 
-// ✅ ADICIONAR ESTA FUNÇÃO
 export async function buscarCandidatoPorId(id: number) {
   try {
     const supabaseClient = supabase()
