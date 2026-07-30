@@ -21,15 +21,15 @@ export function Footer() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           
-          {/* COLUNA 1 - LOGO (2cm de ALTURA) */}
+          {/* COLUNA 1 - LOGO ZENTHOS */}
           <div>
             <img 
               src="/logo.png" 
               alt="ZENTHOS" 
               className="object-contain"
               style={{
-                height: '2cm',     // 2cm de altura (MAIOR)
-                width: 'auto',     // largura proporcional
+                height: '2cm',
+                width: 'auto',
               }}
             />
             <p className="text-sm text-[#708090] mt-4 max-w-xs">
@@ -68,6 +68,16 @@ export function Footer() {
         <div className="border-t border-[#E8EAE0] mt-8 pt-6">
           <div className="flex flex-col md:flex-row items-center justify-between gap-4">
             <div className="flex items-center gap-3">
+              {/* LOGO VIGORRE - CORRIGIDO */}
+              <img 
+                src="/logo-vigorre.png" 
+                alt="VIGORRE" 
+                className="object-contain"
+                style={{
+                  height: '1.2cm',
+                  width: 'auto',
+                }}
+              />
               <div>
                 <p className="text-sm font-semibold text-[#6B1A2A]">VIGORRE</p>
                 <p className="text-xs text-[#708090]">© 2026 VIGORRE TECH™. Todos os direitos reservados.</p>
