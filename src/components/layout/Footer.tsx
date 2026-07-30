@@ -21,17 +21,15 @@ export function Footer() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           
-          {/* COLUNA 1 - LOGO */}
+          {/* COLUNA 1 - LOGO (2cm de ALTURA) */}
           <div>
-            {/* LOGO - 2cm de largura com altura proporcional */}
             <img 
               src="/logo.png" 
               alt="ZENTHOS" 
               className="object-contain"
               style={{
-                width: '2cm',      // 2cm de largura
-                height: 'auto',    // altura proporcional
-                maxHeight: '2cm',  // limite máximo
+                height: '2cm',     // 2cm de altura (MAIOR)
+                width: 'auto',     // largura proporcional
               }}
             />
             <p className="text-sm text-[#708090] mt-4 max-w-xs">
