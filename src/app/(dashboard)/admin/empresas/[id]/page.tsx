@@ -1,16 +1,20 @@
 'use client'
-
 import { useState, useEffect } from 'react'
 import { useRouter, useParams } from 'next/navigation'
 import { SidebarAdmin } from '@/components/dashboard/SidebarAdmin'
 import { DashboardFooter } from '@/components/dashboard/DashboardFooter'
-import { ArrowLeft, Building2, MapPin, Calendar, Users, Briefcase, Edit, Trash2, Mail, Phone, Globe, Shield, CheckCircle, XCircle, Clock } from 'lucide-react'
+import { 
+  ArrowLeft, Building2, MapPin, Calendar, Users, 
+  Briefcase, Edit, Trash2, Mail, Phone, Globe, Shield,
+  CheckCircle, XCircle, Clock
+} from 'lucide-react'
 import { buscarEmpresaPorId, excluirEmpresa } from '@/actions/empresas'
 
 export default function VisualizarEmpresa() {
   const router = useRouter()
   const params = useParams()
   const id = params.id as string
+
   const [empresa, setEmpresa] = useState<any>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
@@ -38,7 +42,6 @@ export default function VisualizarEmpresa() {
 
   const handleDelete = async () => {
     if (!confirm('Tem certeza que deseja excluir esta empresa?')) return
-
     try {
       const result = await excluirEmpresa(parseInt(id))
       if (result.success) {
@@ -119,102 +122,62 @@ export default function VisualizarEmpresa() {
         </header>
 
         <div className="flex-1 p-8">
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            
-            <div className="lg:col-span-2">
-              <div className="bg-white rounded-2xl shadow-sm border border-[#E8EAE0] p-6">
-                <div className="flex items-center gap-4 mb-6">
-                  <div className="w-20 h-20 bg-[#6B1A2A]/10 rounded-2xl flex items-center justify-center text-[#6B1A2A] text-3xl font-bold">
-                    {empresa.nome?.charAt(0) || 'E'}
-                  </div>
-                  <div>
-                    <h2 className="text-xl font-bold text-[#2D343A]">{empresa.nome}</h2>
-                    <div className="flex items-center gap-2 mt-1">
-                      <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${
-                        empresa.status === 'Ativo' ? 'bg-green-100 text-green-700' :
-                        empresa.status === 'Inativo' ? 'bg-red-100 text-red-700' :
-                        'bg-yellow-100 text-yellow-700'
-                      }`}>
-                        {empresa.status || 'Ativo'}
-                      </span>
-                      <span className="text-sm text-[#708090]">• CNPJ: {empresa.cnpj || 'Não informado'}</span>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div className="flex items-center gap-3 p-3 bg-[#F8F4E6] rounded-lg">
-                    <MapPin className="h-5 w-5 text-[#6B1A2A]" />
-                    <div>
-                      <p className="text-sm text-[#708090]">Localização</p>
-                      <p className="font-medium text-[#2D343A]">{empresa.cidade || 'Não informado'}</p>
-                    </div>
-                  </div>
-                  <div className="flex items-center gap-3 p-3 bg-[#F8F4E6] rounded-lg">
-                    <Calendar className="h-5 w-5 text-[#6B1A2A]" />
-                    <div>
-                      <p className="text-sm text-[#708090]">Cadastro</p>
-                      <p className="font-medium text-[#2D343A]">{new Date(empresa.created_at || Date.now()).toLocaleDateString('pt-BR')}</p>
-                    </div>
-                  </div>
-                  <div className="flex items-center gap-3 p-3 bg-[#F8F4E6] rounded-lg">
-                    <Users className="h-5 w-5 text-[#6B1A2A]" />
-                    <div>
-                      <p className="text-sm text-[#708090]">Funcionários</p>
-                      <p className="font-medium text-[#2D343A]">{empresa.funcionarios || '0'}</p>
-                    </div>
-                  </div>
-                  <div className="flex items-center gap-3 p-3 bg-[#F8F4E6] rounded-lg">
-                    <Briefcase className="h-5 w-5 text-[#6B1A2A]" />
-                    <div>
-                      <p className="text-sm text-[#708090]">Vagas Ativas</p>
-                      <p className="font-medium text-[#2D343A]">{empresa.vagas_ativas || '0'}</p>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="mt-6 p-4 border border-[#E8EAE0] rounded-lg">
-                  <h3 className="font-semibold text-[#2D343A] mb-2">Descrição</h3>
-                  <p className="text-[#708090] text-sm">
-                    {empresa.descricao || 'Nenhuma descrição cadastrada para esta empresa.'}
-                  </p>
+          <div className="bg-white rounded-2xl shadow-sm border border-[#E8EAE0] p-6">
+            <div className="flex items-center gap-4 mb-6">
+              <div className="w-20 h-20 bg-[#6B1A2A]/10 rounded-2xl flex items-center justify-center text-[#6B1A2A] text-3xl font-bold">
+                {empresa.nome?.charAt(0) || 'E'}
+              </div>
+              <div>
+                <h2 className="text-xl font-bold text-[#2D343A]">{empresa.nome}</h2>
+                <div className="flex items-center gap-2 mt-1">
+                  <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${
+                    empresa.status === 'Ativo' ? 'bg-green-100 text-green-700' :
+                    empresa.status === 'Inativo' ? 'bg-red-100 text-red-700' :
+                    'bg-yellow-100 text-yellow-700'
+                  }`}>
+                    {empresa.status || 'Ativo'}
+                  </span>
+                  <span className="text-sm text-[#708090]">• CNPJ: {empresa.cnpj || 'Não informado'}</span>
                 </div>
               </div>
             </div>
 
-            <div>
-              <div className="bg-white rounded-2xl shadow-sm border border-[#E8EAE0] p-6">
-                <h3 className="font-semibold text-[#2D343A] mb-4">Informações</h3>
-                
-                <div className="space-y-4">
-                  <div className="flex items-center gap-3 text-sm">
-                    <Mail className="h-4 w-4 text-[#708090]" />
-                    <span className="text-[#708090]">{empresa.email || 'Não informado'}</span>
-                  </div>
-                  <div className="flex items-center gap-3 text-sm">
-                    <Phone className="h-4 w-4 text-[#708090]" />
-                    <span className="text-[#708090]">{empresa.telefone || 'Não informado'}</span>
-                  </div>
-                  <div className="flex items-center gap-3 text-sm">
-                    <Globe className="h-4 w-4 text-[#708090]" />
-                    <span className="text-[#708090]">www.empresa.com.br</span>
-                  </div>
-                  <div className="flex items-center gap-3 text-sm">
-                    <Shield className="h-4 w-4 text-[#708090]" />
-                    <span className="text-[#708090]">Plano: {empresa.plano || 'Básico'}</span>
-                  </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="flex items-center gap-3 p-3 bg-[#F8F4E6] rounded-lg">
+                <MapPin className="h-5 w-5 text-[#6B1A2A]" />
+                <div>
+                  <p className="text-sm text-[#708090]">Localização</p>
+                  <p className="font-medium text-[#2D343A]">{empresa.cidade || 'Não informado'}</p>
                 </div>
-
-                <div className="mt-6 pt-6 border-t border-[#E8EAE0]">
-                  <h4 className="text-sm font-semibold text-[#2D343A] mb-2">Responsável</h4>
-                  <p className="text-sm text-[#708090]">{empresa.responsavel || 'Não informado'}</p>
-                </div>
-
-                <button className="w-full mt-6 px-4 py-2 bg-[#6B1A2A] text-white rounded-lg hover:bg-[#4A0E1A] transition flex items-center justify-center gap-2">
-                  <Building2 className="h-4 w-4" />
-                  Ver Vagas da Empresa
-                </button>
               </div>
+              <div className="flex items-center gap-3 p-3 bg-[#F8F4E6] rounded-lg">
+                <Calendar className="h-5 w-5 text-[#6B1A2A]" />
+                <div>
+                  <p className="text-sm text-[#708090]">Cadastro</p>
+                  <p className="font-medium text-[#2D343A]">{new Date(empresa.created_at || Date.now()).toLocaleDateString('pt-BR')}</p>
+                </div>
+              </div>
+              <div className="flex items-center gap-3 p-3 bg-[#F8F4E6] rounded-lg">
+                <Users className="h-5 w-5 text-[#6B1A2A]" />
+                <div>
+                  <p className="text-sm text-[#708090]">Funcionários</p>
+                  <p className="font-medium text-[#2D343A]">{empresa.funcionarios || '0'}</p>
+                </div>
+              </div>
+              <div className="flex items-center gap-3 p-3 bg-[#F8F4E6] rounded-lg">
+                <Briefcase className="h-5 w-5 text-[#6B1A2A]" />
+                <div>
+                  <p className="text-sm text-[#708090]">Vagas Ativas</p>
+                  <p className="font-medium text-[#2D343A]">{empresa.vagas_ativas || '0'}</p>
+                </div>
+              </div>
+            </div>
+
+            <div className="mt-6 p-4 border border-[#E8EAE0] rounded-lg">
+              <h3 className="font-semibold text-[#2D343A] mb-2">Descrição</h3>
+              <p className="text-[#708090] text-sm">
+                {empresa.descricao || 'Nenhuma descrição cadastrada para esta empresa.'}
+              </p>
             </div>
           </div>
         </div>
