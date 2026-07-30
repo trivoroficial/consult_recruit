@@ -8,8 +8,8 @@ import { supabase } from '@/lib/supabase/client'
 
 export default function Login() {
   const router = useRouter()
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
+  const [email, setEmail] = useState('')  // ✅ VAZIO - SEGURO
+  const [password, setPassword] = useState('')  // ✅ VAZIO - SEGURO
   const [showPassword, setShowPassword] = useState(false)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
@@ -21,7 +21,6 @@ export default function Login() {
     const checkUser = async () => {
       const { data: { user } } = await supabase.auth.getUser()
       if (user) {
-        // Buscar role do usuário
         const { data: userData } = await supabase
           .from('usuarios')
           .select('role')
@@ -40,11 +39,13 @@ export default function Login() {
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault()
 
+    // ✅ VALIDAÇÃO DE LGPD MANTIDA
     if (!aceitouLGPD) {
       setError('Você precisa aceitar os termos da LGPD para continuar.')
       return
     }
 
+    // ✅ VALIDAÇÃO DE CAMPOS VAZIOS (NOVA)
     if (!email || !password) {
       setError('Preencha todos os campos.')
       return
@@ -59,6 +60,7 @@ export default function Login() {
         password,
       })
 
+      // ✅ TRATAMENTO DE ERRO ESPECÍFICO
       if (error) {
         if (error.message === 'Invalid login credentials') {
           setError('Email ou senha inválidos. Tente novamente.')
@@ -70,7 +72,7 @@ export default function Login() {
       }
 
       if (data?.user) {
-        // Buscar role
+        // ✅ BUSCAR ROLE DO USUÁRIO
         const { data: userData } = await supabase
           .from('usuarios')
           .select('role')
@@ -79,7 +81,7 @@ export default function Login() {
 
         const role = userData?.role || 'admin'
         
-        // Salvar apenas informações básicas (NÃO a senha!)
+        // ✅ SALVAR APENAS INFORMAÇÕES BÁSICAS (SEM SENHA!)
         localStorage.setItem('zenthos_user', JSON.stringify({
           email: data.user.email,
           name: data.user.email?.split('@')[0] || 'Usuário',
@@ -87,7 +89,7 @@ export default function Login() {
           id: data.user.id
         }))
 
-        // Redirecionar
+        // ✅ REDIRECIONAMENTO POR ROLE
         if (role === 'admin') router.push('/admin/dashboard')
         else if (role === 'empresa') router.push('/empresa/dashboard')
         else if (role === 'candidato') router.push('/candidato/dashboard')
@@ -164,6 +166,7 @@ export default function Login() {
             </div>
           </div>
 
+          {/* ✅ LGPD MANTIDO */}
           <div className="flex items-start gap-3 p-3 bg-[#F8F4E6] rounded-lg border border-[#E8EAE0]">
             <button
               type="button"
@@ -228,7 +231,7 @@ export default function Login() {
           </Link>
         </div>
 
-        {/* CREDENCIAIS REMOVIDAS - SEGURANÇA */}
+        {/* ✅ CREDENCIAIS REMOVIDAS - SEGURANÇA */}
         <div className="mt-4 text-center text-xs text-[#708090]">
           <p className="text-[#708090]/50">🔒 Ambiente seguro com criptografia</p>
         </div>
