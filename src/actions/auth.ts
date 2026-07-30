@@ -1,107 +1,98 @@
 'use server'
-
-import { supabase } from '@/lib/supabase/server'
+import { createClient } from '@/lib/supabase/server'
 import { cookies } from 'next/headers'
 
 export async function login(email: string, password: string) {
   try {
-    const supabaseClient = supabase()
+    const supabase = createClient()
     
-    const { data, error } = await supabaseClient.auth.signInWithPassword({
+    const { data, error } = await supabase.auth.signInWithPassword({
       email,
       password
     })
 
     if (error) throw error
-
     return { success: true, data }
   } catch (error: any) {
+    console.error('Erro ao fazer login:', error)
     return { success: false, error: error.message }
   }
 }
 
 export async function logout() {
   try {
-    const supabaseClient = supabase()
+    const supabase = createClient()
     
-    const { error } = await supabaseClient.auth.signOut()
-
+    const { error } = await supabase.auth.signOut()
     if (error) throw error
-
-    // Limpar cookie
+    
     cookies().delete('zenthos_user')
-
     return { success: true }
   } catch (error: any) {
+    console.error('Erro ao fazer logout:', error)
     return { success: false, error: error.message }
   }
 }
 
 export async function getSession() {
   try {
-    const supabaseClient = supabase()
+    const supabase = createClient()
     
-    const { data, error } = await supabaseClient.auth.getSession()
-
+    const { data, error } = await supabase.auth.getSession()
     if (error) throw error
-
     return { success: true, data }
   } catch (error: any) {
+    console.error('Erro ao buscar sessão:', error)
     return { success: false, error: error.message }
   }
 }
 
 export async function getUser() {
   try {
-    const supabaseClient = supabase()
+    const supabase = createClient()
     
-    const { data, error } = await supabaseClient.auth.getUser()
-
+    const { data, error } = await supabase.auth.getUser()
     if (error) throw error
-
     return { success: true, data }
   } catch (error: any) {
+    console.error('Erro ao buscar usuário:', error)
     return { success: false, error: error.message }
   }
 }
 
 export async function resetPassword(email: string) {
   try {
-    const supabaseClient = supabase()
+    const supabase = createClient()
     
-    const { error } = await supabaseClient.auth.resetPasswordForEmail(email, {
+    const { error } = await supabase.auth.resetPasswordForEmail(email, {
       redirectTo: `${process.env.NEXT_PUBLIC_APP_URL}/recuperar-senha`
     })
-
     if (error) throw error
-
     return { success: true }
   } catch (error: any) {
+    console.error('Erro ao resetar senha:', error)
     return { success: false, error: error.message }
   }
 }
 
 export async function updatePassword(password: string) {
   try {
-    const supabaseClient = supabase()
+    const supabase = createClient()
     
-    const { error } = await supabaseClient.auth.updateUser({
-      password
-    })
-
+    const { error } = await supabase.auth.updateUser({ password })
     if (error) throw error
-
     return { success: true }
   } catch (error: any) {
+    console.error('Erro ao atualizar senha:', error)
     return { success: false, error: error.message }
   }
 }
 
 export async function registerUser(data: any) {
   try {
-    const supabaseClient = supabase()
+    const supabase = createClient()
     
-    const { data: user, error } = await supabaseClient.auth.signUp({
+    const { data: user, error } = await supabase.auth.signUp({
       email: data.email,
       password: data.password,
       options: {
@@ -111,12 +102,10 @@ export async function registerUser(data: any) {
         }
       }
     })
-
     if (error) throw error
 
-    // Salvar na tabela usuarios
     if (user?.user) {
-      await supabaseClient
+      await supabase
         .from('usuarios')
         .insert([{
           id: user.user.id,
@@ -125,9 +114,9 @@ export async function registerUser(data: any) {
           role: data.role || 'candidato'
         }])
     }
-
     return { success: true, data: user }
   } catch (error: any) {
+    console.error('Erro ao registrar usuário:', error)
     return { success: false, error: error.message }
   }
 }
