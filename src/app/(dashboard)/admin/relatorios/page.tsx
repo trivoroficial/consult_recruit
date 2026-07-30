@@ -9,7 +9,7 @@ import {
   TrendingUp, TrendingDown, Users, Building2,
   Briefcase, DollarSign, FileSpreadsheet,
   RefreshCw, Clock, CheckCircle, XCircle,
-  ArrowUpRight, ArrowDownRight, PieChart
+  ArrowUpRight, ArrowDownRight
 } from 'lucide-react'
 import {
   gerarRelatorioFinanceiro,
@@ -131,7 +131,6 @@ export default function AdminRelatorios() {
         <div className="flex-1 p-8">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             
-            {/* CONFIGURAÇÕES */}
             <div className="lg:col-span-1">
               <div className="bg-white rounded-xl shadow-sm border border-[#E8EAE0] p-6">
                 <h3 className="font-semibold text-[#2D343A] mb-4 flex items-center gap-2">
@@ -251,7 +250,6 @@ export default function AdminRelatorios() {
               </div>
             </div>
 
-            {/* RELATÓRIO */}
             <div className="lg:col-span-2">
               <div className="bg-white rounded-xl shadow-sm border border-[#E8EAE0] p-6">
                 <div className="flex items-center justify-between mb-4">
@@ -297,7 +295,6 @@ export default function AdminRelatorios() {
 
                 {relatorio && (
                   <div className="space-y-4">
-                    {/* FINANCEIRO */}
                     {tipoRelatorio === 'financeiro' && (
                       <>
                         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
@@ -320,94 +317,70 @@ export default function AdminRelatorios() {
                             <p className="text-xs text-[#708090]">Saldo</p>
                           </div>
                         </div>
-                        {relatorio.transacoes && relatorio.transacoes.length > 0 && (
-                          <div className="mt-4">
-                            <h4 className="font-medium text-[#2D343A] mb-2">Últimas transações</h4>
-                            <div className="space-y-2">
-                              {relatorio.transacoes.slice(0, 5).map((t: any) => (
-                                <div key={t.id} className="flex items-center justify-between p-2 bg-[#F8F4E6] rounded-lg text-sm">
-                                  <span>{t.descricao}</span>
-                                  <span className={t.tipo === 'receita' ? 'text-green-600' : 'text-red-600'}>
-                                    {formatCurrency(t.valor)}
-                                  </span>
-                                </div>
-                              ))}
-                            </div>
-                          </div>
-                        )}
                       </>
                     )}
 
-                    {/* PROCESSOS */}
                     {tipoRelatorio === 'processos' && (
-                      <>
-                        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                          <div className="bg-[#F8F4E6] rounded-lg p-4 text-center">
-                            <p className="text-2xl font-bold text-[#2D343A]">{relatorio.total || 0}</p>
-                            <p className="text-xs text-[#708090]">Total</p>
-                          </div>
-                          <div className="bg-[#F8F4E6] rounded-lg p-4 text-center">
-                            <p className="text-2xl font-bold text-yellow-600">{relatorio.statusCount?.triagem || 0}</p>
-                            <p className="text-xs text-[#708090]">Triagem</p>
-                          </div>
-                          <div className="bg-[#F8F4E6] rounded-lg p-4 text-center">
-                            <p className="text-2xl font-bold text-blue-600">{relatorio.statusCount?.entrevista || 0}</p>
-                            <p className="text-xs text-[#708090]">Entrevista</p>
-                          </div>
-                          <div className="bg-[#F8F4E6] rounded-lg p-4 text-center">
-                            <p className="text-2xl font-bold text-green-600">{relatorio.statusCount?.aprovado || 0}</p>
-                            <p className="text-xs text-[#708090]">Aprovados</p>
-                          </div>
+                      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                        <div className="bg-[#F8F4E6] rounded-lg p-4 text-center">
+                          <p className="text-2xl font-bold text-[#2D343A]">{relatorio.total || 0}</p>
+                          <p className="text-xs text-[#708090]">Total</p>
                         </div>
-                      </>
+                        <div className="bg-[#F8F4E6] rounded-lg p-4 text-center">
+                          <p className="text-2xl font-bold text-yellow-600">{relatorio.statusCount?.triagem || 0}</p>
+                          <p className="text-xs text-[#708090]">Triagem</p>
+                        </div>
+                        <div className="bg-[#F8F4E6] rounded-lg p-4 text-center">
+                          <p className="text-2xl font-bold text-blue-600">{relatorio.statusCount?.entrevista || 0}</p>
+                          <p className="text-xs text-[#708090]">Entrevista</p>
+                        </div>
+                        <div className="bg-[#F8F4E6] rounded-lg p-4 text-center">
+                          <p className="text-2xl font-bold text-green-600">{relatorio.statusCount?.aprovado || 0}</p>
+                          <p className="text-xs text-[#708090]">Aprovados</p>
+                        </div>
+                      </div>
                     )}
 
-                    {/* CANDIDATOS */}
                     {tipoRelatorio === 'candidatos' && (
-                      <>
-                        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                          <div className="bg-[#F8F4E6] rounded-lg p-4 text-center">
-                            <p className="text-2xl font-bold text-[#2D343A]">{relatorio.total || 0}</p>
-                            <p className="text-xs text-[#708090]">Total</p>
-                          </div>
-                          <div className="bg-[#F8F4E6] rounded-lg p-4 text-center">
-                            <p className="text-2xl font-bold text-green-600">{relatorio.statusCount?.Disponivel || 0}</p>
-                            <p className="text-xs text-[#708090]">Disponíveis</p>
-                          </div>
-                          <div className="bg-[#F8F4E6] rounded-lg p-4 text-center">
-                            <p className="text-2xl font-bold text-yellow-600">{relatorio.statusCount?.EmProcesso || 0}</p>
-                            <p className="text-xs text-[#708090]">Em processo</p>
-                          </div>
-                          <div className="bg-[#F8F4E6] rounded-lg p-4 text-center">
-                            <p className="text-2xl font-bold text-blue-600">{relatorio.statusCount?.Contratado || 0}</p>
-                            <p className="text-xs text-[#708090]">Contratados</p>
-                          </div>
+                      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                        <div className="bg-[#F8F4E6] rounded-lg p-4 text-center">
+                          <p className="text-2xl font-bold text-[#2D343A]">{relatorio.total || 0}</p>
+                          <p className="text-xs text-[#708090]">Total</p>
                         </div>
-                      </>
+                        <div className="bg-[#F8F4E6] rounded-lg p-4 text-center">
+                          <p className="text-2xl font-bold text-green-600">{relatorio.statusCount?.Disponivel || 0}</p>
+                          <p className="text-xs text-[#708090]">Disponíveis</p>
+                        </div>
+                        <div className="bg-[#F8F4E6] rounded-lg p-4 text-center">
+                          <p className="text-2xl font-bold text-yellow-600">{relatorio.statusCount?.EmProcesso || 0}</p>
+                          <p className="text-xs text-[#708090]">Em processo</p>
+                        </div>
+                        <div className="bg-[#F8F4E6] rounded-lg p-4 text-center">
+                          <p className="text-2xl font-bold text-blue-600">{relatorio.statusCount?.Contratado || 0}</p>
+                          <p className="text-xs text-[#708090]">Contratados</p>
+                        </div>
+                      </div>
                     )}
 
-                    {/* VAGAS */}
                     {tipoRelatorio === 'vagas' && (
-                      <>
-                        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                          <div className="bg-[#F8F4E6] rounded-lg p-4 text-center">
-                            <p className="text-2xl font-bold text-[#2D343A]">{relatorio.total || 0}</p>
-                            <p className="text-xs text-[#708090]">Total</p>
-                          </div>
-                          <div className="bg-[#F8F4E6] rounded-lg p-4 text-center">
-                            <p className="text-2xl font-bold text-green-600">{relatorio.statusCount?.Aberta || 0}</p>
-                            <p className="text-xs text-[#708090]">Abertas</p>
-                          </div>
-                          <div className="bg-[#F8F4E6] rounded-lg p-4 text-center">
-                            <p className="text-2xl font-bold text-yellow-600">{relatorio.statusCount?.EmAnalise || 0}</p>
-                            <p className="text-xs text-[#708090]">Em análise</p>
-                          </div>
-                          <div className="bg-[#F8F4E6] rounded-lg p-4 text-center">
-                            <p className="text-2xl font-bold text-blue-600">{relatorio.totalCandidatos || 0}</p>
-                            <p className="text-xs text-[#708090]">Candidatos</p>
-                          </div>
+                      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                        <div className="bg-[#F8F4E6] rounded-lg p-4 text-center">
+                          <p className="text-2xl font-bold text-[#2D343A]">{relatorio.total || 0}</p>
+                          <p className="text-xs text-[#708090]">Total</p>
                         </div>
-                      </>
+                        <div className="bg-[#F8F4E6] rounded-lg p-4 text-center">
+                          <p className="text-2xl font-bold text-green-600">{relatorio.statusCount?.Aberta || 0}</p>
+                          <p className="text-xs text-[#708090]">Abertas</p>
+                        </div>
+                        <div className="bg-[#F8F4E6] rounded-lg p-4 text-center">
+                          <p className="text-2xl font-bold text-yellow-600">{relatorio.statusCount?.EmAnalise || 0}</p>
+                          <p className="text-xs text-[#708090]">Em análise</p>
+                        </div>
+                        <div className="bg-[#F8F4E6] rounded-lg p-4 text-center">
+                          <p className="text-2xl font-bold text-blue-600">{relatorio.totalCandidatos || 0}</p>
+                          <p className="text-xs text-[#708090]">Candidatos</p>
+                        </div>
+                      </div>
                     )}
                   </div>
                 )}
