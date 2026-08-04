@@ -11,7 +11,6 @@ export default function CandidatoLayout({
 }) {
   const pathname = usePathname()
 
-  // Verifica se está na página de login ou cadastro
   const isAuthPage = pathname?.startsWith('/login') || pathname?.startsWith('/cadastro')
 
   if (isAuthPage) {
