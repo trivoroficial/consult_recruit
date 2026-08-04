@@ -4,84 +4,76 @@ import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { DashboardFooter } from '@/components/dashboard/DashboardFooter'
 import { 
-  DollarSign, Search, Eye, TrendingUp, TrendingDown, 
-  Calendar, CreditCard, Filter, ArrowUpDown, 
-  Download, PieChart 
+  DollarSign, Search, TrendingUp, TrendingDown, 
+  Calendar, CreditCard, Filter, CheckCircle, 
+  XCircle, AlertCircle, Clock, ArrowRight
 } from 'lucide-react'
 
 export default function EmpresaFinanceiro() {
   const router = useRouter()
   const [search, setSearch] = useState('')
   const [filter, setFilter] = useState('Todos')
-  
+
   const transacoes = [
-    { id: 1, descricao: 'Assinatura Plano Premium - ZENTHOS', valor: 299.90, tipo: 'despesa', data: '10/07/2026', status: 'Pago', categoria: 'Assinatura' },
-    { id: 2, descricao: 'Venda de Serviço - Consultoria RH', valor: 1500.00, tipo: 'receita', data: '08/07/2026', status: 'Recebido', categoria: 'Consultoria' },
-    { id: 3, descricao: 'Venda de Serviço - Recrutamento', valor: 850.00, tipo: 'receita', data: '05/07/2026', status: 'Recebido', categoria: 'Recrutamento' },
-    { id: 4, descricao: 'Manutenção de Sistema', valor: 120.00, tipo: 'despesa', data: '03/07/2026', status: 'Pendente', categoria: 'Manutenção' },
-    { id: 5, descricao: 'Venda de Serviço - Treinamento', valor: 2000.00, tipo: 'receita', data: '01/07/2026', status: 'Recebido', categoria: 'Treinamento' },
+    { id: 1, descricao: 'Assinatura Plano Premium - ZENTHOS', valor: 299.90, tipo: 'despesa', data_vencimento: '15/07/2026', status: 'Pendente', categoria: 'Assinatura' },
+    { id: 2, descricao: 'Consultoria RH - Projeto XPTO', valor: 1500.00, tipo: 'receita', data_vencimento: '20/07/2026', status: 'Pendente', categoria: 'Consultoria' },
+    { id: 3, descricao: 'Recrutamento - Analista Administrativo', valor: 850.00, tipo: 'receita', data_vencimento: '10/07/2026', status: 'Pago', categoria: 'Recrutamento' },
+    { id: 4, descricao: 'Treinamento - Equipe Técnica', valor: 2000.00, tipo: 'receita', data_vencimento: '05/07/2026', status: 'Pago', categoria: 'Treinamento' },
   ]
 
   const filtered = transacoes.filter(t => {
     const matchSearch = t.descricao.toLowerCase().includes(search.toLowerCase()) ||
                         t.categoria.toLowerCase().includes(search.toLowerCase())
-    const matchFilter = filter === 'Todos' || t.tipo === filter
+    const matchFilter = filter === 'Todos' || t.status === filter
     return matchSearch && matchFilter
   })
 
-  const totalReceitas = transacoes.filter(t => t.tipo === 'receita').reduce((acc, t) => acc + t.valor, 0)
-  const totalDespesas = transacoes.filter(t => t.tipo === 'despesa').reduce((acc, t) => acc + t.valor, 0)
+  const totalReceitas = transacoes.filter(t => t.tipo === 'receita' && t.status === 'Pago').reduce((acc, t) => acc + t.valor, 0)
+  const totalDespesas = transacoes.filter(t => t.tipo === 'despesa' && t.status === 'Pago').reduce((acc, t) => acc + t.valor, 0)
+  const totalPendentes = transacoes.filter(t => t.status === 'Pendente').reduce((acc, t) => acc + t.valor, 0)
   const saldo = totalReceitas - totalDespesas
 
   const statusCount = {
     total: transacoes.length,
-    receitas: transacoes.filter(t => t.tipo === 'receita').length,
-    despesas: transacoes.filter(t => t.tipo === 'despesa').length,
-    pendentes: transacoes.filter(t => t.status === 'Pendente').length,
+    pago: transacoes.filter(t => t.status === 'Pago').length,
+    pendente: transacoes.filter(t => t.status === 'Pendente').length,
   }
 
   return (
     <div className="min-h-screen bg-[#F8F4E6] flex flex-col">
       <div className="flex-1 p-8">
         <div className="mb-8">
-          <div className="flex items-center justify-between">
-            <div>
-              <h1 className="text-2xl font-bold text-[#2D343A] flex items-center gap-2">
-                <DollarSign className="h-6 w-6 text-[#6B1A2A]" />
-                Financeiro
-              </h1>
-              <p className="text-sm text-[#708090]">{statusCount.total} transações</p>
-            </div>
-            <button className="px-4 py-2 border border-[#6B1A2A] text-[#6B1A2A] rounded-lg hover:bg-[#6B1A2A] hover:text-white transition flex items-center gap-2 text-sm">
-              <Download className="h-4 w-4" />
-              Exportar
-            </button>
-          </div>
+          <h1 className="text-2xl font-bold text-[#2D343A] flex items-center gap-2">
+            <DollarSign className="h-6 w-6 text-[#6B1A2A]" />
+            Financeiro
+          </h1>
+          <p className="text-sm text-[#708090]">Acompanhe seus pagamentos e pendências</p>
         </div>
 
         {/* Resumo Financeiro */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
           <div className="bg-white rounded-2xl shadow-sm border border-[#E8EAE0] p-4">
-            <p className="text-sm text-[#708090]">Saldo Total</p>
+            <p className="text-sm text-[#708090]">Saldo</p>
             <p className={`text-2xl font-bold ${saldo >= 0 ? 'text-green-600' : 'text-red-600'}`}>
               R$ {saldo.toFixed(2)}
             </p>
           </div>
           <div className="bg-white rounded-2xl shadow-sm border border-[#E8EAE0] p-4">
-            <p className="text-sm text-[#708090]">Total Receitas</p>
+            <p className="text-sm text-[#708090]">Total Recebido</p>
             <p className="text-2xl font-bold text-green-600">R$ {totalReceitas.toFixed(2)}</p>
           </div>
           <div className="bg-white rounded-2xl shadow-sm border border-[#E8EAE0] p-4">
-            <p className="text-sm text-[#708090]">Total Despesas</p>
+            <p className="text-sm text-[#708090]">Total Pago</p>
             <p className="text-2xl font-bold text-red-600">R$ {totalDespesas.toFixed(2)}</p>
           </div>
-          <div className="bg-white rounded-2xl shadow-sm border border-[#E8EAE0] p-4">
-            <p className="text-sm text-[#708090]">Pendentes</p>
-            <p className="text-2xl font-bold text-yellow-600">{statusCount.pendentes}</p>
+          <div className="bg-white rounded-2xl shadow-sm border border-[#E8EAE0] p-4 bg-yellow-50 border-yellow-200">
+            <p className="text-sm text-[#708090]">Pendências</p>
+            <p className="text-2xl font-bold text-yellow-600">R$ {totalPendentes.toFixed(2)}</p>
+            <p className="text-xs text-yellow-600">{statusCount.pendente} transações pendentes</p>
           </div>
         </div>
 
-        {/* Filtros e Busca */}
+        {/* Filtros */}
         <div className="bg-white rounded-2xl shadow-sm border border-[#E8EAE0] p-4 mb-6">
           <div className="flex flex-col md:flex-row gap-4">
             <div className="flex-1 relative">
@@ -104,20 +96,20 @@ export default function EmpresaFinanceiro() {
                 Todos ({statusCount.total})
               </button>
               <button 
-                onClick={() => setFilter('receita')}
+                onClick={() => setFilter('Pago')}
                 className={`px-4 py-2 rounded-lg text-sm transition ${
-                  filter === 'receita' ? 'bg-green-600 text-white' : 'bg-[#F8F4E6] text-[#708090] hover:bg-[#E8EAE0]'
+                  filter === 'Pago' ? 'bg-green-600 text-white' : 'bg-[#F8F4E6] text-[#708090] hover:bg-[#E8EAE0]'
                 }`}
               >
-                Receitas ({statusCount.receitas})
+                Pago ({statusCount.pago})
               </button>
               <button 
-                onClick={() => setFilter('despesa')}
+                onClick={() => setFilter('Pendente')}
                 className={`px-4 py-2 rounded-lg text-sm transition ${
-                  filter === 'despesa' ? 'bg-red-600 text-white' : 'bg-[#F8F4E6] text-[#708090] hover:bg-[#E8EAE0]'
+                  filter === 'Pendente' ? 'bg-yellow-600 text-white' : 'bg-[#F8F4E6] text-[#708090] hover:bg-[#E8EAE0]'
                 }`}
               >
-                Despesas ({statusCount.despesas})
+                Pendente ({statusCount.pendente})
               </button>
             </div>
           </div>
@@ -132,7 +124,9 @@ export default function EmpresaFinanceiro() {
         ) : (
           <div className="space-y-3">
             {filtered.map((item) => (
-              <div key={item.id} className="bg-white rounded-2xl shadow-sm border border-[#E8EAE0] p-4 hover:shadow-md transition">
+              <div key={item.id} className={`bg-white rounded-2xl shadow-sm border p-4 hover:shadow-md transition ${
+                item.status === 'Pendente' ? 'border-yellow-300 border-l-4 border-l-yellow-500' : 'border-[#E8EAE0]'
+              }`}>
                 <div className="flex items-start justify-between">
                   <div className="flex-1">
                     <div className="flex items-center gap-3">
@@ -142,10 +136,13 @@ export default function EmpresaFinanceiro() {
                       }`}>
                         {item.tipo === 'receita' ? '💰 Receita' : '💳 Despesa'}
                       </span>
-                      <span className={`px-2 py-0.5 rounded-full text-xs ${
-                        item.status === 'Pago' || item.status === 'Recebido' ? 'bg-green-100 text-green-700' :
+                      <span className={`px-2 py-0.5 rounded-full text-xs flex items-center gap-1 ${
+                        item.status === 'Pago' ? 'bg-green-100 text-green-700' :
                         item.status === 'Pendente' ? 'bg-yellow-100 text-yellow-700' : 'bg-red-100 text-red-700'
                       }`}>
+                        {item.status === 'Pago' ? <CheckCircle className="h-3 w-3" /> :
+                         item.status === 'Pendente' ? <AlertCircle className="h-3 w-3" /> :
+                         <XCircle className="h-3 w-3" />}
                         {item.status}
                       </span>
                     </div>
@@ -153,14 +150,21 @@ export default function EmpresaFinanceiro() {
                       <span>{item.categoria}</span>
                       <span className="flex items-center gap-1">
                         <Calendar className="h-4 w-4" />
-                        {item.data}
+                        Vence: {item.data_vencimento}
                       </span>
                     </div>
                   </div>
                   <div className="text-right">
-                    <p className={`font-bold ${item.tipo === 'receita' ? 'text-green-600' : 'text-red-600'}`}>
+                    <p className={`font-bold ${
+                      item.tipo === 'receita' ? 'text-green-600' : 'text-red-600'
+                    }`}>
                       {item.tipo === 'receita' ? '+' : '-'} R$ {item.valor.toFixed(2)}
                     </p>
+                    {item.status === 'Pendente' && (
+                      <button className="mt-1 text-xs text-[#6B1A2A] hover:underline">
+                        Marcar como pago
+                      </button>
+                    )}
                   </div>
                 </div>
               </div>
