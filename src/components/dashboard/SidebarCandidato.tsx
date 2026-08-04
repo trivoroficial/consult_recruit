@@ -11,10 +11,11 @@ import {
   Bell, 
   Settings, 
   LogOut,
-  ChevronLeft
+  ChevronLeft,
+  Star
 } from 'lucide-react'
 import { useState, useEffect } from 'react'
-import { supabase } from '@lib/supabase/client'
+import { supabase } from '@/lib/supabase/client'  // ← CORRIGIDO: @/lib ao invés de @lib
 
 export function SidebarCandidato() {
   const pathname = usePathname()
@@ -54,6 +55,7 @@ export function SidebarCandidato() {
     { icon: User, label: 'Meu Perfil', href: '/candidato/perfil' },
     { icon: FileText, label: 'Currículo', href: '/candidato/curriculo' },
     { icon: Search, label: 'Buscar Vagas', href: '/candidato/vagas' },
+    { icon: Star, label: 'Favoritas', href: '/candidato/favoritas' },
     { icon: Briefcase, label: 'Candidaturas', href: '/candidato/candidaturas' },
     { icon: Bell, label: 'Notificações', href: '/candidato/notificacoes' },
     { icon: Settings, label: 'Configurações', href: '/candidato/configuracoes' },
