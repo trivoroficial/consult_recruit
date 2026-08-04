@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
-import { User, Mail, Phone, MapPin, Briefcase, Save, CheckCircle, XCircle, Award, GraduationCap } from 'lucide-react'
+import { User, Mail, Phone, MapPin, Briefcase, Save, CheckCircle, XCircle, Award, GraduationCap, Upload } from 'lucide-react'
 import { DashboardFooter } from '@/components/dashboard/DashboardFooter'
 
 export default function CandidatoPerfil() {
@@ -75,6 +75,10 @@ export default function CandidatoPerfil() {
             <div>
               <h2 className="text-xl font-bold text-[#2D343A]">{form.nome || 'Candidato'}</h2>
               <p className="text-sm text-[#708090]">Candidato</p>
+              <button className="mt-1 text-xs text-[#6B1A2A] hover:underline flex items-center gap-1">
+                <Upload className="h-3 w-3" />
+                Alterar foto
+              </button>
             </div>
           </div>
 
