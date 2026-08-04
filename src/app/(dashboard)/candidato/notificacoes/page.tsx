@@ -35,6 +35,15 @@ export default function CandidatoNotificacoes() {
       tipo: 'success',
       link: '/candidato/entrevistas/1'
     },
+    { 
+      id: 4, 
+      titulo: 'Resultado disponível', 
+      descricao: 'O resultado da sua candidatura para Analista de RH já está disponível',
+      data: '01/07/2026', 
+      lida: false,
+      tipo: 'error',
+      link: '/candidato/candidaturas/3'
+    },
   ])
 
   const marcarComoLida = (id: number) => {
