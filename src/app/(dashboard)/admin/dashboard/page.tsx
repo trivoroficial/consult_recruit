@@ -12,7 +12,8 @@ import {
   ArrowUpRight, ArrowDownRight, CircleDollarSign,
   FileText, UserCheck, UserPlus, BriefcaseIcon,
   Download, Printer, Filter, RefreshCw,
-  Bell, BellRing, Eye, EyeOff, Menu as MenuIcon
+  Bell, BellRing, Eye, EyeOff, Menu as MenuIcon,
+  AlertTriangle, XCircle, AlertCircle, ShieldAlert
 } from 'lucide-react'
 import {
   Chart as ChartJS,
@@ -52,6 +53,13 @@ export default function AdminDashboard() {
   const [notificacoes, setNotificacoes] = useState<any[]>([])
   const [notificacoesNaoLidas, setNotificacoesNaoLidas] = useState(0)
   const [mostrarNotificacoes, setMostrarNotificacoes] = useState(false)
+  const [mostrarAlertas, setMostrarAlertas] = useState(true)
+
+  // ============================================
+  // ALERTAS DE SEGURANÇA - ADMIN
+  // ============================================
+  const [alertasSeguranca, setAlertasSeguranca] = useState<any[]>([])
+  const [alertasNaoLidos, setAlertasNaoLidos] = useState(0)
 
   const [stats, setStats] = useState({
     empresas: 0,
@@ -86,11 +94,51 @@ export default function AdminDashboard() {
   const [filtroPeriodo, setFiltroPeriodo] = useState('mes')
   const [ultimaAtualizacao, setUltimaAtualizacao] = useState<string>('')
 
-  // Dados para gráficos
   const [chartDataVagas, setChartDataVagas] = useState({ labels: [], datasets: [] })
   const [chartDataCandidatos, setChartDataCandidatos] = useState({ labels: [], datasets: [] })
   const [chartDataContratacoes, setChartDataContratacoes] = useState({ labels: [], datasets: [] })
   const [chartDataFinanceiro, setChartDataFinanceiro] = useState({ labels: [], datasets: [] })
+
+  // ============================================
+  // BUSCAR ALERTAS DE SEGURANÇA
+  // ============================================
+  const buscarAlertasSeguranca = useCallback(async () => {
+    try {
+      // Buscar logs de acesso admin nas últimas 24h
+      // Simulação - depois conectar com tabela real de logs
+      const alertas = [
+        { 
+          id: 1, 
+          usuario: 'emerson@zenthos.com', 
+          ip: '189.6.XXX.XXX', 
+          data: new Date().toLocaleString('pt-BR'), 
+          status: 'Acesso permitido',
+          tipo: 'admin'
+        },
+        { 
+          id: 2, 
+          usuario: 'admin@zenthos.com', 
+          ip: '189.6.XXX.XXX', 
+          data: new Date(Date.now() - 3600000).toLocaleString('pt-BR'), 
+          status: 'Acesso permitido',
+          tipo: 'admin'
+        },
+        { 
+          id: 3, 
+          usuario: 'usuario_teste@email.com', 
+          ip: '201.20.XXX.XXX', 
+          data: new Date(Date.now() - 7200000).toLocaleString('pt-BR'), 
+          status: 'Tentativa falha',
+          tipo: 'suspeito'
+        },
+      ]
+      
+      setAlertasSeguranca(alertas)
+      setAlertasNaoLidos(alertas.filter(a => a.status === 'Tentativa falha' || a.status === 'Acesso suspeito').length)
+    } catch (error) {
+      console.error('Erro ao buscar alertas de segurança:', error)
+    }
+  }, [])
 
   const carregarDados = useCallback(async (showRefresh = false) => {
     if (showRefresh) setRefreshing(true)
@@ -146,7 +194,6 @@ export default function AdminDashboard() {
         supabase.from('transacoes').select('*')
       ])
 
-      // Calcular financeiro
       let receitaTotal = 0
       let despesaTotal = 0
       let contratacoes = 0
@@ -179,7 +226,6 @@ export default function AdminDashboard() {
       // 2. DADOS PARA GRÁFICOS
       // ============================================
 
-      // Vagas por status
       const { data: vagasPorStatus } = await supabase
         .from('vagas')
         .select('status')
@@ -199,7 +245,6 @@ export default function AdminDashboard() {
         }]
       })
 
-      // Candidatos por status
       const { data: candidatosPorStatus } = await supabase
         .from('candidatos')
         .select('status')
@@ -219,7 +264,6 @@ export default function AdminDashboard() {
         }]
       })
 
-      // Contratações por mês
       const { data: contratacoesData } = await supabase
         .from('transacoes')
         .select('data')
@@ -245,7 +289,6 @@ export default function AdminDashboard() {
         }]
       })
 
-      // Financeiro
       const { data: transacoesFinanceiro } = await supabase
         .from('transacoes')
         .select('data, tipo, valor')
@@ -357,6 +400,11 @@ export default function AdminDashboard() {
 
       setUltimaAtualizacao(new Date().toLocaleString('pt-BR'))
 
+      // ============================================
+      // 6. ALERTAS DE SEGURANÇA
+      // ============================================
+      await buscarAlertasSeguranca()
+
     } catch (error: any) {
       console.error('Erro ao carregar dados:', error)
       setError(error.message || 'Falha na conexão com o banco de dados')
@@ -368,7 +416,7 @@ export default function AdminDashboard() {
       setLoading(false)
       setRefreshing(false)
     }
-  }, [])
+  }, [buscarAlertasSeguranca])
 
   useEffect(() => {
     const userData = localStorage.getItem('zenthos_user')
@@ -392,10 +440,9 @@ export default function AdminDashboard() {
 
     carregarDados()
 
-    // Auto-refresh a cada 30 segundos
     const interval = setInterval(() => {
       carregarDados()
-    }, 30000)
+    }, 60000) // A cada 1 minuto
 
     return () => clearInterval(interval)
   }, [carregarDados])
@@ -462,7 +509,6 @@ export default function AdminDashboard() {
               {new Date().toLocaleDateString('pt-BR', { day: '2-digit', month: 'long', year: 'numeric' })}
             </div>
 
-            {/* NOTIFICAÇÕES */}
             <div className="relative">
               <button
                 onClick={() => setMostrarNotificacoes(!mostrarNotificacoes)}
@@ -537,6 +583,59 @@ export default function AdminDashboard() {
             <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-xl mb-4 text-sm flex items-center gap-2">
               <AlertCircle className="h-5 w-5 flex-shrink-0" />
               {error}
+            </div>
+          )}
+
+          {/* ============================================
+          ALERTA DE SEGURANÇA - ADMIN
+          ============================================ */}
+          {alertasNaoLidos > 0 && (
+            <div className="mb-6">
+              <div className="bg-red-50 border border-red-200 rounded-2xl p-4">
+                <div className="flex items-start gap-4">
+                  <div className="w-10 h-10 bg-red-100 rounded-full flex items-center justify-center flex-shrink-0">
+                    <ShieldAlert className="h-5 w-5 text-red-600" />
+                  </div>
+                  <div className="flex-1">
+                    <div className="flex items-center justify-between">
+                      <h3 className="font-semibold text-red-700 flex items-center gap-2">
+                        <AlertTriangle className="h-4 w-4" />
+                        🔒 Alerta de Segurança
+                      </h3>
+                      <button
+                        onClick={() => setMostrarAlertas(!mostrarAlertas)}
+                        className="text-sm text-red-600 hover:underline"
+                      >
+                        {mostrarAlertas ? 'Ocultar' : 'Mostrar'}
+                      </button>
+                    </div>
+                    <p className="text-sm text-red-600 mt-1">
+                      {alertasNaoLidos} atividade(s) suspeita(s) detectada(s) nas últimas 24h
+                    </p>
+                    {mostrarAlertas && (
+                      <div className="mt-3 space-y-2">
+                        {alertasSeguranca.filter(a => a.status === 'Tentativa falha' || a.status === 'Acesso suspeito').map((alerta) => (
+                          <div key={alerta.id} className="bg-white rounded-lg p-3 border border-red-200">
+                            <div className="flex items-center justify-between">
+                              <div>
+                                <p className="text-sm font-medium text-[#2D343A]">
+                                  {alerta.usuario}
+                                </p>
+                                <p className="text-xs text-[#708090]">
+                                  IP: {alerta.ip} • {alerta.data}
+                                </p>
+                              </div>
+                              <span className="px-2 py-0.5 rounded-full text-xs bg-red-100 text-red-700">
+                                {alerta.status}
+                              </span>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
             </div>
           )}
 
