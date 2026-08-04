@@ -167,7 +167,6 @@ export default function MensagensCandidato() {
                           onChange={(e) => setMensagem(e.target.value)}
                           onKeyDown={(e) => {
                             if (e.key === 'Enter' && mensagem.trim()) {
-                              // Enviar mensagem
                               setMensagem('')
                             }
                           }}
