@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
-import { Briefcase, MapPin, Building2, Clock, ArrowRight, Sparkles, TrendingUp } from 'lucide-react'
+import { Briefcase, MapPin, Building2, ArrowRight, TrendingUp } from 'lucide-react'
 import { listarVagas } from '@/actions/vagas'
 
 export function VagasDestaque() {
@@ -18,7 +18,6 @@ export function VagasDestaque() {
     try {
       const result = await listarVagas()
       if (result.success) {
-        // Filtrar apenas vagas abertas e limitar a 3
         const abertas = (result.data || []).filter((v: any) => v.status === 'Aberta')
         setVagas(abertas.slice(0, 3))
       }
