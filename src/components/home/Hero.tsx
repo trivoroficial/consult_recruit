@@ -10,7 +10,6 @@ export function Hero() {
       {/* Fundo */}
       <div className="absolute inset-0">
         <div className="absolute inset-0 bg-gradient-to-br from-[#8B1A2A]/90 via-[#8B1A2A]/70 to-[#FAFAFA]" />
-        {/* IMAGEM DE FUNDO - USANDO A MESMA DO SITE */}
         <div 
           className="absolute inset-0 bg-cover bg-center opacity-20"
           style={{ backgroundImage: "url('/recrutamento.png')" }}
@@ -19,7 +18,7 @@ export function Hero() {
 
       <div className="container mx-auto px-4 relative z-10">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-          {/* Texto - LADO ESQUERDO */}
+          {/* Texto */}
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
@@ -96,7 +95,7 @@ export function Hero() {
             </div>
           </motion.div>
 
-          {/* IMAGEM - LADO DIREITO - CORRIGIDA */}
+          {/* Imagem */}
           <motion.div
             initial={{ opacity: 0, x: 30 }}
             animate={{ opacity: 1, x: 0 }}
@@ -105,7 +104,6 @@ export function Hero() {
           >
             <div className="relative">
               <div className="absolute inset-0 bg-gradient-to-tr from-[#8B1A2A]/20 to-[#E3C9A8]/20 blur-3xl" />
-              {/* IMAGEM CORRIGIDA - USANDO A LOGO OU UMA ILUSTRAÇÃO GENÉRICA */}
               <div className="relative w-full max-w-lg mx-auto bg-[#8B1A2A]/10 rounded-3xl p-8 border border-white/20 backdrop-blur-sm">
                 <div className="text-center">
                   <img 
