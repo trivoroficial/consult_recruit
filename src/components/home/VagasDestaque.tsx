@@ -43,7 +43,6 @@ export function VagasDestaque() {
     )
   }
 
-  // ⬇️ SEMPRE MOSTRA A SEÇÃO, MESMO SEM VAGAS
   return (
     <section className="py-16 md:py-24 bg-[#FAFAFA]">
       <div className="container mx-auto px-4">
