@@ -21,6 +21,8 @@ export function Header() {
 
   const navItems = [
     { label: 'Início', href: '/' },
+    { label: 'Vagas', href: '/vagas' },        // ← ADICIONADO
+    { label: 'Para Empresas', href: '/empresas' },
     { label: 'Sobre', href: '/sobre' },
     { label: 'Serviços', href: '/servicos' },
     { label: 'Contato', href: '/contato' },
@@ -33,15 +35,14 @@ export function Header() {
     <header className="bg-white border-b border-[#E8EAE0] sticky top-0 z-50 shadow-sm">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-20">
-          {/* LOGO - 2cm de ALTURA (MAIOR) */}
           <Link href="/" className="flex items-center flex-shrink-0">
             <img 
               src="/logo.png" 
               alt="ZENTHOS" 
               className="object-contain"
               style={{
-                height: '2cm',     // 2cm de altura (MAIOR)
-                width: 'auto',     // largura proporcional
+                height: '2cm',
+                width: 'auto',
               }}
             />
           </Link>
@@ -53,8 +54,8 @@ export function Header() {
                 href={item.href}
                 className={`text-sm font-medium transition ${
                   pathname === item.href
-                    ? 'text-[#6B1A2A]'
-                    : 'text-[#708090] hover:text-[#6B1A2A]'
+                    ? 'text-[#8B1A2A]'
+                    : 'text-[#708090] hover:text-[#8B1A2A]'
                 }`}
               >
                 {item.label}
@@ -71,7 +72,7 @@ export function Header() {
             </a>
             <Link
               href="/login"
-              className="px-5 py-2.5 bg-[#6B1A2A] text-white rounded-lg hover:bg-[#4A0E1A] transition text-sm font-medium flex items-center gap-2"
+              className="px-5 py-2.5 bg-[#8B1A2A] text-white rounded-lg hover:bg-[#6B0A1A] transition text-sm font-medium flex items-center gap-2"
             >
               <LogIn className="h-4 w-4" />
               Entrar
@@ -96,8 +97,8 @@ export function Header() {
                   onClick={() => setMobileMenuOpen(false)}
                   className={`text-sm font-medium transition px-3 py-2 rounded-lg ${
                     pathname === item.href
-                      ? 'text-[#6B1A2A] bg-[#6B1A2A]/5'
-                      : 'text-[#708090] hover:text-[#6B1A2A] hover:bg-[#F8F4E6]'
+                      ? 'text-[#8B1A2A] bg-[#8B1A2A]/5'
+                      : 'text-[#708090] hover:text-[#8B1A2A] hover:bg-[#F8F4E6]'
                   }`}
                 >
                   {item.label}
@@ -115,7 +116,7 @@ export function Header() {
               <Link
                 href="/login"
                 onClick={() => setMobileMenuOpen(false)}
-                className="px-4 py-2.5 bg-[#6B1A2A] text-white rounded-lg hover:bg-[#4A0E1A] transition text-sm font-medium text-center flex items-center justify-center gap-2"
+                className="px-4 py-2.5 bg-[#8B1A2A] text-white rounded-lg hover:bg-[#6B0A1A] transition text-sm font-medium text-center flex items-center justify-center gap-2"
               >
                 <LogIn className="h-4 w-4" />
                 Entrar
