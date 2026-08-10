@@ -1,80 +1,127 @@
 'use client'
 
 import Link from 'next/link'
-import { ArrowRight, Phone, CheckCircle, Users, Building2, Briefcase } from 'lucide-react'
-
-const whatsappNumber = "5534991850735";
-const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent("Olá! Gostaria de conhecer as soluções da ZENTHOS.")}`;
+import { motion } from 'framer-motion'
+import { ArrowRight, CheckCircle, Sparkles, Zap, TrendingUp } from 'lucide-react'
 
 export function Hero() {
   return (
-    <section className="relative min-h-[90vh] flex items-center overflow-hidden">
-      {/* IMAGEM DE FUNDO COM TRANSPARÊNCIA */}
+    <section className="relative overflow-hidden min-h-[90vh] flex items-center">
+      {/* Fundo com gradiente suave - NOVAS CORES */}
       <div className="absolute inset-0">
-        <img 
-          src="/recrutamento.png" 
-          alt="ZENTHOS" 
-          className="w-full h-full object-cover"
-        />
-        {/* GRADIENTE VINHO */}
-        <div className="absolute inset-0 bg-gradient-to-r from-[#4A0E1A]/90 via-[#6B1A2A]/70 to-[#6B1A2A]/50"></div>
+        <div className="absolute inset-0 bg-gradient-to-br from-[#8B1A2A]/90 via-[#8B1A2A]/70 to-[#FAFAFA]" />
+        <div className="absolute inset-0 bg-[url('/recrutamento.png')] bg-cover bg-center opacity-20" />
       </div>
-      
-      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 lg:py-28 w-full z-10">
+
+      <div className="container mx-auto px-4 relative z-10">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-          <div>
-            <div className="flex items-center gap-2 mb-4">
-              <span className="px-4 py-1.5 bg-white/10 backdrop-blur-sm rounded-full text-xs font-medium text-[#E3C9A8] border border-[#E3C9A8]/20">
-                🚀 Plataforma de Recrutamento Enterprise
-              </span>
+          {/* Texto - LADO ESQUERDO */}
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+          >
+            {/* Badge de destaque */}
+            <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/10 backdrop-blur-sm rounded-full text-white/90 text-sm mb-6 border border-white/20">
+              <Zap className="h-4 w-4 text-[#E3C9A8]" />
+              <span>+1.200 talentos conectados em 2026</span>
             </div>
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight text-white">
-              Conectamos <br />
-              <span className="text-[#E3C9A8]">talentos</span> às <br />
-              melhores <span className="text-[#E3C9A8]">oportunidades</span>
+
+            {/* Título principal - HIPNÓTICO */}
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white leading-tight">
+              O próximo passo da sua
+              <br />
+              <span className="text-[#E3C9A8] relative">
+                carreira começa aqui
+                <span className="absolute -bottom-2 left-0 w-full h-1 bg-[#E3C9A8]/50 rounded-full" />
+              </span>
             </h1>
-            <p className="text-lg text-white/80 mt-6 max-w-lg">
-              A ZENTHOS é a plataforma inteligente que conecta profissionais qualificados às melhores empresas.
+
+            {/* Subtítulo - PERSUASIVO */}
+            <p className="text-lg text-white/80 mt-6 max-w-lg leading-relaxed">
+              Você já imaginou acordar todos os dias fazendo o que ama, em um lugar que valoriza seu potencial?
+              <br /><br />
+              <span className="text-[#E3C9A8] font-medium">A ZENTHOS conecta você às melhores oportunidades do mercado.</span>
             </p>
+
+            {/* Gatilhos de decisão - NEUROCIÊNCIA */}
             <div className="flex flex-wrap gap-4 mt-8">
-              <Link href="/login">
-                <button className="px-8 py-3.5 bg-[#E3C9A8] hover:bg-[#C9A84C] text-[#1A1A2E] font-semibold rounded-lg transition-all duration-300 shadow-lg shadow-[#6B1A2A]/30 hover:shadow-xl hover:-translate-y-0.5 flex items-center gap-2">
+              <div className="flex items-center gap-2 text-white/80">
+                <CheckCircle className="h-5 w-5 text-[#E3C9A8]" />
+                <span>Vagas exclusivas</span>
+              </div>
+              <div className="flex items-center gap-2 text-white/80">
+                <CheckCircle className="h-5 w-5 text-[#E3C9A8]" />
+                <span>Processo transparente</span>
+              </div>
+              <div className="flex items-center gap-2 text-white/80">
+                <CheckCircle className="h-5 w-5 text-[#E3C9A8]" />
+                <span>Resultado em até 15 dias</span>
+              </div>
+            </div>
+
+            {/* CTAs - AÇÃO IMEDIATA */}
+            <div className="flex flex-wrap gap-4 mt-8">
+              <Link href="/cadastro">
+                <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  className="group px-8 py-4 bg-[#E3C9A8] text-[#8B1A2A] font-bold rounded-lg hover:shadow-xl transition-all flex items-center gap-2"
+                >
+                  Quero Meu Próximo Emprego
+                  <ArrowRight className="h-5 w-5 group-hover:translate-x-1 transition" />
+                </motion.button>
+              </Link>
+              <Link href="/vagas">
+                <button className="px-8 py-4 bg-white/10 backdrop-blur-sm border border-white/30 text-white font-medium rounded-lg hover:bg-white/20 transition-all">
                   Ver Vagas
-                  <ArrowRight className="h-4 w-4" />
                 </button>
               </Link>
-              <a href={whatsappUrl} target="_blank" rel="noopener noreferrer">
-                <button className="px-8 py-3.5 bg-white/10 backdrop-blur-sm hover:bg-white/20 text-white font-semibold rounded-lg transition-all duration-300 border border-white/20 hover:border-white/40 flex items-center gap-2">
-                  <Phone className="h-4 w-4" />
-                  Falar com Especialista
-                </button>
-              </a>
             </div>
-          </div>
 
-          <div className="grid grid-cols-2 gap-4">
-            <div className="bg-white/10 backdrop-blur-md rounded-2xl p-6 border border-white/10 text-center hover:bg-white/20 transition-all duration-300">
-              <Building2 className="h-8 w-8 text-[#E3C9A8] mx-auto mb-2" />
-              <p className="text-3xl font-bold text-white">500+</p>
-              <p className="text-sm text-white/70">Empresas Parceiras</p>
+            {/* Prova social - ESCASSEZ E URGÊNCIA */}
+            <div className="flex items-center gap-6 mt-8 pt-6 border-t border-white/10">
+              <div className="flex -space-x-2">
+                {[1, 2, 3, 4].map((i) => (
+                  <div key={i} className="w-10 h-10 rounded-full bg-[#E3C9A8]/20 border-2 border-white flex items-center justify-center text-white font-bold text-sm">
+                    {String.fromCharCode(64 + i)}
+                  </div>
+                ))}
+                <div className="w-10 h-10 rounded-full bg-[#E3C9A8] border-2 border-white flex items-center justify-center text-[#8B1A2A] font-bold text-sm">
+                  +99
+                </div>
+              </div>
+              <div>
+                <p className="text-white font-medium">Pessoas já se inscreveram hoje</p>
+                <p className="text-white/60 text-sm">E você, vai ficar de fora?</p>
+              </div>
             </div>
-            <div className="bg-white/10 backdrop-blur-md rounded-2xl p-6 border border-white/10 text-center hover:bg-white/20 transition-all duration-300">
-              <Users className="h-8 w-8 text-[#E3C9A8] mx-auto mb-2" />
-              <p className="text-3xl font-bold text-white">10K+</p>
-              <p className="text-sm text-white/70">Candidatos</p>
+          </motion.div>
+
+          {/* Imagem - LADO DIREITO */}
+          <motion.div
+            initial={{ opacity: 0, x: 30 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.8, delay: 0.2 }}
+            className="hidden lg:block"
+          >
+            <div className="relative">
+              <div className="absolute inset-0 bg-gradient-to-tr from-[#8B1A2A]/20 to-[#E3C9A8]/20 blur-3xl" />
+              <img
+                src="/hero-illustration.png"
+                alt="Carreira ZENTHOS"
+                className="relative w-full max-w-lg mx-auto"
+              />
             </div>
-            <div className="bg-white/10 backdrop-blur-md rounded-2xl p-6 border border-white/10 text-center hover:bg-white/20 transition-all duration-300">
-              <Briefcase className="h-8 w-8 text-[#E3C9A8] mx-auto mb-2" />
-              <p className="text-3xl font-bold text-white">1.200+</p>
-              <p className="text-sm text-white/70">Contratações</p>
-            </div>
-            <div className="bg-white/10 backdrop-blur-md rounded-2xl p-6 border border-white/10 text-center hover:bg-white/20 transition-all duration-300">
-              <CheckCircle className="h-8 w-8 text-[#E3C9A8] mx-auto mb-2" />
-              <p className="text-3xl font-bold text-white">96%</p>
-              <p className="text-sm text-white/70">Satisfação</p>
-            </div>
-          </div>
+          </motion.div>
         </div>
+      </div>
+
+      {/* Ondulação inferior - CORES ATUALIZADAS */}
+      <div className="absolute bottom-0 left-0 right-0">
+        <svg viewBox="0 0 1440 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M0 40L60 50C120 60 240 80 360 80C480 80 600 60 720 50C840 40 960 40 1080 50C1200 60 1320 80 1380 90L1440 100V120H0V40Z" fill="#FAFAFA" />
+        </svg>
       </div>
     </section>
   )
