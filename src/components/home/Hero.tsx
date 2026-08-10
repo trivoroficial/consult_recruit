@@ -2,12 +2,12 @@
 
 import Link from 'next/link'
 import { motion } from 'framer-motion'
-import { ArrowRight, CheckCircle, Sparkles, Zap, TrendingUp } from 'lucide-react'
+import { ArrowRight, CheckCircle, Zap, Sparkles } from 'lucide-react'
 
 export function Hero() {
   return (
     <section className="relative overflow-hidden min-h-[90vh] flex items-center">
-      {/* Fundo com gradiente suave - NOVAS CORES */}
+      {/* Fundo - NOVAS CORES */}
       <div className="absolute inset-0">
         <div className="absolute inset-0 bg-gradient-to-br from-[#8B1A2A]/90 via-[#8B1A2A]/70 to-[#FAFAFA]" />
         <div className="absolute inset-0 bg-[url('/recrutamento.png')] bg-cover bg-center opacity-20" />
@@ -15,19 +15,17 @@ export function Hero() {
 
       <div className="container mx-auto px-4 relative z-10">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-          {/* Texto - LADO ESQUERDO */}
+          {/* Texto */}
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
           >
-            {/* Badge de destaque */}
             <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/10 backdrop-blur-sm rounded-full text-white/90 text-sm mb-6 border border-white/20">
               <Zap className="h-4 w-4 text-[#E3C9A8]" />
               <span>+1.200 talentos conectados em 2026</span>
             </div>
 
-            {/* Título principal - HIPNÓTICO */}
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white leading-tight">
               O próximo passo da sua
               <br />
@@ -37,14 +35,12 @@ export function Hero() {
               </span>
             </h1>
 
-            {/* Subtítulo - PERSUASIVO */}
             <p className="text-lg text-white/80 mt-6 max-w-lg leading-relaxed">
               Você já imaginou acordar todos os dias fazendo o que ama, em um lugar que valoriza seu potencial?
               <br /><br />
               <span className="text-[#E3C9A8] font-medium">A ZENTHOS conecta você às melhores oportunidades do mercado.</span>
             </p>
 
-            {/* Gatilhos de decisão - NEUROCIÊNCIA */}
             <div className="flex flex-wrap gap-4 mt-8">
               <div className="flex items-center gap-2 text-white/80">
                 <CheckCircle className="h-5 w-5 text-[#E3C9A8]" />
@@ -60,7 +56,6 @@ export function Hero() {
               </div>
             </div>
 
-            {/* CTAs - AÇÃO IMEDIATA */}
             <div className="flex flex-wrap gap-4 mt-8">
               <Link href="/cadastro">
                 <motion.button
@@ -79,7 +74,6 @@ export function Hero() {
               </Link>
             </div>
 
-            {/* Prova social - ESCASSEZ E URGÊNCIA */}
             <div className="flex items-center gap-6 mt-8 pt-6 border-t border-white/10">
               <div className="flex -space-x-2">
                 {[1, 2, 3, 4].map((i) => (
@@ -98,7 +92,6 @@ export function Hero() {
             </div>
           </motion.div>
 
-          {/* Imagem - LADO DIREITO */}
           <motion.div
             initial={{ opacity: 0, x: 30 }}
             animate={{ opacity: 1, x: 0 }}
@@ -117,7 +110,7 @@ export function Hero() {
         </div>
       </div>
 
-      {/* Ondulação inferior - CORES ATUALIZADAS */}
+      {/* Onda inferior - NOVAS CORES */}
       <div className="absolute bottom-0 left-0 right-0">
         <svg viewBox="0 0 1440 120" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path d="M0 40L60 50C120 60 240 80 360 80C480 80 600 60 720 50C840 40 960 40 1080 50C1200 60 1320 80 1380 90L1440 100V120H0V40Z" fill="#FAFAFA" />
