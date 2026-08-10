@@ -2,12 +2,12 @@
 
 import Link from 'next/link'
 import { motion } from 'framer-motion'
-import { ArrowRight, CheckCircle, Zap, Sparkles } from 'lucide-react'
+import { ArrowRight, CheckCircle, Zap } from 'lucide-react'
 
 export function Hero() {
   return (
     <section className="relative overflow-hidden min-h-[90vh] flex items-center">
-      {/* Fundo - NOVAS CORES */}
+      {/* Fundo */}
       <div className="absolute inset-0">
         <div className="absolute inset-0 bg-gradient-to-br from-[#8B1A2A]/90 via-[#8B1A2A]/70 to-[#FAFAFA]" />
         <div className="absolute inset-0 bg-[url('/recrutamento.png')] bg-cover bg-center opacity-20" />
@@ -110,7 +110,6 @@ export function Hero() {
         </div>
       </div>
 
-      {/* Onda inferior - NOVAS CORES */}
       <div className="absolute bottom-0 left-0 right-0">
         <svg viewBox="0 0 1440 120" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path d="M0 40L60 50C120 60 240 80 360 80C480 80 600 60 720 50C840 40 960 40 1080 50C1200 60 1320 80 1380 90L1440 100V120H0V40Z" fill="#FAFAFA" />
