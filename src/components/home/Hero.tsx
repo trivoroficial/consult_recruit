@@ -10,12 +10,16 @@ export function Hero() {
       {/* Fundo */}
       <div className="absolute inset-0">
         <div className="absolute inset-0 bg-gradient-to-br from-[#8B1A2A]/90 via-[#8B1A2A]/70 to-[#FAFAFA]" />
-        <div className="absolute inset-0 bg-[url('/recrutamento.png')] bg-cover bg-center opacity-20" />
+        {/* IMAGEM DE FUNDO - USANDO A MESMA DO SITE */}
+        <div 
+          className="absolute inset-0 bg-cover bg-center opacity-20"
+          style={{ backgroundImage: "url('/recrutamento.png')" }}
+        />
       </div>
 
       <div className="container mx-auto px-4 relative z-10">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-          {/* Texto */}
+          {/* Texto - LADO ESQUERDO */}
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
@@ -92,6 +96,7 @@ export function Hero() {
             </div>
           </motion.div>
 
+          {/* IMAGEM - LADO DIREITO - CORRIGIDA */}
           <motion.div
             initial={{ opacity: 0, x: 30 }}
             animate={{ opacity: 1, x: 0 }}
@@ -100,11 +105,22 @@ export function Hero() {
           >
             <div className="relative">
               <div className="absolute inset-0 bg-gradient-to-tr from-[#8B1A2A]/20 to-[#E3C9A8]/20 blur-3xl" />
-              <img
-                src="/hero-illustration.png"
-                alt="Carreira ZENTHOS"
-                className="relative w-full max-w-lg mx-auto"
-              />
+              {/* IMAGEM CORRIGIDA - USANDO A LOGO OU UMA ILUSTRAÇÃO GENÉRICA */}
+              <div className="relative w-full max-w-lg mx-auto bg-[#8B1A2A]/10 rounded-3xl p-8 border border-white/20 backdrop-blur-sm">
+                <div className="text-center">
+                  <img 
+                    src="/logo.png" 
+                    alt="ZENTHOS" 
+                    className="w-48 mx-auto mb-6"
+                  />
+                  <h3 className="text-white text-2xl font-bold">Conectando talentos</h3>
+                  <p className="text-white/70 text-sm mt-2">As melhores oportunidades do mercado</p>
+                  <div className="flex justify-center gap-4 mt-4">
+                    <span className="px-3 py-1 bg-white/10 rounded-full text-white/80 text-xs">+1200 talentos</span>
+                    <span className="px-3 py-1 bg-white/10 rounded-full text-white/80 text-xs">98% satisfação</span>
+                  </div>
+                </div>
+              </div>
             </div>
           </motion.div>
         </div>
