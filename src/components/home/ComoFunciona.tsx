@@ -32,7 +32,7 @@ export function ComoFunciona() {
   ]
 
   return (
-    <section className="py-16 md:py-24 bg-white">
+    <section className="py-16 md:py-24 bg-[#FAFAFA]">
       <div className="container mx-auto px-4">
         <div className="text-center max-w-3xl mx-auto mb-16">
           <motion.div
@@ -68,7 +68,7 @@ export function ComoFunciona() {
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: index * 0.1 }}
                 viewport={{ once: true }}
-                className="group relative text-center p-8 bg-[#FAFAFA] rounded-2xl border border-[#E5E7EB] hover:border-[#8B1A2A]/30 hover:shadow-xl transition-all duration-300 hover:-translate-y-2"
+                className="group relative text-center p-8 bg-white rounded-2xl border border-[#E5E7EB] hover:border-[#8B1A2A]/30 hover:shadow-xl transition-all duration-300 hover:-translate-y-2"
               >
                 <div className={`w-20 h-20 rounded-2xl flex items-center justify-center mx-auto mb-6 ${step.color} group-hover:scale-110 transition-transform duration-300`}>
                   <Icon className="h-10 w-10" />
