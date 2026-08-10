@@ -3,7 +3,7 @@
 import { motion } from 'framer-motion'
 import { Search, FileText, Users, CheckCircle, Sparkles } from 'lucide-react'
 
-export function ComoFuncionaCandidato() {
+export function ComoFunciona() {
   const steps = [
     {
       icon: Search,
