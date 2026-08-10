@@ -1,299 +1,161 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import Link from 'next/link'
-import { Building2, MapPin, Briefcase, Clock, ChevronRight, ArrowRight, Users } from 'lucide-react'
-import { supabase } from '@/lib/supabase/client'
+import { motion } from 'framer-motion'
+import { Briefcase, MapPin, Building2, Clock, ArrowRight, TrendingUp, Sparkles } from 'lucide-react'
 
 export function VagasDestaque() {
-  const [vagas, setVagas] = useState<any[]>([])
-  const [currentSlide, setCurrentSlide] = useState(0)
-  const [loading, setLoading] = useState(true)
-
-  // DADOS DE EXEMPLO (FALLBACK)
-  const vagasExemplo = [
+  const [vagas] = useState([
     {
       id: 1,
       titulo: 'Analista Administrativo',
-      empresa: 'Empresa XPTO',
-      local: 'Uberlândia/MG',
-      tipo: 'Presencial',
+      empresa: 'ZENTHOS Consultoria',
+      local: 'Uberlândia - MG',
+      tipo: 'CLT',
       badge: 'Urgente',
-      badgeColor: 'bg-red-500',
-      descricao: 'Atuação em rotinas administrativas, controle documental e suporte operacional.',
-      candidatos: 12
+      cor_badge: '#E74C3C',
+      descricao: 'Oportunidade para profissional organizado e proativo que deseja crescer em um ambiente dinâmico.',
+      salario: 'R$ 3.500 - R$ 4.500'
     },
     {
       id: 2,
-      titulo: 'Auxiliar de RH',
-      empresa: 'Indústria ABC',
-      local: 'Uberlândia/MG',
-      tipo: 'Híbrido',
+      titulo: 'Desenvolvedor Full Stack',
+      empresa: 'Tech Corp',
+      local: 'Remoto',
+      tipo: 'PJ',
       badge: 'Destaque',
-      badgeColor: 'bg-yellow-500',
-      descricao: 'Apoio aos processos de recrutamento, seleção e gestão de pessoas.',
-      candidatos: 8
+      cor_badge: '#8B1A2A',
+      descricao: 'Trabalhe com as mais novas tecnologias em um time de alto desempenho.',
+      salario: 'R$ 8.000 - R$ 12.000'
     },
     {
       id: 3,
-      titulo: 'Assistente Financeiro',
-      empresa: 'Grupo Financeiro',
-      local: 'Uberlândia/MG',
-      tipo: 'Presencial',
+      titulo: 'Analista de RH',
+      empresa: 'RH Solutions',
+      local: 'São Paulo - SP',
+      tipo: 'CLT',
       badge: 'Novo',
-      badgeColor: 'bg-green-500',
-      descricao: 'Controle de fluxo de caixa, contas a pagar e receber, relatórios financeiros.',
-      candidatos: 5
-    },
-    {
-      id: 4,
-      titulo: 'Supervisor de Produção',
-      empresa: 'Indústria XYZ',
-      local: 'Uberlândia/MG',
-      tipo: 'Presencial',
-      badge: 'Premium',
-      badgeColor: 'bg-purple-500',
-      descricao: 'Liderança de equipe, planejamento de produção e controle de qualidade.',
-      candidatos: 3
-    },
-  ]
-
-  useEffect(() => {
-    carregarVagas()
-  }, [])
-
-  const carregarVagas = async () => {
-    setLoading(true)
-    try {
-      // 1. TENTAR BUSCAR DO SUPABASE
-      const { data, error } = await supabase
-        .from('vagas')
-        .select('*')
-        .eq('exibir_carrossel', true)
-        .eq('status', 'Aberta')
-        .order('id', { ascending: false })
-        .limit(6)
-
-      if (error) throw error
-
-      if (data && data.length > 0) {
-        // Mapear dados do Supabase para o formato do carrossel
-        const mapped = data.map((v: any) => ({
-          id: v.id,
-          titulo: v.titulo,
-          empresa: v.empresa,
-          local: v.local || 'Não informado',
-          tipo: v.tipo || 'Presencial',
-          badge: v.badge || 'Destaque',
-          badgeColor: v.cor_badge || 'bg-purple-500',
-          descricao: v.descricao || 'Oportunidade em destaque',
-          candidatos: v.candidatos || 0
-        }))
-        setVagas(mapped)
-        setLoading(false)
-        return
-      }
-
-      // 2. FALLBACK: Tentar do localStorage
-      const saved = localStorage.getItem('zenthos_vagas')
-      if (saved) {
-        const allVagas = JSON.parse(saved)
-        const destaques = allVagas.filter((v: any) => v.exibirCarrossel && v.status === 'Aberta')
-        if (destaques.length > 0) {
-          const mapped = destaques.slice(0, 6).map((v: any) => ({
-            id: v.id,
-            titulo: v.titulo,
-            empresa: v.empresa,
-            local: v.local || 'Não informado',
-            tipo: v.tipo || 'Presencial',
-            badge: v.badge || 'Destaque',
-            badgeColor: v.corBadge || 'bg-purple-500',
-            descricao: v.descricao || 'Oportunidade em destaque',
-            candidatos: v.candidatos || 0
-          }))
-          setVagas(mapped)
-          setLoading(false)
-          return
-        }
-      }
-
-      // 3. FALLBACK FINAL: Dados de exemplo
-      setVagas(vagasExemplo)
-    } catch (error) {
-      console.error('Erro ao carregar vagas do Supabase:', error)
-      // Fallback para localStorage ou exemplo
-      const saved = localStorage.getItem('zenthos_vagas')
-      if (saved) {
-        const allVagas = JSON.parse(saved)
-        const destaques = allVagas.filter((v: any) => v.exibirCarrossel && v.status === 'Aberta')
-        if (destaques.length > 0) {
-          setVagas(destaques.slice(0, 6))
-          setLoading(false)
-          return
-        }
-      }
-      setVagas(vagasExemplo)
-    } finally {
-      setLoading(false)
+      cor_badge: '#2ECC71',
+      descricao: 'Venha fazer parte de uma equipe que transforma vidas através do recrutamento.',
+      salario: 'R$ 4.500 - R$ 6.000'
     }
-  }
+  ])
 
-  // AUTO-SLIDE
-  useEffect(() => {
-    if (vagas.length === 0) return
-    const interval = setInterval(() => {
-      setCurrentSlide((prev) => (prev + 1) % vagas.length)
-    }, 5000)
-    return () => clearInterval(interval)
-  }, [vagas.length])
-
-  const nextSlide = () => {
-    setCurrentSlide((prev) => (prev + 1) % vagas.length)
-  }
-
-  const prevSlide = () => {
-    setCurrentSlide((prev) => (prev - 1 + vagas.length) % vagas.length)
-  }
-
-  if (loading) {
-    return (
-      <section className="py-16 bg-white border-y border-[#E8EAE0]">
-        <div className="max-w-7xl mx-auto px-4">
-          <div className="text-center">
-            <div className="animate-pulse text-[#708090]">Carregando vagas...</div>
-          </div>
-        </div>
-      </section>
-    )
-  }
-
-  if (vagas.length === 0) {
-    return null
-  }
+  const whatsappNumber = "5534991850735"
 
   return (
-    <section className="py-16 bg-white border-y border-[#E8EAE0]">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between mb-8">
-          <div>
-            <div className="flex items-center gap-2">
-              <span className="text-xs font-semibold text-[#6B1A2A] uppercase tracking-wider">Oportunidades</span>
-              <span className="h-px w-12 bg-[#6B1A2A]"></span>
-            </div>
-            <h2 className="text-3xl font-bold text-[#2D343A] mt-1">
-              Vagas em <span className="text-[#6B1A2A]">Destaque</span>
+    <section className="py-16 md:py-24 bg-[#FAFAFA]">
+      <div className="container mx-auto px-4">
+        {/* Header */}
+        <div className="text-center max-w-3xl mx-auto mb-12">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            viewport={{ once: true }}
+          >
+            <span className="inline-flex items-center gap-2 px-4 py-2 bg-[#8B1A2A]/5 text-[#8B1A2A] rounded-full text-sm font-medium mb-4">
+              <TrendingUp className="h-4 w-4" />
+              Oportunidades em destaque
+            </span>
+            <h2 className="text-3xl md:text-4xl font-bold text-[#1A1A2E]">
+              A vaga que vai mudar sua vida
+              <br />
+              <span className="text-[#8B1A2A]">pode estar aqui</span>
             </h2>
-            <p className="text-sm text-[#708090] mt-1">Oportunidades estratégicas para sua carreira</p>
-          </div>
-          <Link href="/login" className="group flex items-center gap-2 text-sm font-medium text-[#6B1A2A] hover:text-[#4A0E1A] transition">
-            Ver todas as vagas
-            <ChevronRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-          </Link>
+            <p className="text-[#6B7280] mt-4 text-lg">
+              Essas oportunidades não vão esperar por você. Cada dia sem ação é uma chance que você perde.
+            </p>
+          </motion.div>
         </div>
 
-        <div className="relative">
-          <div className="overflow-hidden rounded-2xl">
-            <div
-              className="flex transition-transform duration-700 ease-out"
-              style={{ transform: `translateX(-${currentSlide * 100}%)` }}
+        {/* Vagas */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {vagas.map((vaga, index) => (
+            <motion.div
+              key={vaga.id}
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: index * 0.1 }}
+              viewport={{ once: true }}
+              className="group bg-white rounded-2xl shadow-sm border border-[#E5E7EB] hover:shadow-xl transition-all duration-300 hover:-translate-y-2 overflow-hidden relative"
             >
-              {vagas.map((vaga) => (
-                <div key={vaga.id} className="w-full flex-shrink-0 px-1">
-                  <div className="relative bg-gradient-to-br from-white to-[#F8F4E6] rounded-2xl p-8 border border-[#E8EAE0] shadow-sm hover:shadow-xl transition-all duration-500 group">
-                    <div className="absolute top-4 right-4">
-                      <span className={`px-3 py-1 rounded-full text-xs font-semibold text-white shadow-lg ${vaga.badgeColor || 'bg-purple-500'}`}>
-                        {vaga.badge || 'Destaque'}
-                      </span>
-                    </div>
+              {/* Badge */}
+              <div className="absolute top-4 right-4 z-10">
+                <span 
+                  className="px-3 py-1 text-white text-xs font-bold rounded-full shadow-lg"
+                  style={{ backgroundColor: vaga.cor_badge }}
+                >
+                  {vaga.badge}
+                </span>
+              </div>
 
-                    <div className="flex flex-col md:flex-row md:items-center gap-6">
-                      <div className="flex-1">
-                        <div className="flex items-center gap-3 mb-2">
-                          <div className="p-2 bg-[#6B1A2A]/10 rounded-lg">
-                            <Briefcase className="h-5 w-5 text-[#6B1A2A]" />
-                          </div>
-                          <h3 className="text-2xl font-bold text-[#2D343A] group-hover:text-[#6B1A2A] transition">
-                            {vaga.titulo}
-                          </h3>
-                        </div>
+              <div className="p-6">
+                <h3 className="text-xl font-bold text-[#1A1A2E] group-hover:text-[#8B1A2A] transition mb-3">
+                  {vaga.titulo}
+                </h3>
 
-                        <p className="text-lg font-semibold text-[#2D343A]">{vaga.empresa}</p>
-
-                        <div className="flex flex-wrap items-center gap-4 mt-3 text-sm text-[#708090]">
-                          <span className="flex items-center gap-1.5">
-                            <MapPin className="h-4 w-4" />
-                            {vaga.local}
-                          </span>
-                          <span className="flex items-center gap-1.5">
-                            <Clock className="h-4 w-4" />
-                            {vaga.tipo}
-                          </span>
-                          <span className="flex items-center gap-1.5">
-                            <Users className="h-4 w-4" />
-                            {vaga.candidatos || 0} candidatos
-                          </span>
-                        </div>
-
-                        <p className="mt-3 text-sm text-[#708090] leading-relaxed max-w-2xl">
-                          {vaga.descricao}
-                        </p>
-                      </div>
-
-                      <div className="flex-shrink-0">
-                        <Link href="/login">
-                          <button className="group/btn relative px-8 py-3.5 bg-[#6B1A2A] text-white font-semibold rounded-lg overflow-hidden transition-all duration-300 hover:shadow-xl hover:-translate-y-0.5">
-                            <span className="relative z-10 flex items-center gap-2">
-                              Candidatar-se
-                              <ArrowRight className="h-4 w-4 transition-transform group-hover/btn:translate-x-1" />
-                            </span>
-                            <span className="absolute inset-0 bg-[#E3C9A8] transform translate-y-full group-hover/btn:translate-y-0 transition-transform duration-300"></span>
-                          </button>
-                        </Link>
-                      </div>
-                    </div>
-
-                    <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-[#6B1A2A] via-[#E3C9A8] to-[#6B1A2A] opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                <div className="space-y-2 text-sm text-[#6B7280]">
+                  <div className="flex items-center gap-2">
+                    <Building2 className="h-4 w-4 text-[#8B1A2A]" />
+                    <span>{vaga.empresa}</span>
                   </div>
+                  <div className="flex items-center gap-2">
+                    <MapPin className="h-4 w-4 text-[#8B1A2A]" />
+                    <span>{vaga.local}</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <Briefcase className="h-4 w-4 text-[#8B1A2A]" />
+                    <span>{vaga.tipo}</span>
+                  </div>
+                  {vaga.salario && (
+                    <div className="flex items-center gap-2 text-[#8B1A2A] font-semibold">
+                      <span>💰 {vaga.salario}</span>
+                    </div>
+                  )}
                 </div>
-              ))}
-            </div>
-          </div>
 
-          <button
-            onClick={prevSlide}
-            className="absolute -left-4 top-1/2 -translate-y-1/2 p-3 bg-white rounded-full shadow-lg hover:shadow-xl transition-all duration-300 hover:bg-[#F8F4E6] border border-[#E8EAE0] hover:border-[#6B1A2A] group"
-          >
-            <svg className="h-5 w-5 text-[#2D343A] group-hover:text-[#6B1A2A] transition" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-            </svg>
-          </button>
-          <button
-            onClick={nextSlide}
-            className="absolute -right-4 top-1/2 -translate-y-1/2 p-3 bg-white rounded-full shadow-lg hover:shadow-xl transition-all duration-300 hover:bg-[#F8F4E6] border border-[#E8EAE0] hover:border-[#6B1A2A] group"
-          >
-            <svg className="h-5 w-5 text-[#2D343A] group-hover:text-[#6B1A2A] transition" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-            </svg>
-          </button>
+                <p className="text-sm text-[#6B7280] mt-4 line-clamp-2">
+                  {vaga.descricao}
+                </p>
 
-          <div className="flex justify-center gap-2 mt-6">
-            {vagas.map((_, index) => (
-              <button
-                key={index}
-                onClick={() => setCurrentSlide(index)}
-                className={`h-1.5 rounded-full transition-all duration-500 ${currentSlide === index
-                    ? 'w-10 bg-[#6B1A2A] shadow-md shadow-[#6B1A2A]/30'
-                    : 'w-3 bg-[#E8EAE0] hover:bg-[#6B1A2A]/40'
-                  }`}
-              />
-            ))}
-          </div>
+                {/* BOTÕES - 2 OPÇÕES */}
+                <div className="mt-6 pt-4 border-t border-[#E5E7EB] grid grid-cols-2 gap-3">
+                  <a
+                    href={`https://wa.me/${whatsappNumber}?text=${encodeURIComponent(`Olá! Vi a vaga de ${vaga.titulo} na ZENTHOS e gostaria de saber mais.`)}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center justify-center gap-2 px-4 py-2.5 border border-[#8B1A2A] text-[#8B1A2A] rounded-lg hover:bg-[#8B1A2A] hover:text-white transition text-sm font-medium"
+                  >
+                    Saber Mais
+                  </a>
+                  <Link
+                    href="/cadastro"
+                    className="flex items-center justify-center gap-2 px-4 py-2.5 bg-[#8B1A2A] text-white rounded-lg hover:bg-[#6B0A1A] transition text-sm font-medium"
+                  >
+                    Inscrever-se
+                    <ArrowRight className="h-4 w-4" />
+                  </Link>
+                </div>
+              </div>
+
+              <div className="absolute inset-0 bg-gradient-to-tr from-[#8B1A2A]/0 via-[#8B1A2A]/0 to-[#E3C9A8]/0 group-hover:from-[#8B1A2A]/5 group-hover:via-[#E3C9A8]/5 group-hover:to-transparent transition-all duration-700 pointer-events-none" />
+            </motion.div>
+          ))}
         </div>
 
-        <div className="flex justify-center mt-4">
-          <span className="text-xs text-[#708090]">
-            {currentSlide + 1} de {vagas.length} vagas em destaque
-          </span>
+        {/* Ver todas */}
+        <div className="text-center mt-12">
+          <p className="text-[#6B7280] mb-4">
+            <span className="font-medium text-[#8B1A2A]">{vagas.length}+ vagas</span> esperando por você
+          </p>
+          <Link href="/vagas">
+            <button className="group px-8 py-3.5 bg-white border-2 border-[#8B1A2A] text-[#8B1A2A] font-semibold rounded-lg hover:bg-[#8B1A2A] hover:text-white transition-all flex items-center gap-2 mx-auto">
+              Ver Todas as Vagas
+              <ArrowRight className="h-5 w-5 group-hover:translate-x-1 transition" />
+            </button>
+          </Link>
         </div>
       </div>
     </section>
