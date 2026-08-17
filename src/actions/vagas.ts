@@ -12,10 +12,11 @@ export async function listarVagas() {
       .order('id', { ascending: false })
 
     if (error) {
-      console.error('❌ Erro Supabase listarVagas:', error)
+      console.error('❌ Erro ao listar vagas:', error)
       return { success: false, error: error.message }
     }
 
+    // ✅ MANTER IDENTIDADE - Retorna todos os dados incluindo confidencial
     return { success: true, data: data || [] }
   } catch (error: any) {
     console.error('❌ Erro listarVagas:', error)
@@ -48,6 +49,7 @@ export async function criarVaga(data: any) {
   try {
     const supabase = createClient()
 
+    // ✅ MANTER IDENTIDADE - Salva todos os campos incluindo confidencial
     const { data: vaga, error } = await supabase
       .from('vagas')
       .insert([{
@@ -63,7 +65,7 @@ export async function criarVaga(data: any) {
         exibir_carrossel: data.exibir_carrossel || false,
         badge: data.badge || null,
         cor_badge: data.cor_badge || '#6B1A2A',
-        confidencial: data.confidencial || false,
+        confidencial: data.confidencial || false,  // ✅ SALVA
         salario_inicial: data.salario_inicial || null,
         salario_final: data.salario_final || null
       }])
