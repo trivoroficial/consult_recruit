@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
-import { Briefcase, MapPin, Building2, ArrowRight, TrendingUp } from 'lucide-react'
+import { Briefcase, MapPin, Building2, ArrowRight, TrendingUp, Shield } from 'lucide-react'
 import { listarVagas } from '@/actions/vagas'
 
 export function VagasDestaque() {
@@ -82,77 +82,89 @@ export function VagasDestaque() {
         ) : (
           <>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {vagas.map((vaga, index) => (
-                <motion.div
-                  key={vaga.id}
-                  initial={{ opacity: 0, y: 30 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5, delay: index * 0.1 }}
-                  viewport={{ once: true }}
-                  className="group bg-white rounded-2xl shadow-sm border border-[#E5E7EB] hover:shadow-xl transition-all duration-300 hover:-translate-y-2 overflow-hidden relative"
-                >
-                  {vaga.badge && (
-                    <div className="absolute top-4 right-4 z-10">
-                      <span 
-                        className="px-3 py-1 text-white text-xs font-bold rounded-full shadow-lg"
-                        style={{ backgroundColor: vaga.cor_badge || '#8B1A2A' }}
-                      >
-                        {vaga.badge}
-                      </span>
-                    </div>
-                  )}
+              {vagas.map((vaga, index) => {
+                // ✅ SE FOR CONFIDENCIAL - OCULTA NOME DA EMPRESA
+                const empresaExibida = vaga.confidencial ? 'Confidencial' : vaga.empresa
 
-                  <div className="p-6">
-                    <h3 className="text-xl font-bold text-[#1A1A2E] group-hover:text-[#8B1A2A] transition mb-3">
-                      {vaga.titulo}
-                    </h3>
-
-                    <div className="space-y-2 text-sm text-[#6B7280]">
-                      <div className="flex items-center gap-2">
-                        <Building2 className="h-4 w-4 text-[#8B1A2A]" />
-                        <span>{vaga.empresa}</span>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <MapPin className="h-4 w-4 text-[#8B1A2A]" />
-                        <span>{vaga.local || 'Remoto'}</span>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <Briefcase className="h-4 w-4 text-[#8B1A2A]" />
-                        <span>{vaga.tipo || 'CLT'}</span>
-                      </div>
-                      {(vaga.salario_inicial || vaga.salario_final) && (
-                        <div className="flex items-center gap-2 text-[#8B1A2A] font-semibold">
-                          <span>💰 R$ {vaga.salario_inicial || 0} - R$ {vaga.salario_final || 0}</span>
-                        </div>
+                return (
+                  <motion.div
+                    key={vaga.id}
+                    initial={{ opacity: 0, y: 30 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5, delay: index * 0.1 }}
+                    viewport={{ once: true }}
+                    className="group bg-white rounded-2xl shadow-sm border border-[#E5E7EB] hover:shadow-xl transition-all duration-300 hover:-translate-y-2 overflow-hidden relative"
+                  >
+                    {/* Badges */}
+                    <div className="absolute top-4 right-4 z-10 flex flex-col gap-1 items-end">
+                      {vaga.confidencial && (
+                        <span className="px-3 py-1 bg-[#8B1A2A] text-white text-xs font-bold rounded-full shadow-lg flex items-center gap-1">
+                          <Shield className="h-3 w-3" />
+                          Confidencial
+                        </span>
+                      )}
+                      {vaga.badge && !vaga.confidencial && (
+                        <span 
+                          className="px-3 py-1 text-white text-xs font-bold rounded-full shadow-lg"
+                          style={{ backgroundColor: vaga.cor_badge || '#8B1A2A' }}
+                        >
+                          {vaga.badge}
+                        </span>
                       )}
                     </div>
 
-                    <p className="text-sm text-[#6B7280] mt-4 line-clamp-2">
-                      {vaga.descricao || 'Oportunidade imperdível para profissionais talentosos.'}
-                    </p>
+                    <div className="p-6">
+                      <h3 className="text-xl font-bold text-[#1A1A2E] group-hover:text-[#8B1A2A] transition mb-3">
+                        {vaga.titulo}
+                      </h3>
 
-                    <div className="mt-6 pt-4 border-t border-[#E5E7EB] grid grid-cols-2 gap-3">
-                      <a
-                        href={`https://wa.me/${whatsappNumber}?text=${encodeURIComponent(`Olá! Vi a vaga de ${vaga.titulo} na ZENTHOS e gostaria de saber mais.`)}`}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="flex items-center justify-center gap-2 px-4 py-2.5 border border-[#8B1A2A] text-[#8B1A2A] rounded-lg hover:bg-[#8B1A2A] hover:text-white transition text-sm font-medium"
-                      >
-                        Saber Mais
-                      </a>
-                      <Link
-                        href="/cadastro"
-                        className="flex items-center justify-center gap-2 px-4 py-2.5 bg-[#8B1A2A] text-white rounded-lg hover:bg-[#6B0A1A] transition text-sm font-medium"
-                      >
-                        Inscrever-se
-                        <ArrowRight className="h-4 w-4" />
-                      </Link>
+                      <div className="space-y-2 text-sm text-[#6B7280]">
+                        <div className="flex items-center gap-2">
+                          <Building2 className="h-4 w-4 text-[#8B1A2A]" />
+                          <span>{empresaExibida}</span>  {/* ✅ OCULTA EMPRESA SE CONFIDENCIAL */}
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <MapPin className="h-4 w-4 text-[#8B1A2A]" />
+                          <span>{vaga.local || 'Remoto'}</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <Briefcase className="h-4 w-4 text-[#8B1A2A]" />
+                          <span>{vaga.tipo || 'CLT'}</span>
+                        </div>
+                        {(vaga.salario_inicial || vaga.salario_final) && (
+                          <div className="flex items-center gap-2 text-[#8B1A2A] font-semibold">
+                            <span>💰 R$ {vaga.salario_inicial || 0} - R$ {vaga.salario_final || 0}</span>
+                          </div>
+                        )}
+                      </div>
+
+                      <p className="text-sm text-[#6B7280] mt-4 line-clamp-2">
+                        {vaga.descricao || 'Oportunidade imperdível para profissionais talentosos.'}
+                      </p>
+
+                      <div className="mt-6 pt-4 border-t border-[#E5E7EB] grid grid-cols-2 gap-3">
+                        <a
+                          href={`https://wa.me/${whatsappNumber}?text=${encodeURIComponent(`Olá! Vi a vaga de ${vaga.titulo} na ZENTHOS e gostaria de saber mais.`)}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="flex items-center justify-center gap-2 px-4 py-2.5 border border-[#8B1A2A] text-[#8B1A2A] rounded-lg hover:bg-[#8B1A2A] hover:text-white transition text-sm font-medium"
+                        >
+                          Saber Mais
+                        </a>
+                        <Link
+                          href="/cadastro"
+                          className="flex items-center justify-center gap-2 px-4 py-2.5 bg-[#8B1A2A] text-white rounded-lg hover:bg-[#6B0A1A] transition text-sm font-medium"
+                        >
+                          Inscrever-se
+                          <ArrowRight className="h-4 w-4" />
+                        </Link>
+                      </div>
                     </div>
-                  </div>
 
-                  <div className="absolute inset-0 bg-gradient-to-tr from-[#8B1A2A]/0 via-[#8B1A2A]/0 to-[#E3C9A8]/0 group-hover:from-[#8B1A2A]/5 group-hover:via-[#E3C9A8]/5 group-hover:to-transparent transition-all duration-700 pointer-events-none" />
-                </motion.div>
-              ))}
+                    <div className="absolute inset-0 bg-gradient-to-tr from-[#8B1A2A]/0 via-[#8B1A2A]/0 to-[#E3C9A8]/0 group-hover:from-[#8B1A2A]/5 group-hover:via-[#E3C9A8]/5 group-hover:to-transparent transition-all duration-700 pointer-events-none" />
+                  </motion.div>
+                )
+              })}
             </div>
 
             <div className="text-center mt-12">
