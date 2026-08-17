@@ -7,7 +7,7 @@ import { DashboardFooter } from '@/components/dashboard/DashboardFooter'
 import {
   ArrowLeft, Briefcase, Building2, MapPin, Calendar,
   DollarSign, Clock, Users, Edit, Trash2, CheckCircle,
-  XCircle, FileText, Tag, Eye
+  XCircle, FileText, Tag, Eye, Shield
 } from 'lucide-react'
 import { buscarVagaPorId, excluirVaga } from '@/actions/vagas'
 
@@ -124,7 +124,7 @@ export default function VisualizarVaga() {
 
         <div className="flex-1 p-8">
           <div className="bg-white rounded-2xl shadow-sm border border-[#E8EAE0] p-6">
-            {/* Cabeçalho da Vaga */}
+            {/* Cabeçalho */}
             <div className="flex items-start justify-between mb-6">
               <div>
                 <div className="flex items-center gap-3">
@@ -144,7 +144,15 @@ export default function VisualizarVaga() {
                       {vaga.badge}
                     </span>
                   )}
+                  {/* ✅ ADMIN VÊ O BADGE CONFIDENCIAL */}
+                  {vaga.confidencial && (
+                    <span className="px-2 py-0.5 rounded-full text-xs font-medium bg-[#8B1A2A] text-white flex items-center gap-1">
+                      <Shield className="h-3 w-3" />
+                      Confidencial
+                    </span>
+                  )}
                 </div>
+                {/* ✅ ADMIN VÊ O NOME DA EMPRESA */}
                 <div className="flex items-center gap-4 mt-2 text-sm text-[#708090]">
                   <span className="flex items-center gap-1">
                     <Building2 className="h-4 w-4" />
