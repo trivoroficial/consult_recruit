@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { SidebarAdmin } from '@/components/dashboard/SidebarAdmin'
 import { DashboardFooter } from '@/components/dashboard/DashboardFooter'
-import { Briefcase, Plus, Search, Edit, Trash2, Eye, RefreshCw } from 'lucide-react'
+import { Briefcase, Plus, Search, Edit, Trash2, Eye, RefreshCw, Shield } from 'lucide-react'
 import { listarVagas, excluirVaga } from '@/actions/vagas'
 
 export default function AdminVagas() {
@@ -23,19 +23,12 @@ export default function AdminVagas() {
     setError(null)
     try {
       const result = await listarVagas()
-      
-      // LOG para debug
-      console.log('📊 Resultado listarVagas:', result)
-      
       if (result.success) {
         setVagas(result.data || [])
-        console.log('✅ Vagas carregadas:', result.data?.length || 0)
       } else {
         setError(result.error || 'Erro ao carregar vagas')
-        console.error('❌ Erro:', result.error)
       }
     } catch (err: any) {
-      console.error('❌ Erro inesperado:', err)
       setError(err.message || 'Erro ao carregar vagas')
     } finally {
       setLoading(false)
@@ -145,6 +138,7 @@ export default function AdminVagas() {
                       <th className="text-left py-3 px-4 text-sm font-semibold text-[#2D343A]">Empresa</th>
                       <th className="text-left py-3 px-4 text-sm font-semibold text-[#2D343A]">Local</th>
                       <th className="text-left py-3 px-4 text-sm font-semibold text-[#2D343A]">Status</th>
+                      <th className="text-left py-3 px-4 text-sm font-semibold text-[#2D343A]">Confidencial</th>
                       <th className="text-left py-3 px-4 text-sm font-semibold text-[#2D343A]">Ações</th>
                     </tr>
                   </thead>
@@ -162,6 +156,18 @@ export default function AdminVagas() {
                           }`}>
                             {item.status || 'Aberta'}
                           </span>
+                        </td>
+                        <td className="py-3 px-4">
+                          {item.confidencial ? (
+                            <span className="px-2 py-1 rounded-full text-xs font-medium bg-[#8B1A2A] text-white flex items-center gap-1">
+                              <Shield className="h-3 w-3" />
+                              Sim
+                            </span>
+                          ) : (
+                            <span className="px-2 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-500">
+                              Não
+                            </span>
+                          )}
                         </td>
                         <td className="py-3 px-4">
                           <div className="flex gap-2">
