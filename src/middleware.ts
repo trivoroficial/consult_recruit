@@ -1,45 +1,78 @@
-// src/middleware.ts
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
+import { createServerClient } from '@supabase/ssr'
 
-// Rotas protegidas
-const protectedRoutes = ['/admin', '/empresa', '/candidato']
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!
+const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
 
-// Rotas públicas
-const publicRoutes = [
-  '/', '/sobre', '/servicos', '/contato', 
-  '/login', '/cadastro', '/recuperar-senha',
-  '/vagas', '/empresas'
-]
+const publicRoutes = ['/', '/sobre', '/servicos', '/contato', '/login', '/cadastro', '/recuperar-senha', '/vagas', '/empresas']
 
-export function middleware(request: NextRequest) {
+export async function middleware(request: NextRequest) {
   const pathname = request.nextUrl.pathname
 
-  // Verifica se é uma rota pública
+  // Rotas públicas
   if (publicRoutes.some(route => pathname === route || pathname.startsWith(route + '/'))) {
     return NextResponse.next()
   }
 
-  // Verifica se é uma rota protegida
-  const isProtected = protectedRoutes.some(route => pathname.startsWith(route))
-  
-  if (isProtected) {
-    // Verifica o cookie
-    const userCookie = request.cookies.get('zenthos_user')?.value
-    
-    if (!userCookie) {
-      return NextResponse.redirect(new URL('/login', request.url))
-    }
+  let supabaseResponse = NextResponse.next({ request })
 
-    // Se tiver cookie, permite acesso
-    return NextResponse.next()
+  const supabase = createServerClient(
+    supabaseUrl,
+    supabaseAnonKey,
+    {
+      cookies: {
+        getAll() {
+          return request.cookies.getAll()
+        },
+        setAll(cookiesToSet) {
+          cookiesToSet.forEach(({ name, value, options }) => {
+            supabaseResponse.cookies.set(name, value, options)
+          })
+        },
+      },
+    }
+  )
+
+  const { data: { user } } = await supabase.auth.getUser()
+
+  if (!user) {
+    return NextResponse.redirect(new URL('/login', request.url))
   }
 
-  return NextResponse.next()
+  // Buscar role do usuário
+  let role = 'candidato'
+  try {
+    const { data: userData } = await supabase
+      .from('usuarios')
+      .select('role')
+      .eq('id', user.id)
+      .single()
+    role = userData?.role || 'candidato'
+  } catch (error) {
+    console.error('Erro ao buscar role:', error)
+  }
+
+  // Proteção por rota - ADMIN
+  if (pathname.startsWith('/admin') && role !== 'admin') {
+    return NextResponse.redirect(new URL('/login', request.url))
+  }
+
+  // Proteção por rota - EMPRESA
+  if (pathname.startsWith('/empresa') && role !== 'admin' && role !== 'empresa') {
+    return NextResponse.redirect(new URL('/login', request.url))
+  }
+
+  // Proteção por rota - CANDIDATO
+  if (pathname.startsWith('/candidato') && role !== 'admin' && role !== 'candidato') {
+    return NextResponse.redirect(new URL('/login', request.url))
+  }
+
+  return supabaseResponse
 }
 
 export const config = {
   matcher: [
-    '/((?!_next/static|_next/image|favicon.ico|.*\\.png$|.*\\.svg$|.*\\.jpg$|.*\\.webp$|logo.png).*)',
+    '/((?!_next/static|_next/image|favicon.ico|.*\\.png|.*\\.svg|.*\\.jpg|.*\\.webp).*)',
   ],
 }
