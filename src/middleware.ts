@@ -36,6 +36,7 @@ export async function middleware(request: NextRequest) {
 
   const { data: { user } } = await supabase.auth.getUser()
 
+  // Se não tiver usuário, redireciona para login
   if (!user) {
     return NextResponse.redirect(new URL('/login', request.url))
   }
@@ -53,19 +54,29 @@ export async function middleware(request: NextRequest) {
     console.error('Erro ao buscar role:', error)
   }
 
-  // Proteção por rota - ADMIN
-  if (pathname.startsWith('/admin') && role !== 'admin') {
-    return NextResponse.redirect(new URL('/login', request.url))
+  // Se for admin e tentar acessar rota de candidato, redireciona para admin
+  if (role === 'admin' && pathname.startsWith('/candidato')) {
+    return NextResponse.redirect(new URL('/admin/dashboard', request.url))
   }
 
-  // Proteção por rota - EMPRESA
-  if (pathname.startsWith('/empresa') && role !== 'admin' && role !== 'empresa') {
-    return NextResponse.redirect(new URL('/login', request.url))
+  // Se for candidato e tentar acessar rota de admin, redireciona para candidato
+  if (role === 'candidato' && pathname.startsWith('/admin')) {
+    return NextResponse.redirect(new URL('/candidato/dashboard', request.url))
   }
 
-  // Proteção por rota - CANDIDATO
-  if (pathname.startsWith('/candidato') && role !== 'admin' && role !== 'candidato') {
-    return NextResponse.redirect(new URL('/login', request.url))
+  // Se for empresa e tentar acessar rota de admin, redireciona para empresa
+  if (role === 'empresa' && pathname.startsWith('/admin')) {
+    return NextResponse.redirect(new URL('/empresa/dashboard', request.url))
+  }
+
+  // Se for empresa e tentar acessar rota de candidato, redireciona para empresa
+  if (role === 'empresa' && pathname.startsWith('/candidato')) {
+    return NextResponse.redirect(new URL('/empresa/dashboard', request.url))
+  }
+
+  // Se for candidato e tentar acessar rota de empresa, redireciona para candidato
+  if (role === 'candidato' && pathname.startsWith('/empresa')) {
+    return NextResponse.redirect(new URL('/candidato/dashboard', request.url))
   }
 
   return supabaseResponse
@@ -73,6 +84,6 @@ export async function middleware(request: NextRequest) {
 
 export const config = {
   matcher: [
-    '/((?!_next/static|_next/image|favicon.ico|.*\\.png|.*\\.svg|.*\\.jpg|.*\\.webp).*)',
+    '/((?!_next/static|_next/image|favicon.ico|.*\\.png|.*\\.svg|.*\\.jpg|.*\\.webp|logo.*|recrutamento.*).*)',
   ],
 }
