@@ -1,18 +1,40 @@
 'use client'
 
-import { useState } from 'react'
-import Link from 'next/link'
+import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
-import { Eye, EyeOff, LogIn, Loader2 } from 'lucide-react'
 import { supabase } from '@/lib/supabase/client'
 
 export default function Login() {
   const router = useRouter()
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [showPassword, setShowPassword] = useState(false)
+  const [email, setEmail] = useState('admin@zenthos.com')
+  const [password, setPassword] = useState('admin@2026')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
+
+  // Verificar se já está logado
+  useEffect(() => {
+    const checkUser = async () => {
+      const { data: { user } } = await supabase.auth.getUser()
+      if (user) {
+        // Buscar role
+        const { data: userData } = await supabase
+          .from('usuarios')
+          .select('role')
+          .eq('id', user.id)
+          .single()
+        
+        const role = userData?.role || 'candidato'
+        if (role === 'admin') {
+          router.push('/admin/dashboard')
+        } else if (role === 'empresa') {
+          router.push('/empresa/dashboard')
+        } else {
+          router.push('/candidato/dashboard')
+        }
+      }
+    }
+    checkUser()
+  }, [router])
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -28,41 +50,24 @@ export default function Login() {
       if (error) throw error
 
       if (data?.user) {
-        // 🔧 FIX: Tentar buscar role, mas se falhar, usar 'candidato' como fallback
-        let role = 'candidato'
-        let name = email.split('@')[0] || 'Usuário'
-
-        try {
-          const { data: userData } = await supabase
-            .from('usuarios')
-            .select('role, name')
-            .eq('id', data.user.id)
-            .single()
-          
-          if (userData) {
-            role = userData.role || 'candidato'
-            name = userData.name || name
-          }
-        } catch (err) {
-          console.warn('Erro ao buscar role, usando fallback:', err)
-        }
-
+        // Buscar role
+        const { data: userData } = await supabase
+          .from('usuarios')
+          .select('role')
+          .eq('id', data.user.id)
+          .single()
+        
+        const role = userData?.role || 'candidato'
+        
         // Salvar no localStorage
         localStorage.setItem('zenthos_user', JSON.stringify({
           email: data.user.email,
-          name: name,
+          name: data.user.email?.split('@')[0] || 'Usuário',
           role: role,
           id: data.user.id
         }))
 
-        // Salvar cookie
-        document.cookie = `zenthos_user=${JSON.stringify({
-          email: data.user.email,
-          role: role,
-          id: data.user.id
-        })}; path=/; max-age=86400`
-
-        // Redirecionar baseado no role
+        // Redirecionar
         if (role === 'admin') {
           window.location.href = '/admin/dashboard'
         } else if (role === 'empresa') {
@@ -72,8 +77,7 @@ export default function Login() {
         }
       }
     } catch (err: any) {
-      console.error('Erro no login:', err)
-      setError(err.message || 'Erro ao fazer login.')
+      setError(err.message || 'Erro ao fazer login')
     } finally {
       setLoading(false)
     }
@@ -109,26 +113,15 @@ export default function Login() {
             </div>
 
             <div>
-              <div className="flex items-center justify-between mb-1.5">
-                <label className="block text-sm font-medium text-[#2D343A]">Senha</label>
-              </div>
-              <div className="relative">
-                <input
-                  type={showPassword ? 'text' : 'password'}
-                  required
-                  className="w-full px-4 py-3 border border-[#E8EAE0] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#6B1A2A] transition pr-12"
-                  placeholder="••••••••"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                />
-                <button
-                  type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-[#708090] hover:text-[#2D343A]"
-                >
-                  {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
-                </button>
-              </div>
+              <label className="block text-sm font-medium text-[#2D343A] mb-1.5">Senha</label>
+              <input
+                type="password"
+                required
+                className="w-full px-4 py-3 border border-[#E8EAE0] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#6B1A2A] transition"
+                placeholder="••••••••"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
             </div>
 
             <button
@@ -136,25 +129,9 @@ export default function Login() {
               disabled={loading}
               className="w-full py-3.5 bg-[#6B1A2A] hover:bg-[#4A0E1A] text-white font-semibold rounded-lg transition-all duration-300 shadow-md shadow-[#6B1A2A]/20 hover:shadow-lg hover:-translate-y-0.5 flex items-center justify-center gap-2 disabled:opacity-50"
             >
-              {loading ? (
-                <>
-                  <Loader2 className="h-5 w-5 animate-spin" />
-                  Entrando...
-                </>
-              ) : (
-                <>
-                  <LogIn className="h-5 w-5" />
-                  Entrar
-                </>
-              )}
+              {loading ? 'Entrando...' : 'Entrar'}
             </button>
           </form>
-
-          <div className="mt-6 pt-6 border-t border-[#E8EAE0] text-center">
-            <Link href="/cadastro" className="text-[#6B1A2A] hover:underline text-sm font-medium">
-              Não tem uma conta? Cadastre-se
-            </Link>
-          </div>
         </div>
       </div>
     </div>
