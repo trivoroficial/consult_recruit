@@ -15,19 +15,12 @@ export default function Login() {
     setError('')
 
     try {
-      console.log('🔐 Tentando login:', email)
-
       const { data, error } = await supabase.auth.signInWithPassword({
         email,
         password,
       })
 
-      if (error) {
-        console.error('❌ Erro no login:', error)
-        throw error
-      }
-
-      console.log('✅ Login bem-sucedido:', data.user?.id)
+      if (error) throw error
 
       if (data?.user) {
         // Buscar role
@@ -38,7 +31,6 @@ export default function Login() {
           .single()
         
         const role = userData?.role || 'candidato'
-        console.log('📋 Role:', role)
         
         localStorage.setItem('zenthos_user', JSON.stringify({
           email: data.user.email,
@@ -47,7 +39,6 @@ export default function Login() {
           id: data.user.id
         }))
 
-        // Redirecionamento manual usando window.location
         if (role === 'admin') {
           window.location.href = '/admin/dashboard'
         } else if (role === 'empresa') {
@@ -57,7 +48,6 @@ export default function Login() {
         }
       }
     } catch (err: any) {
-      console.error('❌ Erro:', err)
       setError(err.message || 'Erro ao fazer login')
     } finally {
       setLoading(false)
