@@ -2,12 +2,12 @@
 import { createServerClient } from '@supabase/ssr'
 import { cookies } from 'next/headers'
 
-const supabaseUrl = 'https://dhnmyofmavrsfjtntxjt.supabase.co'
-const supabaseAnonKey = 'sb_publishable_NpAUC2GRqhwUsafIkFo6iQ_4azrbrsC'
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!
+const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
 
 export const createClient = () => {
   const cookieStore = cookies()
-  
+
   return createServerClient(
     supabaseUrl,
     supabaseAnonKey,
