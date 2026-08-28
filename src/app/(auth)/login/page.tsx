@@ -15,31 +15,36 @@ export default function Login() {
   useEffect(() => {
     const checkUser = async () => {
       try {
-        const { data: { user } } = await supabase.auth.getUser()
-        if (user) {
-          const { data: userData } = await supabase
-            .from('usuarios')
-            .select('role')
-            .eq('id', user.id)
-            .single()
-          
-          const role = userData?.role || 'candidato'
-          if (role === 'admin') {
-            router.push('/admin/dashboard')
-          } else if (role === 'empresa') {
-            router.push('/empresa/dashboard')
-          } else {
-            router.push('/candidato/dashboard')
+        const { data: { session } } = await supabase.auth.getSession()
+        console.log('🔍 Sessão atual:', session ? '✅ Existe' : '❌ Não existe')
+        
+        if (session) {
+          const { data: { user } } = await supabase.auth.getUser()
+          if (user) {
+            const { data: userData } = await supabase
+              .from('usuarios')
+              .select('role')
+              .eq('id', user.id)
+              .single()
+            
+            const role = userData?.role || 'candidato'
+            if (role === 'admin') {
+              window.location.href = '/admin/dashboard'
+            } else if (role === 'empresa') {
+              window.location.href = '/empresa/dashboard'
+            } else {
+              window.location.href = '/candidato/dashboard'
+            }
           }
         }
       } catch (err) {
-        console.error('Erro ao verificar usuário:', err)
+        console.error('Erro ao verificar:', err)
       } finally {
         setChecking(false)
       }
     }
     checkUser()
-  }, [router])
+  }, [])
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -47,14 +52,24 @@ export default function Login() {
     setError('')
 
     try {
+      console.log('🔐 Tentando login:', email)
+
       const { data, error } = await supabase.auth.signInWithPassword({
         email,
         password,
       })
 
-      if (error) throw error
+      if (error) {
+        console.error('❌ Erro no login:', error)
+        throw error
+      }
+
+      console.log('✅ Login bem-sucedido:', data.user?.id)
 
       if (data?.user) {
+        // Forçar refresh da sessão
+        await supabase.auth.getSession()
+
         const { data: userData } = await supabase
           .from('usuarios')
           .select('role')
@@ -62,6 +77,7 @@ export default function Login() {
           .single()
         
         const role = userData?.role || 'candidato'
+        console.log('📋 Role:', role)
         
         localStorage.setItem('zenthos_user', JSON.stringify({
           email: data.user.email,
@@ -70,15 +86,19 @@ export default function Login() {
           id: data.user.id
         }))
 
-        if (role === 'admin') {
-          window.location.href = '/admin/dashboard'
-        } else if (role === 'empresa') {
-          window.location.href = '/empresa/dashboard'
-        } else {
-          window.location.href = '/candidato/dashboard'
-        }
+        // Aguardar 1 segundo para garantir que o cookie foi salvo
+        setTimeout(() => {
+          if (role === 'admin') {
+            window.location.href = '/admin/dashboard'
+          } else if (role === 'empresa') {
+            window.location.href = '/empresa/dashboard'
+          } else {
+            window.location.href = '/candidato/dashboard'
+          }
+        }, 1000)
       }
     } catch (err: any) {
+      console.error('❌ Erro:', err)
       setError(err.message || 'Erro ao fazer login')
     } finally {
       setLoading(false)
