@@ -9,9 +9,11 @@ const publicRoutes = ['/', '/sobre', '/servicos', '/contato', '/login', '/cadast
 
 export async function middleware(request: NextRequest) {
   const pathname = request.nextUrl.pathname
+  console.log('🔍 Middleware:', pathname)
 
-  // Rotas públicas
+  // Rotas públicas - sempre permitir
   if (publicRoutes.some(route => pathname === route || pathname.startsWith(route + '/'))) {
+    console.log('✅ Rota pública:', pathname)
     return NextResponse.next()
   }
 
@@ -38,8 +40,11 @@ export async function middleware(request: NextRequest) {
 
   // Se não tiver usuário, redireciona para login
   if (!user) {
+    console.log('❌ Sem usuário, redirecionando para /login')
     return NextResponse.redirect(new URL('/login', request.url))
   }
+
+  console.log('✅ Usuário logado:', user.email)
 
   // Buscar role do usuário
   let role = 'candidato'
@@ -50,35 +55,28 @@ export async function middleware(request: NextRequest) {
       .eq('id', user.id)
       .single()
     role = userData?.role || 'candidato'
+    console.log('📋 Role:', role)
   } catch (error) {
-    console.error('Erro ao buscar role:', error)
+    console.error('❌ Erro ao buscar role:', error)
   }
 
-  // Se for admin e tentar acessar rota de candidato, redireciona para admin
-  if (role === 'admin' && pathname.startsWith('/candidato')) {
-    return NextResponse.redirect(new URL('/admin/dashboard', request.url))
+  // Proteção de rotas
+  if (pathname.startsWith('/admin') && role !== 'admin') {
+    console.log('🚫 Acesso negado ao admin')
+    return NextResponse.redirect(new URL('/login', request.url))
   }
 
-  // Se for candidato e tentar acessar rota de admin, redireciona para candidato
-  if (role === 'candidato' && pathname.startsWith('/admin')) {
-    return NextResponse.redirect(new URL('/candidato/dashboard', request.url))
+  if (pathname.startsWith('/empresa') && role !== 'admin' && role !== 'empresa') {
+    console.log('🚫 Acesso negado à empresa')
+    return NextResponse.redirect(new URL('/login', request.url))
   }
 
-  // Se for empresa e tentar acessar rota de admin, redireciona para empresa
-  if (role === 'empresa' && pathname.startsWith('/admin')) {
-    return NextResponse.redirect(new URL('/empresa/dashboard', request.url))
+  if (pathname.startsWith('/candidato') && role !== 'admin' && role !== 'candidato') {
+    console.log('🚫 Acesso negado ao candidato')
+    return NextResponse.redirect(new URL('/login', request.url))
   }
 
-  // Se for empresa e tentar acessar rota de candidato, redireciona para empresa
-  if (role === 'empresa' && pathname.startsWith('/candidato')) {
-    return NextResponse.redirect(new URL('/empresa/dashboard', request.url))
-  }
-
-  // Se for candidato e tentar acessar rota de empresa, redireciona para candidato
-  if (role === 'candidato' && pathname.startsWith('/empresa')) {
-    return NextResponse.redirect(new URL('/candidato/dashboard', request.url))
-  }
-
+  console.log('✅ Acesso permitido:', pathname)
   return supabaseResponse
 }
 
