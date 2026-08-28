@@ -10,27 +10,32 @@ export default function Login() {
   const [password, setPassword] = useState('admin@2026')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
+  const [checking, setChecking] = useState(true)
 
-  // Verificar se já está logado
   useEffect(() => {
     const checkUser = async () => {
-      const { data: { user } } = await supabase.auth.getUser()
-      if (user) {
-        // Buscar role
-        const { data: userData } = await supabase
-          .from('usuarios')
-          .select('role')
-          .eq('id', user.id)
-          .single()
-        
-        const role = userData?.role || 'candidato'
-        if (role === 'admin') {
-          router.push('/admin/dashboard')
-        } else if (role === 'empresa') {
-          router.push('/empresa/dashboard')
-        } else {
-          router.push('/candidato/dashboard')
+      try {
+        const { data: { user } } = await supabase.auth.getUser()
+        if (user) {
+          const { data: userData } = await supabase
+            .from('usuarios')
+            .select('role')
+            .eq('id', user.id)
+            .single()
+          
+          const role = userData?.role || 'candidato'
+          if (role === 'admin') {
+            router.push('/admin/dashboard')
+          } else if (role === 'empresa') {
+            router.push('/empresa/dashboard')
+          } else {
+            router.push('/candidato/dashboard')
+          }
         }
+      } catch (err) {
+        console.error('Erro ao verificar usuário:', err)
+      } finally {
+        setChecking(false)
       }
     }
     checkUser()
@@ -50,7 +55,6 @@ export default function Login() {
       if (error) throw error
 
       if (data?.user) {
-        // Buscar role
         const { data: userData } = await supabase
           .from('usuarios')
           .select('role')
@@ -59,7 +63,6 @@ export default function Login() {
         
         const role = userData?.role || 'candidato'
         
-        // Salvar no localStorage
         localStorage.setItem('zenthos_user', JSON.stringify({
           email: data.user.email,
           name: data.user.email?.split('@')[0] || 'Usuário',
@@ -67,7 +70,6 @@ export default function Login() {
           id: data.user.id
         }))
 
-        // Redirecionar
         if (role === 'admin') {
           window.location.href = '/admin/dashboard'
         } else if (role === 'empresa') {
@@ -81,6 +83,14 @@ export default function Login() {
     } finally {
       setLoading(false)
     }
+  }
+
+  if (checking) {
+    return (
+      <div className="min-h-screen bg-[#F8F4E6] flex items-center justify-center">
+        <p className="text-[#708090]">Verificando...</p>
+      </div>
+    )
   }
 
   return (
