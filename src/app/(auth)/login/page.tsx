@@ -1,50 +1,13 @@
 'use client'
 
-import { useState, useEffect } from 'react'
-import { useRouter } from 'next/navigation'
+import { useState } from 'react'
 import { supabase } from '@/lib/supabase/client'
 
 export default function Login() {
-  const router = useRouter()
   const [email, setEmail] = useState('admin@zenthos.com')
   const [password, setPassword] = useState('admin@2026')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
-  const [checking, setChecking] = useState(true)
-
-  useEffect(() => {
-    const checkUser = async () => {
-      try {
-        const { data: { session } } = await supabase.auth.getSession()
-        console.log('🔍 Sessão atual:', session ? '✅ Existe' : '❌ Não existe')
-        
-        if (session) {
-          const { data: { user } } = await supabase.auth.getUser()
-          if (user) {
-            const { data: userData } = await supabase
-              .from('usuarios')
-              .select('role')
-              .eq('id', user.id)
-              .single()
-            
-            const role = userData?.role || 'candidato'
-            if (role === 'admin') {
-              window.location.href = '/admin/dashboard'
-            } else if (role === 'empresa') {
-              window.location.href = '/empresa/dashboard'
-            } else {
-              window.location.href = '/candidato/dashboard'
-            }
-          }
-        }
-      } catch (err) {
-        console.error('Erro ao verificar:', err)
-      } finally {
-        setChecking(false)
-      }
-    }
-    checkUser()
-  }, [])
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -67,9 +30,7 @@ export default function Login() {
       console.log('✅ Login bem-sucedido:', data.user?.id)
 
       if (data?.user) {
-        // Forçar refresh da sessão
-        await supabase.auth.getSession()
-
+        // Buscar role
         const { data: userData } = await supabase
           .from('usuarios')
           .select('role')
@@ -86,16 +47,14 @@ export default function Login() {
           id: data.user.id
         }))
 
-        // Aguardar 1 segundo para garantir que o cookie foi salvo
-        setTimeout(() => {
-          if (role === 'admin') {
-            window.location.href = '/admin/dashboard'
-          } else if (role === 'empresa') {
-            window.location.href = '/empresa/dashboard'
-          } else {
-            window.location.href = '/candidato/dashboard'
-          }
-        }, 1000)
+        // Redirecionamento manual usando window.location
+        if (role === 'admin') {
+          window.location.href = '/admin/dashboard'
+        } else if (role === 'empresa') {
+          window.location.href = '/empresa/dashboard'
+        } else {
+          window.location.href = '/candidato/dashboard'
+        }
       }
     } catch (err: any) {
       console.error('❌ Erro:', err)
@@ -103,14 +62,6 @@ export default function Login() {
     } finally {
       setLoading(false)
     }
-  }
-
-  if (checking) {
-    return (
-      <div className="min-h-screen bg-[#F8F4E6] flex items-center justify-center">
-        <p className="text-[#708090]">Verificando...</p>
-      </div>
-    )
   }
 
   return (
